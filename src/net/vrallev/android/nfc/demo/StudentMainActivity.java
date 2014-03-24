@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,12 +37,12 @@ public class StudentMainActivity extends Activity {
     JSONParser jsonParser = new JSONParser();
 
     // username in db url
-    private static final String url_user_name_details = "http://192.168.43.7/nfc_library/get_product_details.php";
+    private static final String url_user_name_details = "http://192.168.43.28/nfc_library/get_product_details.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
-    private static final String TAG_PRODUCT = "product";
-    //private static final String TAG_PID = "pid";
+    private static final String TAG_PRODUCT = "reader";
+    //private static final String TAG_PID = "sid";
     private static final String TAG_NAME = "name";
 
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,10 @@ public class StudentMainActivity extends Activity {
         setTitle("Reader Menu");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reader_main);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
 
         searchBtn = (Button) findViewById(R.id.searchBtn);
@@ -105,7 +110,7 @@ public class StudentMainActivity extends Activity {
                     try {
                         // Building Parameters
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("pid", studentID));
+                        params.add(new BasicNameValuePair("id", studentID));
 
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request

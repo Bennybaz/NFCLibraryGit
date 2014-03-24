@@ -1,4 +1,4 @@
-package com.example.androidhive;
+package net.vrallev.android.nfc.demo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
