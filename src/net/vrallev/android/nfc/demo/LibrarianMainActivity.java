@@ -14,16 +14,18 @@ import android.widget.TextView;
 public class LibrarianMainActivity extends Activity {
 
     private Button searchBtn;
+    private Button returnBtn;
     private TextView greeting;
 
     public void onCreate(Bundle savedInstanceState) {
         final Context context = this;
         setTitle("Librarian Menu");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.reader_main);
+        setContentView(R.layout.librarian_main);
 
         searchBtn = (Button) findViewById(R.id.searchBtn);
-        greeting = (TextView) findViewById(R.id.greetText);
+        returnBtn = (Button) findViewById(R.id.bookReturnBtn);
+        greeting = (TextView) findViewById(R.id.greetText2);
 
         final String librarianID = getIntent().getExtras().getString("ID").substring(1);
 
@@ -38,6 +40,15 @@ public class LibrarianMainActivity extends Activity {
                 startActivity(intent);
             }
 
+        });
+
+        returnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LibrarianMainActivity.this, ReturnRouteActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         });
     }
 
