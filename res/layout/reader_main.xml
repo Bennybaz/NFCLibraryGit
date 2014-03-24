@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:orientation="vertical" android:padding="5.0dip"
+              android:layout_width="fill_parent" android:layout_height="fill_parent"
+              android:background="@color/abackground"
+              xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/greetText"
+            android:padding="10dp"
+            android:textColor="@color/holo_blue_dark" android:textSize="24sp"
+            android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/operationChoose"
+            android:id="@+id/operation"
+            android:padding="10dp"
+            android:layout_below="@+id/greetText" android:layout_alignLeft="@+id/greetText"
+            android:layout_alignStart="@+id/greetText"
+            android:textColor="@color/holo_blue_dark" android:textSize="24sp"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bookSearch"
+            android:id="@+id/searchBtn"
+            android:padding="5dp"
+            android:gravity="center"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_marginTop="46dp"
+            android:layout_below="@+id/operation" android:layout_centerHorizontal="true"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bookBorrow"
+            android:id="@+id/borrowBtn"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/book_cart"
+            android:id="@+id/cartBtn"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/borrow_history"
+            android:id="@+id/historyBtn"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+</LinearLayout>

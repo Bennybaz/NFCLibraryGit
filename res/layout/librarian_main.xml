@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:orientation="vertical" android:background="@color/abackground">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text=""
+            android:id="@+id/greetText2"
+            android:textColor="@color/holo_blue_dark" android:textSize="24sp"
+            android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/operationChoose"
+            android:id="@+id/textView2"
+            android:textSize="@dimen/text_size" android:textColor="@color/holo_blue_dark"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/myButton"
+            android:padding="5dp"
+            android:text="@string/bookReturn"
+            android:id="@+id/bookReturnBtn"
+            android:layout_marginTop="46dp" android:textColor="@color/black"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/manageInventory"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            style="@style/myButton"
+            android:id="@+id/manageBtn"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bookSearch"
+            android:padding="5dp"
+            style="@style/myButton"
+            android:id="@+id/searchBtn"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp" android:layout_below="@+id/manageBtn"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bookBorrow"
+            android:padding="5dp"
+            style="@style/myButton"
+            android:id="@+id/button" android:layout_below="@+id/searchBtn"
+            android:layout_marginTop="10dp" android:textColor="@color/black"/>
+
+</LinearLayout>

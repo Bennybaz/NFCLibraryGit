@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NFC Library</string>
+    <string name="identification">Attach NFC ID Tag.</string>
+    <string name="nfcStatus">NFC Status:</string>
+    <string name="operationChoose">Choose an Operation:</string>
+    <string name="bookSearch">Book Search</string>
+    <string name="bookBorrow">Book Borrow</string>
+    <string name="bookReturn">Book Return</string>
+    <string name="manageInventory">Manage Inventory</string>
+    <string name="addBook">Add a New Book</string>
+    <string name="search_query">Type word or phrase:</string>
+    <string name="search_field">Field to search:</string>
+    <string name="search_field_hint">Title starting with</string>
+    <string name="search_btn_url">Search</string>
+    <string name="add_new_book">Add a New Book</string>
+    <string name="write_nfc">Write</string>
+
+    <string name="error_detected">TAG NOT DETECTED. WHERE DO YOU WANT WRITE!?!?</string>
+    <string name="ok_writing">Tag was successfully written</string>
+    <string name="error_writing">ERROR DURING WRITING. ARE YOU SURE THAT YOUR TAG IS CLOSE TO YOUR MOBILE PHONE?</string>
+    <string name="ok_detection">TAG DETECTED: </string>
+
+    <string name="book_cart">Book Cart</string>
+    <string name="borrow_history">Borrow History</string>
+
+    <string name="book_title">Title:</string>
+    <string name="book_author_name">Author:</string>
+    <string name="book_edition">Edition:</string>
+    <string name="book_shelf_number">Shelf:</string>
+    <string name="book_dewey_number">Dewey:</string>
+    <string name="book_subject">Subject:</string>
+
+    <string-array name="field_arrays">
+        <item>Title starting with</item>
+        <item>Author starting with</item>
+        <item>Subject starting with</item>
+    </string-array>
+
+</resources>

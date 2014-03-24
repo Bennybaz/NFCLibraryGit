@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="5dp"
+              android:layout_height="match_parent" android:background="@color/abackground">
+
+   <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:text="@string/book_title"
+            android:textSize="20dp"
+            android:textColor="@color/holo_blue_dark"
+            android:id="@+id/titleTV"/>
+       <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:id="@+id/titleTextView" android:layout_centerVertical="true"
+               android:layout_toRightOf="@+id/titleTV"
+               android:padding="5dp"
+               android:textAlignment="center"
+               android:textSize="16dp"
+               />
+
+   </RelativeLayout>
+    <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="@string/book_author_name"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/authorTV"
+                />
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/authorTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/authorTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
+    <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="@string/book_edition"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/editionTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editionTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/editionTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
+    <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="@string/book_subject"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/subjectTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/subjectTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/subjectTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
+    <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="@string/book_shelf_number"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/shelfTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/shelfTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/shelfTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
+    <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="@string/book_dewey_number"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/deweyTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deweyTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/deweyTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
+    <Button android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/myButton"
+            android:padding="5dp"
+            android:layout_marginTop="55dp"
+            android:text="Get Directions"
+            android:layout_weight="0"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"
+            />
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Borrow This Book"
+            android:id="@+id/borrowBookBtn"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add To Cart"
+            android:id="@+id/addToCartBtn"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+</LinearLayout>

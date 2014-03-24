@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" android:background="@color/abackground"
+        >
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/textBC"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:textSize="@dimen/text_size"
+            android:layout_centerHorizontal="true"
+            />
+    <ImageView
+            android:id="@+id/directImage"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/textBC"
+            android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+
+    <TextView
+            android:id="@+id/textShelf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            android:textColor="#000"
+            android:textAlignment="center"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/directImage" android:layout_centerHorizontal="true"/>/>
+
+    <Button
+            android:id="@+id/directionButtonScan"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan Shelf"
+            android:layout_marginTop="10dp"
+            android:background="@color/white"
+            android:layout_centerVertical="true" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textShelf"/>
+    <Button
+            android:id="@+id/directionButtonCancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:background="@color/white"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/directionButtonScan" android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+</RelativeLayout>
