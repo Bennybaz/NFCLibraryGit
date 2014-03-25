@@ -37,7 +37,9 @@ public class StudentMainActivity extends Activity {
     JSONParser jsonParser = new JSONParser();
 
     // username in db url
-    private static final String url_user_name_details = "http://192.168.43.28/nfc_library/get_product_details.php";
+    private static final String url_user_name_details = "http://nfclibrary.site40.net/get_product_details.php";
+    //private static final String url_user_name_details = "http://192.168.2.101/nfc_library/get_product_details.php";
+
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -117,25 +119,29 @@ public class StudentMainActivity extends Activity {
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_user_name_details, "GET", params);
 
+                        Toast.makeText(context,json.toString(),Toast.LENGTH_LONG).show();
                         // check your log for json response
-                        Log.d("Single Product Details", json.toString());
+                        //Log.d("Single Product Details", json.toString());
 
                         // json success tag
-                        success = json.getInt(TAG_SUCCESS);
-                        if (success == 1) {
-                            //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
-                            // successfully received product details
-                            JSONArray productObj = json
-                                    .getJSONArray(TAG_PRODUCT); // JSON Array
+                        if(json!=null) {
+                            success = json.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
+                                // successfully received product details
+                                JSONArray productObj = json
+                                        .getJSONArray(TAG_PRODUCT); // JSON Array
 
-                            // get first user object from JSON Array
-                            JSONObject product = productObj.getJSONObject(0);
+                                // get first user object from JSON Array
+                                JSONObject product = productObj.getJSONObject(0);
+                                Toast.makeText(context,"NOT SHIT",Toast.LENGTH_LONG).show();
+                                greeting.setText("Hello, " + product.getString(TAG_NAME));
 
-                            greeting.setText("Hello, "+product.getString(TAG_NAME));
-
-                        }else{
-                            // product with pid not found
+                            } else {
+                                // product with pid not found
+                            }
                         }
+                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

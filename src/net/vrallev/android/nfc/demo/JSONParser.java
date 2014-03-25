@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import android.widget.Toast;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -71,7 +72,9 @@ public class JSONParser {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
