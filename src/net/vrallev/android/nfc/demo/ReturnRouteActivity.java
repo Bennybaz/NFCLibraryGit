@@ -15,9 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.*;
 import libalg.BranchAndBound;
 
 import java.io.*;
@@ -26,7 +24,7 @@ import java.util.*;
 /**
  * Created by Benny on 24/03/2014.
  */
-public class ReturnRouteActivity extends Activity{
+public class ReturnRouteActivity extends Activity {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
@@ -34,7 +32,16 @@ public class ReturnRouteActivity extends Activity{
     private Stack<Integer> stack;
     public double[][] adjacency_matrix;
     Context context;
-    public ArrayList<Integer> sectors  = new ArrayList<Integer>();;
+    public ArrayList<Integer> sectors  = new ArrayList<Integer>();
+    ListView lv;
+
+    //*********
+    //private ListView lv;
+    //private ArrayList<String> strArr;
+    //private ArrayAdapter<String> adapter;
+    public MySimpleArrayAdapter adapter;
+    ArrayList<Book> b = new ArrayList<Book>();
+    //********
 
     Button calcBtn;
     private NfcAdapter mNfcAdapter;
@@ -45,6 +52,28 @@ public class ReturnRouteActivity extends Activity{
         context = this;
 
         calcBtn = (Button) findViewById(R.id.calcRouteBtn);
+        lv = (ListView) findViewById(R.id.listView);
+
+        //*******
+        //lv = (ListView) findViewById(R.id.listView);
+
+        //adapter = new ArrayAdapter<String>(getApplicationContext(),
+        //        android.R.layout.simple_list_item_1, strArr);
+
+        //lv.setAdapter(adapter);
+        //Book [] books = new Book[30];
+        //books[1]=new Book("SQL","Dani");
+       /* Book check = new Book("SQL","Dani");
+        b.add(check);*/
+        for(int i=1; i<10; i++)
+        {
+            Book check = new Book(""+i,"des:"+i);
+            b.add(check);
+        }
+        adapter = new MySimpleArrayAdapter(this, b);
+        lv.setAdapter(adapter);
+        //lv.setListAdapter(adapter);
+        //*******
 
         calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -322,14 +351,21 @@ public class ReturnRouteActivity extends Activity{
                 String type = result.substring(0,1);
                 int row = Integer.parseInt(result.substring(1,3));
 
-
                 if(type.equals("E")){
                     super.onPostExecute(result);
 
                         if(!sectors.contains(row)){
                             sectors.add(row);
+                            //Book book= new Book(type,""+row);
+                            //update the book array here
+                            //b.add(book);
+                            //adapter.notifyDataSetChanged();
+
+                            //strArr.add(result);
+                            //adapter.notifyDataSetChanged();
                         }
                 }
+
             }
             Toast.makeText(context,sectors.toString(),Toast.LENGTH_LONG).show();
         }
