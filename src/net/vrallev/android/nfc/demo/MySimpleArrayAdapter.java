@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class MySimpleArrayAdapter extends ArrayAdapter<Book> {
     private Context context;
-    private ArrayList<Book> values;
+    public ArrayList<Book> values;
 
     public MySimpleArrayAdapter(Context context, ArrayList<Book> values) {
         super(context, R.layout.row_layout, values);
@@ -25,30 +25,26 @@ public class MySimpleArrayAdapter extends ArrayAdapter<Book> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.row_layout, parent, false);
         TextView textView1 = (TextView) rowView.findViewById(R.id.headline);
         TextView textView2 = (TextView) rowView.findViewById(R.id.baseline);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image_right);
         //textView1.setText(values[position].getName());
         //textView2.setText(values[position].getAuthor());
         textView1.setText(values.get(position).getName());
         textView2.setText(values.get(position).getAuthor());
         // change the icon for Windows and iPhone
-        //String s = values[position];
-        //if (s.startsWith("iPhone")) {
-        //    imageView.setImageResource(R.drawable.no);
-        //} else {
-        //    imageView.setImageResource(R.drawable.ok);
-        //}
-
+            imageView.setImageResource(R.drawable.remove_icon);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                values.remove(pos);
+                notifyDataSetChanged();
+            }
+        });
         return rowView;
-    }
-
-    public void updateEntries(ArrayList<Book> b)
-    {
-        values=b;
-        notifyDataSetChanged();
     }
 }

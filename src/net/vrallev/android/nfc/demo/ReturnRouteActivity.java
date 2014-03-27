@@ -53,27 +53,9 @@ public class ReturnRouteActivity extends Activity {
 
         calcBtn = (Button) findViewById(R.id.calcRouteBtn);
         lv = (ListView) findViewById(R.id.listView);
-
-        //*******
-        //lv = (ListView) findViewById(R.id.listView);
-
-        //adapter = new ArrayAdapter<String>(getApplicationContext(),
-        //        android.R.layout.simple_list_item_1, strArr);
-
-        //lv.setAdapter(adapter);
-        //Book [] books = new Book[30];
-        //books[1]=new Book("SQL","Dani");
-       /* Book check = new Book("SQL","Dani");
-        b.add(check);*/
-        for(int i=1; i<10; i++)
-        {
-            Book check = new Book(""+i,"des:"+i);
-            b.add(check);
-        }
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
-        //lv.setListAdapter(adapter);
-        //*******
+
 
         calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,14 +79,6 @@ public class ReturnRouteActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
-                    //System.out.println(result);
-
-
-
-
             }
         });
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -115,7 +89,6 @@ public class ReturnRouteActivity extends Activity {
 
         double[] row = new double[input.length];
         int i=0;
-        //Toast.makeText(context,input.length,Toast.LENGTH_LONG).show();
 
         while(i<sectors.size()){
             row = input[sectors.get(i)-1];
@@ -146,10 +119,6 @@ public class ReturnRouteActivity extends Activity {
     }*/
 
     public double[][] getDoubleTwoDimArray(String fileName) throws IOException {
-        /*Reader reader = new FileReader(fileName);
-
-        double[][] data = getDoubleTwoDimArray(reader);
-        reader.close();*/
 
         double[][] data = new double[0][0];
 
@@ -159,26 +128,14 @@ public class ReturnRouteActivity extends Activity {
         int rows = Integer.parseInt(reader.readLine().toString());
         int cols = Integer.parseInt(reader.readLine().toString());
 
-
-           /* int rows = Integer.parseInt(reader.readLine());
-            int cols = Integer.parseInt(reader.readLine());*/
-            data = new double[rows][cols];
-            for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < cols; col++) {
-                    data[row][col] = Double.parseDouble(reader.readLine().toString());
-                }
+        data = new double[rows][cols];
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                data[row][col] = Double.parseDouble(reader.readLine().toString());
             }
-            databaseInputStream.close();
+        }
+        databaseInputStream.close();
         String result = sb.toString();
-        //Toast.makeText(context,result.substring(1,10).toString(),Toast.LENGTH_LONG).show();
-
-
-
-//Read text from file
-        //StringBuilder text = new StringBuilder();
-
-
-
         return data;
     }
 
@@ -356,13 +313,10 @@ public class ReturnRouteActivity extends Activity {
 
                         if(!sectors.contains(row)){
                             sectors.add(row);
-                            //Book book= new Book(type,""+row);
+                            Book book= new Book(type,""+row);
                             //update the book array here
-                            //b.add(book);
-                            //adapter.notifyDataSetChanged();
-
-                            //strArr.add(result);
-                            //adapter.notifyDataSetChanged();
+                            b.add(book);
+                            adapter.notifyDataSetChanged();
                         }
                 }
 
