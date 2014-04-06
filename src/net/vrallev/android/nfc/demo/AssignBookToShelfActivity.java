@@ -10,6 +10,7 @@ import android.nfc.*;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +18,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import libalg.BranchAndBound;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Benny on 06/04/2014.
@@ -43,11 +51,30 @@ public class AssignBookToShelfActivity extends Activity {
     boolean writeMode;
     Tag mytag;
     TextView shelf;
+    String barcode;
+
+    // JSON parser class
+    JSONParser jsonParser = new JSONParser();
+
+    // username in db url
+    private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
+    private static final String url_book_to_shlef = "http://nfclibrary.site40.net/attach_book_to_shlef.php";
+
+    // JSON Node names
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_PRODUCT = "reader";
+    //private static final String TAG_PID = "sid";
+    private static final String TAG_NAME = "name";
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.assign_shelf);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         context = this;
 
         writeToShelfBtn = (Button) findViewById(R.id.writeShelfBtn);
@@ -61,6 +88,7 @@ public class AssignBookToShelfActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                new UpdateBookLocation().execute();
 
             }
         });
@@ -245,13 +273,17 @@ public class AssignBookToShelfActivity extends Activity {
                 if(type.equals("BK")){
                     super.onPostExecute(result);
 
+                    barcode=result.substring(2);
 
-                    Book book= new Book(type,""+row);
-                    allIDs.append(result.substring(2,4));
-                    Toast.makeText(context,allIDs,Toast.LENGTH_LONG).show();
+                    // Getting complete user details in background thread
+                    new GetBookBarcode().execute();
+
+                    //Book book= new Book(type,""+row);
+                    //allIDs.append(result.substring(2,4));
+                    //Toast.makeText(context,allIDs,Toast.LENGTH_LONG).show();
                      //update the book array here
-                     b.add(book);
-                     adapter.notifyDataSetChanged();
+                     //b.add(book);
+                     //adapter.notifyDataSetChanged();
                 }
                 if(type.equals("SH")){
                     super.onPostExecute(result);
@@ -260,6 +292,120 @@ public class AssignBookToShelfActivity extends Activity {
                     writeToShelfBtn.setVisibility(1);
                 }
             }
+        }
+    }
+
+    class GetBookBarcode extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    try {
+                        // Building Parameters
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("barcode", barcode));
+
+                        // getting student details by making HTTP request
+                        // Note that product details url will use GET request
+                        JSONObject json = jsonParser.makeHttpRequest(
+                                url_book_barcode_for_details, "GET", params);
+
+                        Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
+                        // check your log for json response
+                        //Log.d("Single Product Details", json.toString());
+
+                        // json success tag
+                        if(json!=null) {
+                            success = json.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
+                                // successfully received product details
+                                JSONArray productObj = json
+                                        .getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                // get first user object from JSON Array
+                                JSONObject product = productObj.getJSONObject(0);
+
+                                Book bk = new Book();
+                                bk.setBarcode(barcode);
+                                bk.setName(product.getString("title"));
+                                bk.setAuthor(product.getString("author"));
+                                b.add(bk);
+                                adapter.notifyDataSetChanged();
+
+                            } else {
+                                // product with pid not found
+                            }
+                        }
+                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            return null;
+        }
+    }
+
+
+    class UpdateBookLocation extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    for(int i=0; i< b.size(); i++)
+                    {
+                        try{
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("shelf", shelf.getText().toString()));
+                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode()));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+                            JSONObject json = jsonParser.makeHttpRequest(
+                                    url_book_to_shlef, "GET", params);
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+                                    // successfully received product details
+                                    //JSONArray productObj = json
+                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                    // get first user object from JSON Array
+                                    //JSONObject product = productObj.getJSONObject(0);
+                                    Toast.makeText(context,"ADDED",Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    // product with pid not found
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            });
+
+            return null;
         }
     }
 }
