@@ -26,6 +26,7 @@
         android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity android:name=".SearchBook"></activity>
+        <activity android:name=".ManageInventoryActivity"></activity>
         <activity android:name=".AboutActivity"></activity>
         <activity android:name=".ReturnRouteActivity">
 
@@ -33,6 +34,15 @@
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
             </intent-filter>
+        </activity>
+        <activity android:name=".AssignBookToShelfActivity">
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.nfc.action.TECH_DISCOVERED"
+                    android:resource="@xml/nfc_tech_filter" />
         </activity>
         <activity android:name=".AddNewBook" android:parentActivityName=".LibrarianMainActivity"></activity>
         <activity android:name=".StudentMainActivity" android:parentActivityName=".MainActivity"></activity>

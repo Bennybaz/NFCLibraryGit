@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:padding="5dp"
+              android:layout_height="match_parent" android:background="@color/abackground">
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/myButton"
+            android:padding="5dp"
+            android:text="@string/add_new_book"
+            android:id="@+id/addNewBookBtn"
+            android:layout_marginTop="46dp" android:textColor="@color/black"/>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/myButton"
+            android:padding="5dp"
+            android:text="@string/assign_books"
+            android:id="@+id/assignToShelfBtn"
+            android:layout_marginTop="10dp" android:textColor="@color/black"/>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/myButton"
+            android:padding="5dp"
+            android:text="@string/manage_shelf"
+            android:id="@+id/manageShelfBtn"
+            android:layout_marginTop="10dp" android:textColor="@color/black"/>
+
+</LinearLayout>

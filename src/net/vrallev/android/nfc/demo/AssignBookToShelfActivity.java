@@ -1,122 +1,78 @@
 package net.vrallev.android.nfc.demo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
-import android.nfc.Tag;
+import android.nfc.*;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import libalg.BranchAndBound;
-
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
- * Created by Benny on 24/03/2014.
+ * Created by Benny on 06/04/2014.
  */
-public class ReturnRouteActivity extends Activity {
+public class AssignBookToShelfActivity extends Activity {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
-    private int numberOfNodes;
-    private Stack<Integer> stack;
-    public double[][] adjacency_matrix;
+    private NfcAdapter mNfcAdapter;
     Context context;
-    public ArrayList<Integer> sectors  = new ArrayList<Integer>();
     ListView lv;
     public MySimpleArrayAdapter adapter;
+    private Button writeToShelfBtn;
     ArrayList<Book> b = new ArrayList<Book>();
+    StringBuilder allIDs=new StringBuilder();
+    Dialog dialog;
+    PendingIntent pendingIntent;
+    IntentFilter writeTagFilters[];
+    boolean writeMode;
+    Tag mytag;
+    TextView shelf;
 
-    Button calcBtn;
-    private NfcAdapter mNfcAdapter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.return_route);
+        setContentView(R.layout.assign_shelf);
         context = this;
 
-        calcBtn = (Button) findViewById(R.id.calcRouteBtn);
-        lv = (ListView) findViewById(R.id.listView);
+        writeToShelfBtn = (Button) findViewById(R.id.writeShelfBtn);
+        shelf = (TextView) findViewById(R.id.shelfTextView);
+        lv = (ListView) findViewById(R.id.listViewShelf);
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
 
 
-        calcBtn.setOnClickListener(new View.OnClickListener() {
+        writeToShelfBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                try {
-                    double[][] data2 = getDoubleTwoDimArray("dump.txt");
-                    if(sectors.get(0)!=1) sectors.add(1);
 
-                    Collections.sort(sectors);
-
-
-
-                    adjacency_matrix = new double[sectors.size() + 1][sectors.size() + 1];
-
-                    createAdj(data2, sectors);
-
-                    BranchAndBound bnb = new BranchAndBound(adjacency_matrix,0, sectors);
-                    String result = bnb.execute();
-                    Toast.makeText(context, result,Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
     }
 
-    public void createAdj(double[][] input, ArrayList<Integer> sectors){
 
-        double[] row = new double[input.length];
-        int i=0;
 
-        while(i<sectors.size()){
-            row = input[sectors.get(i)-1];
-            int j=0;
-            while(j<sectors.size()){
-                adjacency_matrix[i][j]=row[sectors.get(j)-1];
-                j++;
-            }
-            i++;
-        }
-    }
 
-    public double[][] getDoubleTwoDimArray(String fileName) throws IOException {
 
-        double[][] data = new double[0][0];
-
-        InputStream databaseInputStream = getResources().openRawResource(R.raw.dump);
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(databaseInputStream));
-        int rows = Integer.parseInt(reader.readLine().toString());
-        int cols = Integer.parseInt(reader.readLine().toString());
-
-        data = new double[rows][cols];
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                data[row][col] = Double.parseDouble(reader.readLine().toString());
-            }
-        }
-        databaseInputStream.close();
-        String result = sb.toString();
-        return data;
-    }
-
-   @Override
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -281,24 +237,29 @@ public class ReturnRouteActivity extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-            if (result != null) {
-                String type = result.substring(0,1);
-                int row = Integer.parseInt(result.substring(1,3));
 
-                if(type.equals("E")){
+            if (result != null) {
+                String type = result.substring(0,2);
+                int row = Integer.parseInt(result.substring(2,4));
+
+                if(type.equals("BK")){
                     super.onPostExecute(result);
 
-                        if(!sectors.contains(row)){
-                            sectors.add(row);
-                            Book book= new Book(type,""+row);
-                            //update the book array here
-                            b.add(book);
-                            adapter.notifyDataSetChanged();
-                        }
-                }
 
+                    Book book= new Book(type,""+row);
+                    allIDs.append(result.substring(2,4));
+                    Toast.makeText(context,allIDs,Toast.LENGTH_LONG).show();
+                     //update the book array here
+                     b.add(book);
+                     adapter.notifyDataSetChanged();
+                }
+                if(type.equals("SH")){
+                    super.onPostExecute(result);
+                    shelf.setText(result.substring(2,4));
+                    lv.setVisibility(1);
+                    writeToShelfBtn.setVisibility(1);
+                }
             }
-            Toast.makeText(context,sectors.toString(),Toast.LENGTH_LONG).show();
         }
     }
 }
