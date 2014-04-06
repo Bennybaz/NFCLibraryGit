@@ -28,13 +28,13 @@ public class SearchResultsActivity extends Activity {
 
         adapter = new MySimpleArrayAdapter(this, books);
         lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+       /* lv.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
     }
 }

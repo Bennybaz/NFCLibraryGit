@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -32,7 +33,7 @@ public class LibrarianMainActivity extends Activity {
     private Context context;
 
     // JSON parser class
-    JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser = new JSONParser();
 
     // username in db url
     private static final String url_user_name_details = "http://nfclibrary.site40.net/get_product_details.php";
@@ -63,7 +64,15 @@ public class LibrarianMainActivity extends Activity {
         librarianID = getIntent().getExtras().getString("ID").substring(1);
 
         // Getting complete user details in background thread
-        new GetUserDetails().execute();
+        GetUserDetails task1 = new GetUserDetails();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            task1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        else
+            task1.execute();
+
+
+
+
 
         greeting.setText("Hello, "+librarianID);
 
@@ -124,7 +133,7 @@ public class LibrarianMainActivity extends Activity {
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_user_name_details, "GET", params);
 
-                        Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
+
                         // check your log for json response
                         //Log.d("Single Product Details", json.toString());
 
@@ -139,7 +148,7 @@ public class LibrarianMainActivity extends Activity {
 
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
-                                Toast.makeText(context,"NOT SHIT",Toast.LENGTH_LONG).show();
+
                                 greeting.setText("Hello, " + product.getString(TAG_NAME));
 
                             } else {
@@ -152,7 +161,6 @@ public class LibrarianMainActivity extends Activity {
                     }
                 }
             });
-
             return null;
         }
     }

@@ -36,7 +36,7 @@
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="420dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:id="@+id/listViewShelf"/>
     </LinearLayout>
     <Button

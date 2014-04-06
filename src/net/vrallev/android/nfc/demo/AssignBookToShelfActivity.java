@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.nfc.*;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -54,15 +55,16 @@ public class AssignBookToShelfActivity extends Activity {
     String barcode;
 
     // JSON parser class
-    JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser2 = new JSONParser();
 
     // username in db url
     private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
-    private static final String url_book_to_shlef = "http://nfclibrary.site40.net/attach_book_to_shlef.php";
+    private static final String url_book_to_shelf = "http://nfclibrary.site40.net/attach_book_to_shelf.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
-    private static final String TAG_PRODUCT = "reader";
+    private static final String TAG_PRODUCT = "book";
     //private static final String TAG_PID = "sid";
     private static final String TAG_NAME = "name";
 
@@ -88,7 +90,7 @@ public class AssignBookToShelfActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new UpdateBookLocation().execute();
+               new UpdateBookLocation().execute();
 
             }
         });
@@ -141,7 +143,12 @@ public class AssignBookToShelfActivity extends Activity {
             if (MIME_TEXT_PLAIN.equals(type)) {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                new NdefReaderTask().execute(tag);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new NdefReaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tag);
+                    else
+                    new NdefReaderTask().execute(tag);
+
+               // new NdefReaderTask().execute(tag);
 
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);
@@ -155,7 +162,13 @@ public class AssignBookToShelfActivity extends Activity {
 
             for (String tech : techList) {
                 if (searchedTech.equals(tech)) {
-                    new NdefReaderTask().execute(tag);
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        new NdefReaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tag);
+                    else
+                        new NdefReaderTask().execute(tag);
+
+                    //new NdefReaderTask().execute(tag);
                     break;
                 }
             }
@@ -197,7 +210,7 @@ public class AssignBookToShelfActivity extends Activity {
     }
 
     public void nfcStatusChanged(View view) {
-        startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS),2 );
+        startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 2);
     }
 
     // create a distance matrix according to the input
@@ -275,8 +288,14 @@ public class AssignBookToShelfActivity extends Activity {
 
                     barcode=result.substring(2);
 
+
                     // Getting complete user details in background thread
-                    new GetBookBarcode().execute();
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    else
+                        new GetBookBarcode().execute();
+
+                    //new GetBookBarcode().execute();
 
                     //Book book= new Book(type,""+row);
                     //allIDs.append(result.substring(2,4));
@@ -315,21 +334,17 @@ public class AssignBookToShelfActivity extends Activity {
 
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request
-                        JSONObject json = jsonParser.makeHttpRequest(
+
+                        JSONObject json2 = jsonParser.makeHttpRequest(
                                 url_book_barcode_for_details, "GET", params);
 
-                        Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
-                        // check your log for json response
-                        //Log.d("Single Product Details", json.toString());
-
                         // json success tag
-                        if(json!=null) {
-                            success = json.getInt(TAG_SUCCESS);
+                        if(json2!=null) {
+                            success = json2.getInt(TAG_SUCCESS);
                             if (success == 1) {
                                 //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
                                 // successfully received product details
-                                JSONArray productObj = json
-                                        .getJSONArray(TAG_PRODUCT); // JSON Array
+                                JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
 
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
@@ -359,9 +374,9 @@ public class AssignBookToShelfActivity extends Activity {
 
     class UpdateBookLocation extends AsyncTask<String, String, String> {
 
-        /**
+       /* *
          * Getting product details in background thread
-         * */
+         **/
         protected String doInBackground(String... params) {
 
             // updating UI from Background Thread
@@ -373,13 +388,19 @@ public class AssignBookToShelfActivity extends Activity {
                     {
                         try{
                             List<NameValuePair> params = new ArrayList<NameValuePair>();
-                            params.add(new BasicNameValuePair("shelf", shelf.getText().toString()));
-                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode()));
+                            Integer sh = Integer.parseInt(shelf.getText().toString());
+                            //String s = new String(sh);
+                            Toast.makeText(context, sh.toString(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, b.get(i).getBarcode().toString(), Toast.LENGTH_SHORT).show();
+                            params.add(new BasicNameValuePair("shelf", sh.toString()));
+                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
 
                             // getting student details by making HTTP request
                             // Note that product details url will use GET request
-                            JSONObject json = jsonParser.makeHttpRequest(
-                                    url_book_to_shlef, "GET", params);
+                            JSONObject json = jsonParser2.makeHttpRequest(
+                                    url_book_to_shelf, "GET", params);
+
+                            Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
 
                             // json success tag
                             if(json!=null) {
