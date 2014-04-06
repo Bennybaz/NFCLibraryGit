@@ -26,6 +26,7 @@ public class LibrarianMainActivity extends Activity {
 
     private Button searchBtn;
     private Button returnBtn;
+    private Button manageBtn;
     private TextView greeting;
     private String librarianID;
     private Context context;
@@ -56,6 +57,7 @@ public class LibrarianMainActivity extends Activity {
 
         searchBtn = (Button) findViewById(R.id.searchBtn);
         returnBtn = (Button) findViewById(R.id.bookReturnBtn);
+        manageBtn = (Button) findViewById(R.id.manageBtn);
         greeting = (TextView) findViewById(R.id.greetText2);
 
         librarianID = getIntent().getExtras().getString("ID").substring(1);
@@ -83,6 +85,15 @@ public class LibrarianMainActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(LibrarianMainActivity.this, ReturnRouteActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        manageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ManageInventoryActivity.class);
+                intent.putExtra("ID", librarianID);
                 startActivity(intent);
             }
         });

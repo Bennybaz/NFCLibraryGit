@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="5dp">
+
+    <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="Scan a Shelf Tag: "
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/shelfTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/shelfTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/shelfTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/listViewLayout2"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ListView
+                android:layout_width="match_parent"
+                android:layout_height="420dp"
+                android:visibility="invisible"
+                android:id="@+id/listViewShelf"/>
+    </LinearLayout>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/assign_books"
+            android:id="@+id/writeShelfBtn"
+            android:padding="5dp"
+            android:gravity="center"
+            android:visibility="invisible"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/operation"
+            android:layout_centerHorizontal="true"/>
+
+</LinearLayout>

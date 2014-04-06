@@ -122,7 +122,7 @@ public class AddNewBook extends Activity{
                 if (mytag == null) {
                     Toast.makeText(ctx, ctx.getString(R.string.error_detected), Toast.LENGTH_LONG).show();
                 } else {
-                    write("B"+message.getText().toString(), mytag);
+                    write("BK"+message.getText().toString(), mytag);
                     Toast.makeText(ctx, ctx.getString(R.string.ok_writing), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     message.setText("");

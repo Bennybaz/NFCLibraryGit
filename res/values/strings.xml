@@ -32,6 +32,9 @@
     <string name="book_dewey_number">Dewey:</string>
     <string name="book_subject">Subject:</string>
 
+    <string name="assign_books">Assign Books To Shelf</string>
+    <string name="manage_shelf">Manage Shelf</string>
+
     <string-array name="field_arrays">
         <item>Title starting with</item>
         <item>Author starting with</item>
