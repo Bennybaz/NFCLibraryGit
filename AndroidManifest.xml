@@ -26,6 +26,7 @@
         android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity android:name=".SearchBook"></activity>
+        <activity android:name=".SearchResultsActivity"></activity>
         <activity android:name=".ManageInventoryActivity"></activity>
         <activity android:name=".AboutActivity"></activity>
         <activity android:name=".ReturnRouteActivity">
@@ -65,7 +66,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".SearchResultsActivity"/>
+        <activity android:name=".BookBorrowActivity"/>
     </application>
 
 </manifest>
