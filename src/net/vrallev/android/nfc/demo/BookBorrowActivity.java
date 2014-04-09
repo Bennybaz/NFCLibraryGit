@@ -22,6 +22,7 @@ import android.widget.Toast;
 import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,13 +43,18 @@ public class BookBorrowActivity extends Activity {
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser2 = new JSONParser();
+
 
     // username in db url
     private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
+    private static final String url_book_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
+    private static final String TAG_PRODUCT = "book";
 
+    String barcode;
     Context context;
     ListView lv;
     public MySimpleArrayAdapter adapter;
@@ -247,18 +253,19 @@ public class BookBorrowActivity extends Activity {
         protected void onPostExecute(String result) {
             if (result != null) {
                 String type = result.substring(0,1);
-                int barcode = Integer.parseInt(result.substring(2));
+                barcode=result.substring(2);
 
                 if(type.equals("BK")){
                     super.onPostExecute(result);
 
-                    Book book= new Book();
+                    //Book book= new Book();
                     //update the book array here
-                    book.setBarcode(result.substring(2));
-                    b.add(book);
+                    //book.setBarcode(result.substring(2));
+                    //b.add(book);
 
-                    //????//
-                    adapter.notifyDataSetChanged();
+                    new GetBookBarcode().execute();
+
+                    //adapter.notifyDataSetChanged();
                 }
 
             }
@@ -311,6 +318,63 @@ public class BookBorrowActivity extends Activity {
                             e.printStackTrace();
                         }
 
+                    }
+                }
+            });
+
+            return null;
+        }
+    }
+
+    class GetBookBarcode extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    try {
+                        // Building Parameters
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("barcode", barcode));
+
+                        // getting student details by making HTTP request
+                        // Note that product details url will use GET request
+
+                        JSONObject json2 = jsonParser.makeHttpRequest(
+                                url_book_details , "GET", params);
+
+                        // json success tag
+                        if(json2!=null) {
+                            success = json2.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
+                                // successfully received product details
+                                JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                // get first user object from JSON Array
+                                JSONObject product = productObj.getJSONObject(0);
+
+                                Book bk = new Book();
+                                bk.setBarcode(barcode);
+                                bk.setName(product.getString("title"));
+                                bk.setAuthor(product.getString("author"));
+                                b.add(bk);
+                                adapter.notifyDataSetChanged();
+
+                            } else {
+                                // product with pid not found
+                            }
+                        }
+                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }
             });
