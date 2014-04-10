@@ -55,7 +55,7 @@
             android:text="@string/bookBorrow"
             android:padding="5dp"
             style="@style/myButton"
-            android:id="@+id/button" android:layout_below="@+id/searchBtn"
+            android:id="@+id/button" android:layout_below="@+id/borrowBtn"
             android:layout_marginTop="10dp" android:textColor="@color/black"/>
 
 </LinearLayout>

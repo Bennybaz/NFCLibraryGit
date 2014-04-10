@@ -27,9 +27,17 @@
 
         <activity android:name=".SearchBook"></activity>
         <activity android:name=".SearchResultsActivity"></activity>
+        <activity android:name=".SearchResultActivity"></activity>
         <activity android:name=".ManageInventoryActivity"></activity>
         <activity android:name=".AboutActivity"></activity>
         <activity android:name=".ReturnRouteActivity">
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+            </intent-filter>
+        </activity>
+        <activity android:name=".BookBorrowActivity">
 
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -66,7 +74,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".BookBorrowActivity"/>
     </application>
 
 </manifest>

@@ -7,14 +7,15 @@
               android:padding="5dp">
 
     <LinearLayout
-            android:id="@+id/searchResultsList"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="514dp"
-                android:id="@+id/listView"/>
+                android:id="@+id/searchResultsList"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
     </LinearLayout>
 
 </LinearLayout>

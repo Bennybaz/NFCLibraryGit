@@ -58,9 +58,10 @@ public class BookBorrowActivity extends Activity {
     Context context;
     ListView lv;
     public MySimpleArrayAdapter adapter;
+    int flag = 0;
     ArrayList<Book> b = new ArrayList<Book>();
 
-    Button borrowBtn;
+    Button borrowBooksBtn;
     private NfcAdapter mNfcAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -74,12 +75,12 @@ public class BookBorrowActivity extends Activity {
 
         context = this;
 
-        borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        borrowBooksBtn = (Button) findViewById(R.id.borrowBooksBtn);
         lv = (ListView) findViewById(R.id.borrowListView);
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
 
-        borrowBtn.setOnClickListener(new View.OnClickListener() {
+        borrowBooksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new UpdateBorrow().execute();
@@ -252,7 +253,7 @@ public class BookBorrowActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                String type = result.substring(0,1);
+                String type = result.substring(0,2);
                 barcode=result.substring(2);
 
                 if(type.equals("BK")){
@@ -319,6 +320,9 @@ public class BookBorrowActivity extends Activity {
                         }
 
                     }
+
+                    b.clear();
+                    adapter.notifyDataSetChanged();
                 }
             });
 
@@ -347,7 +351,7 @@ public class BookBorrowActivity extends Activity {
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request
 
-                        JSONObject json2 = jsonParser.makeHttpRequest(
+                        JSONObject json2 = jsonParser2.makeHttpRequest(
                                 url_book_details , "GET", params);
 
                         // json success tag
@@ -365,8 +369,16 @@ public class BookBorrowActivity extends Activity {
                                 bk.setBarcode(barcode);
                                 bk.setName(product.getString("title"));
                                 bk.setAuthor(product.getString("author"));
-                                b.add(bk);
-                                adapter.notifyDataSetChanged();
+                                for(int i=0; i<b.size(); i++) {
+                                    if(b.get(i).getBarcode().equals(barcode))
+                                        flag=1;
+                                        break;
+                                }
+
+                                if(flag==0) {
+                                    b.add(bk);
+                                    adapter.notifyDataSetChanged();
+                                }
 
                             } else {
                                 // product with pid not found

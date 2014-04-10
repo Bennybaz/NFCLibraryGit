@@ -38,7 +38,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/bookBorrow"
-            android:id="@+id/borrowBtn"
+            android:id="@+id/readerBorrowBtn"
             android:gravity="center"
             android:padding="5dp"
             android:layout_marginTop="5dp"

@@ -1,11 +1,14 @@
 package net.vrallev.android.nfc.demo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by Lidor on 25/03/14.
  */
-public class Book implements Serializable {
+public class Book implements Parcelable {
     private String name;
     private String author;
     private String bookID;
@@ -20,9 +23,20 @@ public class Book implements Serializable {
         this.name = name;
     }
 
-    public Book()
-    {
+    public Book(){
 
+    }
+
+    public Book(Parcel source)
+    {
+        name = source.readString();
+        author = source.readString();
+        bookID = source.readString();
+        location = source.readString();
+        shelf = source.readString();
+        barcode = source.readString();
+        year = source.readString();
+        publisher = source.readString();
     }
 
     public String getAuthor() {
@@ -89,4 +103,32 @@ public class Book implements Serializable {
         this.publisher = publisher;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(name);
+        dest.writeString(author);
+        dest.writeString(bookID);
+        dest.writeString(location);
+        dest.writeString(shelf);
+        dest.writeString(barcode);
+        dest.writeString(year);
+        dest.writeString(publisher);
+
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 }

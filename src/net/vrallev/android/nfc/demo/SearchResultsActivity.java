@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,26 +16,38 @@ import java.util.ArrayList;
  */
 public class SearchResultsActivity extends Activity {
 
-    ArrayList<Book> books = (ArrayList<Book>) getIntent().getSerializableExtra("bookList");
+    ArrayList<Book> books;
+
     Context context;
     ListView lv;
     public MySimpleArrayAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.search_results_list);
+        books =  getIntent().getParcelableArrayListExtra("bookList");
 
-        lv = (ListView) findViewById(R.layout.search_results_list);
+        lv = (ListView) findViewById(R.id.searchResultsList);
 
 
         adapter = new MySimpleArrayAdapter(this, books);
         lv.setAdapter(adapter);
-       /* lv.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
-                startActivity(intent);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                Toast.makeText(context, "SHIT", Toast.LENGTH_LONG).show();
+                Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
+                intent2.putParcelableArrayListExtra("books", books);
+                intent2.putExtra("position", position);
+                startActivity(intent2);
+
             }
-        });*/
+        });
+
 
     }
 }

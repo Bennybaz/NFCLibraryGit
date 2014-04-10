@@ -11,12 +11,18 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import libalg.BranchAndBound;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.*;
@@ -39,6 +45,24 @@ public class ReturnRouteActivity extends Activity {
 
     Button calcBtn;
     private NfcAdapter mNfcAdapter;
+    String barcode;
+    int flag=0;
+
+    // JSON parser class
+    private JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser2 = new JSONParser();
+    private JSONParser jsonParser3 = new JSONParser();
+
+    // username in db url
+    private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
+    private static final String url_book_barcode_for_sector = "http://nfclibrary.site40.net/barcode_to_sector.php";
+    private static final String url_return_book_by_barcode = "http://nfclibrary.site40.net/return_book_by_barcode.php";
+
+    // JSON Node names
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_PRODUCT = "book";
+    //private static final String TAG_PID = "sid";
+    private static final String TAG_NAME = "name";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +79,12 @@ public class ReturnRouteActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                new UpdateBookStatus().execute();
                 try {
                     double[][] data2 = getDoubleTwoDimArray("dump.txt");
                     if(sectors.get(0)!=1) sectors.add(1);
 
                     Collections.sort(sectors);
-
-
-
                     adjacency_matrix = new double[sectors.size() + 1][sectors.size() + 1];
 
                     createAdj(data2, sectors);
@@ -282,23 +304,203 @@ public class ReturnRouteActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                String type = result.substring(0,1);
-                int row = Integer.parseInt(result.substring(1,3));
+                String type = result.substring(0,2);
+                barcode=result.substring(2);
 
-                if(type.equals("E")){
+                if(type.equals("BK")){
                     super.onPostExecute(result);
 
-                        if(!sectors.contains(row)){
-                            sectors.add(row);
-                            Book book= new Book(type,""+row);
-                            //update the book array here
-                            b.add(book);
-                            adapter.notifyDataSetChanged();
-                        }
+
+                    // Getting complete user details in background thread
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        new GetBookSector().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    else
+                        new GetBookSector().execute();
                 }
+                else Toast.makeText(context,"This is not a Book Tag",Toast.LENGTH_SHORT).show();
 
             }
-            Toast.makeText(context,sectors.toString(),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    class GetBookBarcode extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    try {
+                        // Building Parameters
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("barcode", barcode));
+
+                        // getting student details by making HTTP request
+                        // Note that product details url will use GET request
+
+                        JSONObject json2 = jsonParser.makeHttpRequest(
+                                url_book_barcode_for_details, "GET", params);
+
+                        // json success tag
+                        if(json2!=null) {
+                            success = json2.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+                                // successfully received product details
+                                JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                // get first user object from JSON Array
+                                JSONObject product = productObj.getJSONObject(0);
+
+                                Book bk = new Book();
+                                bk.setBarcode(barcode);
+                                bk.setName(product.getString("title"));
+                                bk.setAuthor(product.getString("author"));
+                                for(int i=0; i<b.size(); i++) {
+                                    if(b.get(i).getBarcode().equals(barcode))
+                                        flag=1;
+                                    break;
+                                }
+
+                                if(flag==0) {
+                                    b.add(bk);
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                            } else {
+                                // product with pid not found
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            return null;
+        }
+    }
+
+    class GetBookSector extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    try {
+                        // Building Parameters
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("barcode", barcode));
+
+                        // getting student details by making HTTP request
+                        // Note that product details url will use GET request
+
+                        JSONObject json2 = jsonParser2.makeHttpRequest(
+                                url_book_barcode_for_sector, "GET", params);
+
+                        // json success tag
+                        if(json2!=null) {
+                            success = json2.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+
+                                // successfully received product details
+                                JSONArray productObj = json2.getJSONArray("reader"); // JSON Array
+
+                                // get first user object from JSON Array
+                                JSONObject product = productObj.getJSONObject(0);
+
+
+                                int sector = product.getInt("sector");
+
+                                if(!sectors.contains(sector)) {
+                                    sectors.add(sector);
+                                }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                                        new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    else
+                                        new GetBookBarcode().execute();
+
+
+
+
+                            } else {
+                                // product with pid not found
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            return null;
+        }
+    }
+
+    class UpdateBookStatus extends AsyncTask<String, String, String> {
+
+        /* *
+          * Getting product details in background thread
+          **/
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    for(int i=0; i< b.size(); i++)
+                    {
+                        try{
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+                            JSONObject json = jsonParser3.makeHttpRequest(
+                                    url_return_book_by_barcode, "GET", params);
+
+                            Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+                                    // successfully received product details
+                                    //JSONArray productObj = json
+                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                    // get first user object from JSON Array
+                                    //JSONObject product = productObj.getJSONObject(0);
+                                    Toast.makeText(context,"CHANGED",Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    // product with pid not found
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    b.clear();
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            return null;
         }
     }
 }

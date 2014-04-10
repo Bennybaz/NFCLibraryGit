@@ -31,6 +31,7 @@ public class LibrarianMainActivity extends Activity {
     private TextView greeting;
     private String librarianID;
     private Context context;
+    private Button borrowBtn;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
@@ -59,6 +60,7 @@ public class LibrarianMainActivity extends Activity {
         searchBtn = (Button) findViewById(R.id.searchBtn);
         returnBtn = (Button) findViewById(R.id.bookReturnBtn);
         manageBtn = (Button) findViewById(R.id.manageBtn);
+        borrowBtn = (Button) findViewById(R.id.borrowBtn);
         greeting = (TextView) findViewById(R.id.greetText2);
 
         librarianID = getIntent().getExtras().getString("ID").substring(1);
@@ -106,6 +108,15 @@ public class LibrarianMainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        /*borrowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, BookBorrowActivity.class);
+                intent.putExtra("ID", librarianID);
+                startActivity(intent);
+            }
+        });*/
     }
     /**
      * Background Async Task to Get complete product details

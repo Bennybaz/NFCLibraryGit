@@ -59,7 +59,7 @@ public class StudentMainActivity extends Activity {
 
 
         searchBtn = (Button) findViewById(R.id.searchBtn);
-        borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        borrowBtn = (Button) findViewById(R.id.readerBorrowBtn);
         greeting = (TextView) findViewById(R.id.greetText);
 
         studentID = getIntent().getExtras().getString("ID").substring(1);
@@ -87,8 +87,9 @@ public class StudentMainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-
-
+                Intent intent = new Intent(context, BookBorrowActivity.class);
+                intent.putExtra("ID", studentID);
+                startActivity(intent);
             }
         });
     }

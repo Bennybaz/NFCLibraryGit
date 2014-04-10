@@ -1,6 +1,7 @@
 package net.vrallev.android.nfc.demo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -28,12 +29,12 @@ public class SearchBook extends Activity {
 
     private Button button;
     private EditText query;
-    private Spinner field;
+    //private Spinner field;
     ArrayList<Book> books = new ArrayList<Book>();
     Context context;
 
     String query_string;
-    String field_string;
+    //String field_string;
 
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
@@ -51,7 +52,8 @@ public class SearchBook extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         setTitle("Search Book");
-        final Context context = this;
+        //final Context context = this;
+        context=this;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_search_main);
@@ -62,30 +64,35 @@ public class SearchBook extends Activity {
 
         button = (Button) findViewById(R.id.buttonUrl);
         query = (EditText) findViewById(R.id.queryET);
-        field = (Spinner) findViewById(R.id.fieldSpinner);
+        //field = (Spinner) findViewById(R.id.fieldSpinner);
 
-        // Getting complete user details in background thread
-        new GetSearchResults().execute();
 
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-                query_string = query.getText().toString();
-                field_string = field.getSelectedItem().toString();
-                Intent intent = new Intent(context, WebActivity.class);
-                intent.putExtra("returnkey1",query_string);
-                intent.putExtra("returnkey2",field_string);
-                startActivity(intent);
+                // Getting complete user details in background thread
+                new GetSearchResults().execute();
             }
 
         });
     }
 
+
     /**
      * Background Async Task to Get complete product details
      * */
     class GetSearchResults extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ProgressDialog pDialog = new ProgressDialog(SearchBook.this);
+            pDialog.setMessage("Loading results. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
 
         /**
          * Getting product details in background thread
@@ -103,7 +110,7 @@ public class SearchBook extends Activity {
                     try {
                         // Building Parameters
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("searchField", author));
+                        //params.add(new BasicNameValuePair("searchField", author));
                         params.add(new BasicNameValuePair("keyWord", query_string));
 
                         // getting student details by making HTTP request
@@ -119,10 +126,10 @@ public class SearchBook extends Activity {
                         if(json!=null) {
                             success = json.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
+
                                 // successfully received product details
                                 JSONArray productObj = json
-                                        .getJSONArray(TAG_PRODUCT); // JSON Array
+                                        .getJSONArray("books"); // JSON Array
 
 
 
@@ -132,21 +139,18 @@ public class SearchBook extends Activity {
                                     JSONObject product = productObj.getJSONObject(i);
                                     Book b = new Book();
                                     b.setBookID(product.getString("bookID"));
-                                    b.setLocation("location");
-                                    b.setShelf("shelf");
-                                    b.setBarcode("barcode");
-                                    b.setAuthor("author");
-                                    b.setName("name");
-                                    b.setYear("year");
-                                    b.setPublisher("publisher");
+                                    b.setLocation(product.getString("location"));
+                                    b.setShelf(product.getString("shelf"));
+                                    b.setBarcode(product.getString("barcode"));
+                                    b.setAuthor(product.getString("author"));
+                                    b.setName(product.getString("name"));
+                                    b.setYear(product.getString("year"));
+                                    b.setPublisher(product.getString("publisher"));
                                     books.add(b);
-
-                                    Intent intent = new Intent(SearchBook.this, SearchResultsActivity.class);
-                                    intent.putExtra("bookList",books);
-                                    startActivity(intent);
                                 }
-                                //Toast.makeText(context,"NOT SHIT",Toast.LENGTH_LONG).show();
-                                //greeting.setText("Hello, " + product.getString(TAG_NAME));
+                                Intent intent = new Intent(SearchBook.this, SearchResultsActivity.class);
+                                intent.putParcelableArrayListExtra("bookList",books);
+                                startActivity(intent);
 
                             } else {
                                 // product with pid not found
