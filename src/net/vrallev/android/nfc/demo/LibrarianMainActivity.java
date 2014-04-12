@@ -63,7 +63,7 @@ public class LibrarianMainActivity extends Activity {
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
         greeting = (TextView) findViewById(R.id.greetText2);
 
-        librarianID = getIntent().getExtras().getString("ID").substring(1);
+        librarianID = getIntent().getExtras().getString("ID").substring(2);
 
         // Getting complete user details in background thread
         GetUserDetails task1 = new GetUserDetails();

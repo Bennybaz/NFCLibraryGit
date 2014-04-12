@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-        android:padding="5dp">
+              android:padding="5dp">
 
     <LinearLayout
             android:id="@+id/listViewLayout"
@@ -14,13 +14,13 @@
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="459dp"
-                android:id="@+id/listView"/>
+                android:id="@+id/cartListView"/>
     </LinearLayout>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="CALCULATE"
-            android:id="@+id/calcRouteBtn"
+            android:id="@+id/borrowCartBtn"
             android:padding="5dp"
             android:gravity="center"
             style="@style/myButton"

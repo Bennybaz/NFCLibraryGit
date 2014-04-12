@@ -17,6 +17,7 @@ public class Book implements Parcelable {
     private String barcode;
     private String year;
     private String publisher;
+    private String status;
 
     public Book(String author, String name) {
         this.author = author;
@@ -37,6 +38,7 @@ public class Book implements Parcelable {
         barcode = source.readString();
         year = source.readString();
         publisher = source.readString();
+        status = source.readString();
     }
 
     public String getAuthor() {
@@ -103,6 +105,14 @@ public class Book implements Parcelable {
         this.publisher = publisher;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,6 +129,7 @@ public class Book implements Parcelable {
         dest.writeString(barcode);
         dest.writeString(year);
         dest.writeString(publisher);
+        dest.writeString(status);
 
     }
 

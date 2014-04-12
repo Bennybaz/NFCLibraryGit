@@ -238,29 +238,25 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			if (result != null) {
-                String type = result.substring(0,1);
+                String type = result.substring(0,2);
 
 
-                if(type.equals("S")){
+                if(type.equals("ST")){
                     super.onPostExecute(result);
 
                     Intent intent = new Intent(MainActivity.this, StudentMainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("ID", result);
                     startActivity(intent);
-
-                    Toast.makeText(getApplicationContext(), type, Toast.LENGTH_SHORT).show();
                 }
 
-                if(type.equals("L")){
+                if(type.equals("LB")){
                     super.onPostExecute(result);
 
                     Intent intent = new Intent(MainActivity.this, LibrarianMainActivity.class);
                     intent.putExtra("ID", result);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-
-                    Toast.makeText(getApplicationContext(), type, Toast.LENGTH_SHORT).show();
                 }
 			}
 		}
@@ -282,6 +278,7 @@ public class MainActivity extends Activity {
                 this.startActivityForResult(new Intent((Context)(this), (Class)(AboutActivity.class)),1);
                 return true;
             case R.id.menu_exit:
+                getApplicationContext().deleteFile("cart");
                 this.finish();
                 return true;
             default:

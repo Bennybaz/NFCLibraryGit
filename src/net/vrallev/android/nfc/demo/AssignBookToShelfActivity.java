@@ -72,6 +72,7 @@ public class AssignBookToShelfActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.assign_shelf);
+        setTitle("Assign Books To Shelf");
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -281,7 +282,7 @@ public class AssignBookToShelfActivity extends Activity {
 
             if (result != null) {
                 String type = result.substring(0,2);
-                int row = Integer.parseInt(result.substring(2,4));
+                //int row = Integer.parseInt(result.substring(2,4));
 
                 if(type.equals("BK")){
                     super.onPostExecute(result);

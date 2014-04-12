@@ -84,7 +84,7 @@ public class SearchBook extends Activity {
      * */
     class GetSearchResults extends AsyncTask<String, String, String> {
 
-        @Override
+       /* @Override
         protected void onPreExecute() {
             super.onPreExecute();
             ProgressDialog pDialog = new ProgressDialog(SearchBook.this);
@@ -92,7 +92,7 @@ public class SearchBook extends Activity {
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
-        }
+        }*/
 
         /**
          * Getting product details in background thread
@@ -146,6 +146,7 @@ public class SearchBook extends Activity {
                                     b.setName(product.getString("name"));
                                     b.setYear(product.getString("year"));
                                     b.setPublisher(product.getString("publisher"));
+                                    b.setStatus(product.getString("status"));
                                     books.add(b);
                                 }
                                 Intent intent = new Intent(SearchBook.this, SearchResultsActivity.class);
@@ -156,7 +157,6 @@ public class SearchBook extends Activity {
                                 // product with pid not found
                             }
                         }
-                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

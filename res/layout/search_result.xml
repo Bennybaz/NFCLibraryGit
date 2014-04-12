@@ -55,15 +55,15 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textAlignment="center"
-                android:text="@string/book_edition"
+                android:text="Publisher:"
                 android:textSize="20dp"
                 android:textColor="@color/holo_blue_dark"
-                android:id="@+id/editionTV"/>
+                android:id="@+id/publisherTV"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editionTextView" android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/editionTV"
+                android:id="@+id/publisherTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/publisherTV"
                 android:padding="5dp"
                 android:textAlignment="center"
                 android:textSize="16dp"
@@ -76,15 +76,15 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textAlignment="center"
-                android:text="@string/book_subject"
+                android:text="Year:"
                 android:textSize="20dp"
                 android:textColor="@color/holo_blue_dark"
-                android:id="@+id/subjectTV"/>
+                android:id="@+id/yearTV"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/subjectTextView" android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/subjectTV"
+                android:id="@+id/yearTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/yearTV"
                 android:padding="5dp"
                 android:textAlignment="center"
                 android:textSize="16dp"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textAlignment="center"
-                android:text="@string/book_dewey_number"
+                android:text="Barcode:"
                 android:textSize="20dp"
                 android:textColor="@color/holo_blue_dark"
                 android:id="@+id/deweyTV"/>
@@ -133,9 +133,31 @@
                 />
 
     </RelativeLayout>
+    <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="Status:"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/statusTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/statusTextView" android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/statusTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+
+    </RelativeLayout>
     <Button android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="@style/myButton"
+            android:id="@+id/getDirectionsBtn"
             android:padding="5dp"
             android:layout_marginTop="55dp"
             android:text="Get Directions"

@@ -29,6 +29,7 @@ public class StudentMainActivity extends Activity {
 
     private Button searchBtn;
     private Button borrowBtn;
+    private Button cartBtn;
     private TextView greeting;
     private String studentID;
     private Context context;
@@ -60,9 +61,10 @@ public class StudentMainActivity extends Activity {
 
         searchBtn = (Button) findViewById(R.id.searchBtn);
         borrowBtn = (Button) findViewById(R.id.readerBorrowBtn);
+        cartBtn = (Button) findViewById(R.id.cartBtn);
         greeting = (TextView) findViewById(R.id.greetText);
 
-        studentID = getIntent().getExtras().getString("ID").substring(1);
+        studentID = getIntent().getExtras().getString("ID").substring(2);
 
         // Getting complete user details in background thread
         new GetUserDetails().execute();
@@ -88,6 +90,16 @@ public class StudentMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, BookBorrowActivity.class);
+                intent.putExtra("ID", studentID);
+                startActivity(intent);
+            }
+        });
+
+        cartBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, BookCartActivity.class);
                 intent.putExtra("ID", studentID);
                 startActivity(intent);
             }
@@ -120,7 +132,7 @@ public class StudentMainActivity extends Activity {
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_user_name_details, "GET", params);
 
-                        Toast.makeText(context,json.toString(),Toast.LENGTH_LONG).show();
+
                         // check your log for json response
                         //Log.d("Single Product Details", json.toString());
 
@@ -128,21 +140,21 @@ public class StudentMainActivity extends Activity {
                         if(json!=null) {
                             success = json.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
+
                                 // successfully received product details
                                 JSONArray productObj = json
                                         .getJSONArray(TAG_PRODUCT); // JSON Array
 
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
-                                Toast.makeText(context,"NOT SHIT",Toast.LENGTH_LONG).show();
+
                                 greeting.setText("Hello, " + product.getString(TAG_NAME));
 
                             } else {
                                 // product with pid not found
                             }
                         }
-                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

@@ -67,6 +67,7 @@ public class ReturnRouteActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.return_route);
+        setTitle("Return Books");
         context = this;
 
         calcBtn = (Button) findViewById(R.id.calcRouteBtn);

@@ -26,11 +26,11 @@
         android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity android:name=".SearchBook"></activity>
-        <activity android:name=".SearchResultsActivity"></activity>
-        <activity android:name=".SearchResultActivity"></activity>
-        <activity android:name=".ManageInventoryActivity"></activity>
+        <activity android:name=".SearchResultsActivity" android:parentActivityName=".SearchBook"></activity>
+        <activity android:name=".SearchResultActivity" android:parentActivityName=".SearchResultsActivity"></activity>
+        <activity android:name=".ManageInventoryActivity" android:parentActivityName=".LibrarianMainActivity"></activity>
         <activity android:name=".AboutActivity"></activity>
-        <activity android:name=".ReturnRouteActivity">
+        <activity android:name=".ReturnRouteActivity" android:parentActivityName=".LibrarianMainActivity">
 
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -44,7 +44,7 @@
 
             </intent-filter>
         </activity>
-        <activity android:name=".AssignBookToShelfActivity">
+        <activity android:name=".AssignBookToShelfActivity" android:parentActivityName=".ManageInventoryActivity">
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
@@ -56,6 +56,7 @@
         <activity android:name=".AddNewBook" android:parentActivityName=".LibrarianMainActivity"></activity>
         <activity android:name=".StudentMainActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".LibrarianMainActivity" android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".BookCartActivity" android:parentActivityName=".StudentMainActivity"></activity>
 
 
         <activity
