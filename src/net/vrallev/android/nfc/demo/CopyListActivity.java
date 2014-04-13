@@ -1,99 +1,95 @@
 package net.vrallev.android.nfc.demo;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by Benny on 17/03/14.
+ * Created by Lidor on 13/04/14.
  */
-public class SearchBook extends Activity {
-
-    private Button button;
-    private EditText query;
-    private Spinner field;
-    ArrayList<Book> books = new ArrayList<Book>();
-    Context context;
-
-    String query_string;
-    //String field_string;
+public class CopyListActivity extends Activity {
 
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
 
-    // books in db url
-    //private static final String url_user_name_details = "http://nfclibrary.site40.net/search_book_by_author_or_title.php";
-    private static final String url_user_name_details = "http://nfclibrary.site40.net/search_book_test.php";
-
-
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PRODUCT = "reader";
-    //private static final String TAG_PID = "sid";
-    private static final String TAG_SEARCH_FIELD = "searchField";
-    private static final String TAG_KEYWORD = "keyWord";
+
+    Context context;
+    ArrayList<Book> books;
+    ArrayList<Book> copy = new ArrayList<Book>();
+    int pos;
+    Book bk;
+    String bookID;
+
+    ListView lv;
+    public CopyResultsAdapter adapter;
+
+    private static final String url_copy_details = "http://nfclibrary.site40.net/book_copy_test.php";
 
     public void onCreate(Bundle savedInstanceState) {
-        setTitle("Search Book");
-        //final Context context = this;
-        context=this;
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_search_main);
+        setContentView(R.layout.copy_list);
+        setTitle("Copy List");
+
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
 
-        button = (Button) findViewById(R.id.buttonUrl);
-        query = (EditText) findViewById(R.id.queryET);
-        field = (Spinner) findViewById(R.id.fieldSpinner);
+        context = this;
+        books =  getIntent().getParcelableArrayListExtra("bookList");
+        pos =  getIntent().getIntExtra("position",0);
+        bk = books.get(pos);
+        bookID = bk.getBookID();
 
+        /*for(int i=0; i<5 ;i++)
+        {
+            Book b = new Book();
+            b.setName("lol"+i);
+            b.setAuthor("hh"+i);
+            copy.add(b);
+        }*/
 
-        button.setOnClickListener(new View.OnClickListener() {
+        lv = (ListView) findViewById(R.id.copyList);
+        adapter = new CopyResultsAdapter(this, copy);
+        lv.setAdapter(adapter);
 
+        new GetSearchResults().execute();
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View arg0) {
-                // Getting complete user details in background thread
-                new GetSearchResults().execute();
-            }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                //Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
+                Intent intent2 = new Intent(CopyListActivity.this, SearchResultActivity.class);
+                intent2.putParcelableArrayListExtra("bookList", copy);
+                intent2.putExtra("position", position);
+                startActivity(intent2);
+            }
         });
+
     }
 
-
-    /**
-     * Background Async Task to Get complete product details
-     * */
     class GetSearchResults extends AsyncTask<String, String, String> {
-
-       /* @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ProgressDialog pDialog = new ProgressDialog(SearchBook.this);
-            pDialog.setMessage("Loading results. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }*/
 
         /**
          * Getting product details in background thread
@@ -105,24 +101,16 @@ public class SearchBook extends Activity {
                     // Check for success tag
                     int success;
 
-                    //type of search
-                    String searchField = new String();
-
                     try {
                         // Building Parameters
-                        if(field.getSelectedItemPosition() == 0)
-                            searchField = "name";
-                        if(field.getSelectedItemPosition() == 1)
-                            searchField = "author";
 
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("searchField", searchField));
-                        params.add(new BasicNameValuePair("keyWord", query.getText().toString()));
+                        params.add(new BasicNameValuePair("bookID", bookID));
 
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request
                         JSONObject json = jsonParser.makeHttpRequest(
-                                url_user_name_details, "GET", params);
+                                url_copy_details, "GET", params);
 
                         //Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
                         // check your log for json response
@@ -144,20 +132,18 @@ public class SearchBook extends Activity {
                                     // get first user object from JSON Array
                                     JSONObject product = productObj.getJSONObject(i);
                                     Book b = new Book();
-                                    b.setBookID(product.getString("bookID"));
-                                    b.setLocation(product.getString("location"));
-                                    b.setShelf(product.getString("shelf"));
+                                    b.setBookID(bookID);
+                                    b.setLocation(bk.getLocation());
+                                    b.setShelf(bk.getShelf());
                                     b.setBarcode(product.getString("barcode"));
-                                    b.setAuthor(product.getString("author"));
-                                    b.setName(product.getString("name"));
-                                    b.setYear(product.getString("year"));
-                                    b.setPublisher(product.getString("publisher"));
+                                    b.setAuthor(bk.getAuthor());
+                                    b.setName(bk.getName());
+                                    b.setYear(bk.getYear());
+                                    b.setPublisher(bk.getPublisher());
                                     b.setStatus(product.getString("status"));
-                                    books.add(b);
+                                    copy.add(b);
+                                    adapter.notifyDataSetChanged();
                                 }
-                                Intent intent = new Intent(SearchBook.this, SearchResultsActivity.class);
-                                intent.putParcelableArrayListExtra("bookList",books);
-                                startActivity(intent);
 
                             } else {
                                 // product with pid not found

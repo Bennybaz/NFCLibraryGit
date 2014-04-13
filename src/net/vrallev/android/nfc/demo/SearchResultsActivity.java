@@ -38,7 +38,8 @@ public class SearchResultsActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
+                //Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
+                Intent intent2 = new Intent(SearchResultsActivity.this, CopyListActivity.class);
                 intent2.putParcelableArrayListExtra("bookList", books);
                 intent2.putExtra("position", position);
                 startActivity(intent2);
