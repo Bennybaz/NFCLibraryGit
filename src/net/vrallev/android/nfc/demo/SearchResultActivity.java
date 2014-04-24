@@ -36,8 +36,6 @@ public class SearchResultActivity extends Activity{
     private Button borrowBookBtn;
     private Dialog directDialog;
     private Button addToCartBtn;
-    ArrayList<Book> books;
-    int pos;
     TextView title;
     TextView author;
     TextView publisher;
@@ -45,16 +43,20 @@ public class SearchResultActivity extends Activity{
     TextView shelf;
     TextView barcode;
     TextView status;
-    Book bk;
+
+    ArrayList<Book> books; //contains the books from the search query
+    int pos; //position of specific book
+    Book bk; //the chosen book
 
     private JSONParser jsonParser = new JSONParser();
     private JSONParser jsonParser2 = new JSONParser();
+
+    // book details in db url
     private static final String url_book_barcode_for_sector = "http://nfclibrary.site40.net/barcode_to_sector.php";
     private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
-    private static final String TAG_PRODUCT = "book";
     String FILENAME="cart";
 
 
@@ -76,12 +78,8 @@ public class SearchResultActivity extends Activity{
         addToCartBtn = (Button) findViewById(R.id.addToCartBtn);
 
         books =  getIntent().getParcelableArrayListExtra("bookList");
-
-
         pos =  getIntent().getIntExtra("position",0);
-
         bk = books.get(pos);
-
 
         title = (TextView) findViewById(R.id.titleTextView);
         author = (TextView) findViewById(R.id.authorTextView);
@@ -91,6 +89,7 @@ public class SearchResultActivity extends Activity{
         barcode = (TextView) findViewById(R.id.deweyTextView);
         status = (TextView) findViewById(R.id.statusTextView);
 
+        //set the book details
         title.setText(books.get(pos).getName().toString());
         author.setText(books.get(pos).getAuthor().toString());
         publisher.setText(books.get(pos).getPublisher().toString());
@@ -103,7 +102,7 @@ public class SearchResultActivity extends Activity{
 
             @Override
             public void onClick(View arg0) {
-
+                //call async task for book position
                new GetBookSector().execute();
             }
         });
@@ -111,7 +110,7 @@ public class SearchResultActivity extends Activity{
         borrowBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //call async task for borrow
                 new UpdateBorrow().execute();
 
             }
@@ -120,6 +119,7 @@ public class SearchResultActivity extends Activity{
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //add book to cart
                 FileOutputStream fos = null;
                 try {
                     fos = openFileOutput(FILENAME, Context.MODE_APPEND);
@@ -133,9 +133,6 @@ public class SearchResultActivity extends Activity{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
             }
         });
 
@@ -156,7 +153,7 @@ public class SearchResultActivity extends Activity{
     class UpdateBorrow extends AsyncTask<String, String, String> {
 
         /* *
-          * Getting product details in background thread
+          * Updating book borrow in background thread
           **/
         protected String doInBackground(String... params) {
 
@@ -181,16 +178,10 @@ public class SearchResultActivity extends Activity{
                         if (json != null) {
                             success = json.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                // successfully received product details
-                                //JSONArray productObj = json
-                                //       .getJSONArray(TAG_PRODUCT); // JSON Array
-
-                                // get first user object from JSON Array
-                                //JSONObject product = productObj.getJSONObject(0);
                                 Toast.makeText(context, "BORROWED", Toast.LENGTH_LONG).show();
 
                             } else {
-                                // product with pid not found
+
                             }
                         }
                     } catch (JSONException e) {
@@ -208,7 +199,7 @@ public class SearchResultActivity extends Activity{
     class GetBookSector extends AsyncTask<String, String, String> {
 
         /**
-         * Getting product details in background thread
+         * Getting book position details in background thread
          * */
         protected String doInBackground(String... params) {
 
@@ -239,7 +230,6 @@ public class SearchResultActivity extends Activity{
 
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
-
 
                                 int sector = product.getInt("sector");
                                 int stand = product.getInt("stand");

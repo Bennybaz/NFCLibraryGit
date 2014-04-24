@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
  * Created by Benny on 20/03/2014.
  */
 public class AddNewBook extends Activity{
+
     final Context context = this;
     private Button writeBtn;
     TextView message;
@@ -31,8 +32,8 @@ public class AddNewBook extends Activity{
     NfcAdapter adapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
-    boolean writeMode;
-    Tag mytag;
+    boolean writeMode; //flag for enable/disable write on tag
+    Tag mytag; //the NFC tag for write
     Context ctx;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,7 @@ public class AddNewBook extends Activity{
     protected void onNewIntent(Intent intent){
         if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             mytag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-
+            //write book barcode on its NFC tag
             try {
                 if (mytag == null) {
                     Toast.makeText(ctx, ctx.getString(R.string.error_detected), Toast.LENGTH_LONG).show();
@@ -129,13 +130,10 @@ public class AddNewBook extends Activity{
 
                 }
             } catch (IOException e) {
-                //Toast.makeText(ctx, ctx.getString(R.string.error_writing), Toast.LENGTH_LONG ).show();
                 e.printStackTrace();
             } catch (FormatException e) {
-                //Toast.makeText(ctx, ctx.getString(R.string.error_writing) , Toast.LENGTH_LONG ).show();
                 e.printStackTrace();
             }
-            //Toast.makeText(this, this.getString(R.string.ok_detection) + mytag.toString(), Toast.LENGTH_LONG ).show();
         }
     }
 

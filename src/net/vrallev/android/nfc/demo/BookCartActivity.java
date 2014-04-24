@@ -30,7 +30,7 @@ public class BookCartActivity extends Activity {
     public ArrayList<String> barcodes  = new ArrayList<String>();
     ListView lv;
     public MySimpleArrayAdapter adapter;
-    ArrayList<Book> b = new ArrayList<Book>();
+    ArrayList<Book> b = new ArrayList<Book>(); //contains the books for ListView
     int flag = 0;
     Button borrowBtn;
     Dialog directDialog;
@@ -39,16 +39,13 @@ public class BookCartActivity extends Activity {
     private JSONParser jsonParser = new JSONParser();
     private JSONParser jsonParser2 = new JSONParser();
 
-    // username in db url
+    // book details in db url
     private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
     private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PRODUCT = "book";
-    //private static final String TAG_PID = "sid";
-    private static final String TAG_NAME = "name";
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +62,7 @@ public class BookCartActivity extends Activity {
         lv.setAdapter(adapter);
         borrowBtn = (Button) findViewById(R.id.borrowCartBtn);
 
+        //open the file for get the book barcodes from cart
         FileInputStream databaseInputStream = null;
         try {
             databaseInputStream = openFileInput("cart");
@@ -99,11 +97,11 @@ public class BookCartActivity extends Activity {
 
 
     }
-
+    //async task for get the book details for view on ListView
     class GetBookBarcode extends AsyncTask<String, String, String> {
 
         /**
-         * Getting product details in background thread
+         * Getting books details in background thread
          * */
         protected String doInBackground(String... params) {
 
@@ -166,7 +164,7 @@ public class BookCartActivity extends Activity {
     class UpdateBorrow extends AsyncTask<String, String, String> {
 
         /* *
-          * Getting product details in background thread
+          * Updating the book status in background thread
           **/
         protected String doInBackground(String... params) {
 

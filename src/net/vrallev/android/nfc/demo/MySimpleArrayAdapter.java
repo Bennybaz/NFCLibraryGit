@@ -34,12 +34,9 @@ public class MySimpleArrayAdapter extends ArrayAdapter<Book> {
         TextView textView1 = (TextView) rowView.findViewById(R.id.headline);
         TextView textView2 = (TextView) rowView.findViewById(R.id.baseline);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image_right);
-        //textView1.setText(values[position].getName());
-        //textView2.setText(values[position].getAuthor());
         textView1.setText(values.get(position).getName());
         textView2.setText(values.get(position).getAuthor());
-        // change the icon for Windows and iPhone
-            imageView.setImageResource(R.drawable.remove_icon);
+        imageView.setImageResource(R.drawable.remove_icon);
         imageView.setFocusable(false);
         imageView.setFocusableInTouchMode(false);
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -49,8 +46,6 @@ public class MySimpleArrayAdapter extends ArrayAdapter<Book> {
                 notifyDataSetChanged();
             }
         });
-
-
         return rowView;
     }
 

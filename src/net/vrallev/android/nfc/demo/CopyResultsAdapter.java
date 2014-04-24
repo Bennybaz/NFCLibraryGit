@@ -31,9 +31,6 @@ public class CopyResultsAdapter extends ArrayAdapter<Book>{
         View rowView = inflater.inflate(R.layout.row_layout2, parent, false);
         TextView textView1 = (TextView) rowView.findViewById(R.id.headline2);
         TextView textView2 = (TextView) rowView.findViewById(R.id.baseline2);
-        //ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image_right);
-        //textView1.setText(values[position].getName());
-        //textView2.setText(values[position].getAuthor());
         textView1.setText(values.get(position).getBarcode());
         String status = new String();
         if(values.get(position).getStatus().equals("ok"))
@@ -41,21 +38,6 @@ public class CopyResultsAdapter extends ArrayAdapter<Book>{
         else
             status = "Book is already borrowed";
         textView2.setText(status);
-        // change the icon for Windows and iPhone
-        /*imageView.setImageResource(R.drawable.remove_icon);
-        imageView.setFocusable(false);
-        imageView.setFocusableInTouchMode(false);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                values.remove(pos);
-                notifyDataSetChanged();
-            }
-        });*/
-
-
-
-
         return rowView;
     }
 }

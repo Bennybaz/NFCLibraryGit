@@ -34,15 +34,16 @@ public class CopyListActivity extends Activity {
     private static final String TAG_PRODUCT = "reader";
 
     Context context;
-    ArrayList<Book> books;
+    ArrayList<Book> books; //contains the search results (list of books)
     ArrayList<Book> copy = new ArrayList<Book>();
-    int pos;
-    Book bk;
-    String bookID;
-
     ListView lv;
     public CopyResultsAdapter adapter;
 
+    int pos; //position of selected book
+    Book bk; //the selected book
+    String bookID; //id of selected book
+
+    // book details in db url
     private static final String url_copy_details = "http://nfclibrary.site40.net/book_copy_test.php";
 
     public void onCreate(Bundle savedInstanceState) {
@@ -61,25 +62,16 @@ public class CopyListActivity extends Activity {
         bk = books.get(pos);
         bookID = bk.getBookID();
 
-        /*for(int i=0; i<5 ;i++)
-        {
-            Book b = new Book();
-            b.setName("lol"+i);
-            b.setAuthor("hh"+i);
-            copy.add(b);
-        }*/
-
         lv = (ListView) findViewById(R.id.copyList);
         adapter = new CopyResultsAdapter(this, copy);
         lv.setAdapter(adapter);
 
+        //call async task for build the list of copies of the selected book
         new GetSearchResults().execute();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
                 Intent intent2 = new Intent(CopyListActivity.this, SearchResultActivity.class);
                 intent2.putParcelableArrayListExtra("bookList", copy);
                 intent2.putExtra("position", position);
@@ -92,7 +84,7 @@ public class CopyListActivity extends Activity {
     class GetSearchResults extends AsyncTask<String, String, String> {
 
         /**
-         * Getting product details in background thread
+         * Getting copies details in background thread
          * */
         protected String doInBackground(String... params) {
             //updating UI from Background Thread
@@ -111,10 +103,6 @@ public class CopyListActivity extends Activity {
                         // Note that product details url will use GET request
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_copy_details, "GET", params);
-
-                        //Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
-                        // check your log for json response
-                        //Log.d("Single Product Details", json.toString());
 
                         // json success tag
                         if(json!=null) {

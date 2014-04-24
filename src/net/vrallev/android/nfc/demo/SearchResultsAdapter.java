@@ -32,26 +32,8 @@ public class SearchResultsAdapter extends ArrayAdapter<Book> {
         View rowView = inflater.inflate(R.layout.row_layout2, parent, false);
         TextView textView1 = (TextView) rowView.findViewById(R.id.headline2);
         TextView textView2 = (TextView) rowView.findViewById(R.id.baseline2);
-        //ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image_right);
-        //textView1.setText(values[position].getName());
-        //textView2.setText(values[position].getAuthor());
         textView1.setText(values.get(position).getName());
         textView2.setText(values.get(position).getAuthor());
-        // change the icon for Windows and iPhone
-        /*imageView.setImageResource(R.drawable.remove_icon);
-        imageView.setFocusable(false);
-        imageView.setFocusableInTouchMode(false);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                values.remove(pos);
-                notifyDataSetChanged();
-            }
-        });*/
-
-
-
-
         return rowView;
     }
 

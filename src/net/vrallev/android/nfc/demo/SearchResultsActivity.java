@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 public class SearchResultsActivity extends Activity {
 
-    ArrayList<Book> books;
+    ArrayList<Book> books; //contains the books from search query
 
     Context context;
     ListView lv;
@@ -38,8 +38,6 @@ public class SearchResultsActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
                 Intent intent2 = new Intent(SearchResultsActivity.this, CopyListActivity.class);
                 intent2.putParcelableArrayListExtra("bookList", books);
                 intent2.putExtra("position", position);

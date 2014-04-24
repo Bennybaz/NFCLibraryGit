@@ -30,11 +30,10 @@ public class SearchBook extends Activity {
     private Button button;
     private EditText query;
     private Spinner field;
-    ArrayList<Book> books = new ArrayList<Book>();
+    ArrayList<Book> books = new ArrayList<Book>(); //contains the books(search results)
     Context context;
 
     String query_string;
-    //String field_string;
 
     // JSON parser class
     JSONParser jsonParser = new JSONParser();
@@ -46,14 +45,9 @@ public class SearchBook extends Activity {
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
-    private static final String TAG_PRODUCT = "reader";
-    //private static final String TAG_PID = "sid";
-    private static final String TAG_SEARCH_FIELD = "searchField";
-    private static final String TAG_KEYWORD = "keyWord";
 
     public void onCreate(Bundle savedInstanceState) {
         setTitle("Search Book");
-        //final Context context = this;
         context=this;
 
         super.onCreate(savedInstanceState);
@@ -72,7 +66,7 @@ public class SearchBook extends Activity {
 
             @Override
             public void onClick(View arg0) {
-                // Getting complete user details in background thread
+                // Getting complete search details in background thread
                 new GetSearchResults().execute();
             }
 
@@ -81,22 +75,12 @@ public class SearchBook extends Activity {
 
 
     /**
-     * Background Async Task to Get complete product details
+     * Background Async Task to Get complete search details
      * */
     class GetSearchResults extends AsyncTask<String, String, String> {
 
-       /* @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ProgressDialog pDialog = new ProgressDialog(SearchBook.this);
-            pDialog.setMessage("Loading results. Please wait...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }*/
-
         /**
-         * Getting product details in background thread
+         * Getting search results in background thread
          * */
         protected String doInBackground(String... params) {
             //updating UI from Background Thread
@@ -124,10 +108,6 @@ public class SearchBook extends Activity {
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_user_name_details, "GET", params);
 
-                        //Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
-                        // check your log for json response
-                        //Log.d("Single Product Details", json.toString());
-
                         // json success tag
                         if(json!=null) {
                             success = json.getInt(TAG_SUCCESS);
@@ -136,8 +116,6 @@ public class SearchBook extends Activity {
                                 // successfully received product details
                                 JSONArray productObj = json
                                         .getJSONArray("books"); // JSON Array
-
-
 
                                 for(int i=0; i<productObj.length(); i++)
                                 {
@@ -160,7 +138,7 @@ public class SearchBook extends Activity {
                                 startActivity(intent);
 
                             } else {
-                                // product with pid not found
+                                // books with search id not found
                                 Toast.makeText(context, "No Such Item", Toast.LENGTH_LONG).show();
                             }
                         }

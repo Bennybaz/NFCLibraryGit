@@ -38,8 +38,6 @@ public class LibrarianMainActivity extends Activity {
 
     // username in db url
     private static final String url_user_name_details = "http://nfclibrary.site40.net/get_product_details.php";
-    //private static final String url_user_name_details = "http://192.168.2.101/nfc_library/get_product_details.php";
-
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -63,6 +61,7 @@ public class LibrarianMainActivity extends Activity {
         borrowBtn = (Button) findViewById(R.id.borrowBtn);
         greeting = (TextView) findViewById(R.id.greetText2);
 
+        //get the librarian id
         librarianID = getIntent().getExtras().getString("ID").substring(2);
 
         // Getting complete user details in background thread
@@ -72,13 +71,7 @@ public class LibrarianMainActivity extends Activity {
         else
             task1.execute();
 
-
-
-
-
         greeting.setText("Hello, "+librarianID);
-
-
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -118,13 +111,12 @@ public class LibrarianMainActivity extends Activity {
             }
         });*/
     }
-    /**
-     * Background Async Task to Get complete product details
-     * */
+
+    //Background Async Task to Get complete user details
     class GetUserDetails extends AsyncTask<String, String, String> {
 
         /**
-         * Getting product details in background thread
+         * Getting librarian details in background thread
          * */
         protected String doInBackground(String... params) {
 
@@ -144,15 +136,10 @@ public class LibrarianMainActivity extends Activity {
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_user_name_details, "GET", params);
 
-
-                        // check your log for json response
-                        //Log.d("Single Product Details", json.toString());
-
                         // json success tag
                         if(json!=null) {
                             success = json.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
                                 // successfully received product details
                                 JSONArray productObj = json
                                         .getJSONArray(TAG_PRODUCT); // JSON Array
@@ -163,10 +150,12 @@ public class LibrarianMainActivity extends Activity {
                                 greeting.setText("Hello, " + product.getString(TAG_NAME));
 
                             } else {
-                                // product with pid not found
+                                // librarian with id not found
                             }
                         }
-                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
+                        else {
+
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

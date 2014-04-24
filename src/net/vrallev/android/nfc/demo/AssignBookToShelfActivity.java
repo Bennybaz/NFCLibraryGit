@@ -40,17 +40,22 @@ public class AssignBookToShelfActivity extends Activity {
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     private NfcAdapter mNfcAdapter;
+
     Context context;
     ListView lv;
     public MySimpleArrayAdapter adapter;
     private Button writeToShelfBtn;
-    ArrayList<Book> b = new ArrayList<Book>();
+    ArrayList<Book> b = new ArrayList<Book>(); //contains the scanned books for assigning
+
+    //???????????????
     StringBuilder allIDs=new StringBuilder();
     Dialog dialog;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
     boolean writeMode;
     Tag mytag;
+    //???????????????
+
     TextView shelf;
     String barcode;
 
@@ -58,15 +63,13 @@ public class AssignBookToShelfActivity extends Activity {
     private JSONParser jsonParser = new JSONParser();
     private JSONParser jsonParser2 = new JSONParser();
 
-    // username in db url
+    // book and shelf details in db url
     private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
     private static final String url_book_to_shelf = "http://nfclibrary.site40.net/attach_book_to_shelf.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PRODUCT = "book";
-    //private static final String TAG_PID = "sid";
-    private static final String TAG_NAME = "name";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +93,7 @@ public class AssignBookToShelfActivity extends Activity {
         writeToShelfBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+               //call async task for update the books location(shelf)
                new UpdateBookLocation().execute();
 
             }
@@ -284,26 +287,15 @@ public class AssignBookToShelfActivity extends Activity {
                 String type = result.substring(0,2);
                 //int row = Integer.parseInt(result.substring(2,4));
 
-                if(type.equals("BK")){
+                if(type.equals("BK"))
+                {
                     super.onPostExecute(result);
-
                     barcode=result.substring(2);
-
-
                     // Getting complete user details in background thread
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                         new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     else
                         new GetBookBarcode().execute();
-
-                    //new GetBookBarcode().execute();
-
-                    //Book book= new Book(type,""+row);
-                    //allIDs.append(result.substring(2,4));
-                    //Toast.makeText(context,allIDs,Toast.LENGTH_LONG).show();
-                     //update the book array here
-                     //b.add(book);
-                     //adapter.notifyDataSetChanged();
                 }
                 if(type.equals("SH")){
                     super.onPostExecute(result);
@@ -315,10 +307,11 @@ public class AssignBookToShelfActivity extends Activity {
         }
     }
 
+    //async task for get the book details for view on ListView
     class GetBookBarcode extends AsyncTask<String, String, String> {
 
         /**
-         * Getting product details in background thread
+         * Getting book details in background thread
          * */
         protected String doInBackground(String... params) {
 
@@ -332,8 +325,7 @@ public class AssignBookToShelfActivity extends Activity {
                         // Building Parameters
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
                         params.add(new BasicNameValuePair("barcode", barcode));
-
-                        // getting student details by making HTTP request
+                        // getting book details by making HTTP request
                         // Note that product details url will use GET request
 
                         JSONObject json2 = jsonParser.makeHttpRequest(
@@ -343,7 +335,6 @@ public class AssignBookToShelfActivity extends Activity {
                         if(json2!=null) {
                             success = json2.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
                                 // successfully received product details
                                 JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
 
@@ -361,7 +352,10 @@ public class AssignBookToShelfActivity extends Activity {
                                 // product with pid not found
                             }
                         }
-                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
+                        else
+                        {
+
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -372,11 +366,10 @@ public class AssignBookToShelfActivity extends Activity {
         }
     }
 
-
     class UpdateBookLocation extends AsyncTask<String, String, String> {
 
        /* *
-         * Getting product details in background thread
+         * Updating books location details in background thread
          **/
         protected String doInBackground(String... params) {
 
@@ -390,9 +383,6 @@ public class AssignBookToShelfActivity extends Activity {
                         try{
                             List<NameValuePair> params = new ArrayList<NameValuePair>();
                             Integer sh = Integer.parseInt(shelf.getText().toString());
-                            //String s = new String(sh);
-                            Toast.makeText(context, sh.toString(), Toast.LENGTH_SHORT).show();
-                            Toast.makeText(context, b.get(i).getBarcode().toString(), Toast.LENGTH_SHORT).show();
                             params.add(new BasicNameValuePair("shelf", sh.toString()));
                             params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
 
@@ -407,12 +397,7 @@ public class AssignBookToShelfActivity extends Activity {
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
                                 if (success == 1) {
-                                    // successfully received product details
-                                    //JSONArray productObj = json
-                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
-
-                                    // get first user object from JSON Array
-                                    //JSONObject product = productObj.getJSONObject(0);
+                                    // successfully updated the book position
                                     Toast.makeText(context,"ADDED",Toast.LENGTH_LONG).show();
 
                                 } else {
