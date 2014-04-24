@@ -1,6 +1,7 @@
 package net.vrallev.android.nfc.demo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -15,10 +16,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.*;
 import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -60,6 +58,7 @@ public class BookBorrowActivity extends Activity {
     public MySimpleArrayAdapter adapter;
     int flag = 0;
     ArrayList<Book> b = new ArrayList<Book>();
+    Dialog directDialog;
 
     Button borrowBooksBtn;
     private NfcAdapter mNfcAdapter;
@@ -258,17 +257,8 @@ public class BookBorrowActivity extends Activity {
 
                 if(type.equals("BK")){
                     super.onPostExecute(result);
-
-                    //Book book= new Book();
-                    //update the book array here
-                    //book.setBarcode(result.substring(2));
-                    //b.add(book);
-
                     new GetBookBarcode().execute();
-
-                    //adapter.notifyDataSetChanged();
                 }
-
             }
         }
     }
@@ -303,13 +293,15 @@ public class BookBorrowActivity extends Activity {
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
                                 if (success == 1) {
-                                    // successfully received product details
-                                    //JSONArray productObj = json
-                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
-
-                                    // get first user object from JSON Array
-                                    //JSONObject product = productObj.getJSONObject(0);
-                                    Toast.makeText(context,"BORROWED",Toast.LENGTH_LONG).show();
+                                    directDialog = new Dialog(context);
+                                    directDialog.setContentView(R.layout.direction_dialog);
+                                    directDialog.setTitle("Success");
+                                    TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                                    TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                                    bookCase.setText("");
+                                    shelff.setText("Books were borrowed");
+                                    ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                                    image.setImageResource(success);
 
                                 } else {
                                     // product with pid not found
@@ -358,7 +350,6 @@ public class BookBorrowActivity extends Activity {
                         if(json2!=null) {
                             success = json2.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
                                 // successfully received product details
                                 JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
 
@@ -384,7 +375,6 @@ public class BookBorrowActivity extends Activity {
                                 // product with pid not found
                             }
                         }
-                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

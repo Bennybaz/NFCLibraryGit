@@ -1,15 +1,14 @@
 package net.vrallev.android.nfc.demo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -33,12 +32,15 @@ public class BookCartActivity extends Activity {
     public MySimpleArrayAdapter adapter;
     ArrayList<Book> b = new ArrayList<Book>();
     int flag = 0;
+    Button borrowBtn;
+    Dialog directDialog;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
-
+    private JSONParser jsonParser2 = new JSONParser();
 
     // username in db url
+    private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
     private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
 
     // JSON Node names
@@ -61,6 +63,7 @@ public class BookCartActivity extends Activity {
         lv = (ListView) findViewById(R.id.cartListView);
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
+        borrowBtn = (Button) findViewById(R.id.borrowCartBtn);
 
         FileInputStream databaseInputStream = null;
         try {
@@ -76,7 +79,6 @@ public class BookCartActivity extends Activity {
                     break;
                 }
                 if(flag==0) barcodes.add(line);
-                Toast.makeText(context,line,Toast.LENGTH_SHORT).show();
             }
             databaseInputStream.close();
             new GetBookBarcode().execute();
@@ -85,6 +87,15 @@ public class BookCartActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        borrowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new UpdateBorrow().execute();
+            }
+        });
+
+
 
 
     }
@@ -152,5 +163,60 @@ public class BookCartActivity extends Activity {
 
     }
 
+    class UpdateBorrow extends AsyncTask<String, String, String> {
+
+        /* *
+          * Getting product details in background thread
+          **/
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    for(int i=0; i< b.size(); i++)
+                    {
+                        try{
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+                            JSONObject json = jsonParser2.makeHttpRequest(
+                                    url_book_borrow, "GET", params);
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+                                    directDialog = new Dialog(context);
+                                    directDialog.setContentView(R.layout.direction_dialog);
+                                    directDialog.setTitle("Success");
+                                    TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                                    TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                                    bookCase.setText("");
+                                    shelff.setText("Books were borrowed");
+                                    ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                                    image.setImageResource(success);
+
+                                } else {
+                                    // product with pid not found
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    b.clear();
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            return null;
+        }
+    }
 
 }
