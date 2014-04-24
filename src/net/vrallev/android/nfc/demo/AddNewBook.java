@@ -43,6 +43,7 @@ public class AddNewBook extends Activity{
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        setTitle("Assign Books To Shelf");
         writeBtn = (Button) findViewById(R.id.writeNfcBtn);
         message = (TextView)findViewById(R.id.newBookET);
 
@@ -129,13 +130,10 @@ public class AddNewBook extends Activity{
 
                 }
             } catch (IOException e) {
-                //Toast.makeText(ctx, ctx.getString(R.string.error_writing), Toast.LENGTH_LONG ).show();
                 e.printStackTrace();
             } catch (FormatException e) {
-                //Toast.makeText(ctx, ctx.getString(R.string.error_writing) , Toast.LENGTH_LONG ).show();
                 e.printStackTrace();
             }
-            //Toast.makeText(this, this.getString(R.string.ok_detection) + mytag.toString(), Toast.LENGTH_LONG ).show();
         }
     }
 

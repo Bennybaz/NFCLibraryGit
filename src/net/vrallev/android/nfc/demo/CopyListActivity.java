@@ -61,14 +61,6 @@ public class CopyListActivity extends Activity {
         bk = books.get(pos);
         bookID = bk.getBookID();
 
-        /*for(int i=0; i<5 ;i++)
-        {
-            Book b = new Book();
-            b.setName("lol"+i);
-            b.setAuthor("hh"+i);
-            copy.add(b);
-        }*/
-
         lv = (ListView) findViewById(R.id.copyList);
         adapter = new CopyResultsAdapter(this, copy);
         lv.setAdapter(adapter);
@@ -79,11 +71,10 @@ public class CopyListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //Intent intent2 = new Intent(SearchResultsActivity.this, SearchResultActivity.class);
-                Intent intent2 = new Intent(CopyListActivity.this, SearchResultActivity.class);
-                intent2.putParcelableArrayListExtra("bookList", copy);
-                intent2.putExtra("position", position);
-                startActivity(intent2);
+        Intent intent2 = new Intent(CopyListActivity.this, SearchResultActivity.class);
+        intent2.putParcelableArrayListExtra("bookList", copy);
+        intent2.putExtra("position", position);
+        startActivity(intent2);
             }
         });
 
@@ -112,9 +103,6 @@ public class CopyListActivity extends Activity {
                         JSONObject json = jsonParser.makeHttpRequest(
                                 url_copy_details, "GET", params);
 
-                        //Toast.makeText(context, json.toString(), Toast.LENGTH_LONG).show();
-                        // check your log for json response
-                        //Log.d("Single Product Details", json.toString());
 
                         // json success tag
                         if(json!=null) {

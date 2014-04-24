@@ -34,6 +34,7 @@ public class BookCartActivity extends Activity {
     int flag = 0;
     Button borrowBtn;
     Dialog directDialog;
+    int successFlag=0;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
@@ -117,7 +118,6 @@ public class BookCartActivity extends Activity {
                         try {
                             // Building Parameters
                             List<NameValuePair> params = new ArrayList<NameValuePair>();
-                            Toast.makeText(context,barcodes.get(i).toString(),Toast.LENGTH_SHORT).show();
                             params.add(new BasicNameValuePair("barcode", barcodes.get(i).toString()));
 
 
@@ -190,15 +190,7 @@ public class BookCartActivity extends Activity {
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
                                 if (success == 1) {
-                                    directDialog = new Dialog(context);
-                                    directDialog.setContentView(R.layout.direction_dialog);
-                                    directDialog.setTitle("Success");
-                                    TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
-                                    TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
-                                    bookCase.setText("");
-                                    shelff.setText("Books were borrowed");
-                                    ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
-                                    image.setImageResource(success);
+                                    successFlag=1;
 
                                 } else {
                                     // product with pid not found
@@ -208,6 +200,17 @@ public class BookCartActivity extends Activity {
                             e.printStackTrace();
                         }
 
+                    }
+                    if(successFlag==1){
+                        directDialog = new Dialog(context);
+                        directDialog.setContentView(R.layout.direction_dialog);
+                        directDialog.setTitle("Success");
+                        TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                        TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                        bookCase.setText("");
+                        shelff.setText("Books were borrowed");
+                        ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                        image.setImageResource(R.drawable.success);
                     }
 
                     b.clear();

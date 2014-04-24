@@ -14,10 +14,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -53,6 +50,8 @@ public class AssignBookToShelfActivity extends Activity {
     Tag mytag;
     TextView shelf;
     String barcode;
+    Dialog directDialog;
+    int successFlag=0;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
@@ -168,8 +167,6 @@ public class AssignBookToShelfActivity extends Activity {
                         new NdefReaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tag);
                     else
                         new NdefReaderTask().execute(tag);
-
-                    //new NdefReaderTask().execute(tag);
                     break;
                 }
             }
@@ -295,15 +292,6 @@ public class AssignBookToShelfActivity extends Activity {
                         new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     else
                         new GetBookBarcode().execute();
-
-                    //new GetBookBarcode().execute();
-
-                    //Book book= new Book(type,""+row);
-                    //allIDs.append(result.substring(2,4));
-                    //Toast.makeText(context,allIDs,Toast.LENGTH_LONG).show();
-                     //update the book array here
-                     //b.add(book);
-                     //adapter.notifyDataSetChanged();
                 }
                 if(type.equals("SH")){
                     super.onPostExecute(result);
@@ -343,7 +331,6 @@ public class AssignBookToShelfActivity extends Activity {
                         if(json2!=null) {
                             success = json2.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                //Toast.makeText(context, "in success", Toast.LENGTH_LONG);
                                 // successfully received product details
                                 JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
 
@@ -361,7 +348,6 @@ public class AssignBookToShelfActivity extends Activity {
                                 // product with pid not found
                             }
                         }
-                        else Toast.makeText(context,"SHIT",Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -390,9 +376,7 @@ public class AssignBookToShelfActivity extends Activity {
                         try{
                             List<NameValuePair> params = new ArrayList<NameValuePair>();
                             Integer sh = Integer.parseInt(shelf.getText().toString());
-                            //String s = new String(sh);
-                            Toast.makeText(context, sh.toString(), Toast.LENGTH_SHORT).show();
-                            Toast.makeText(context, b.get(i).getBarcode().toString(), Toast.LENGTH_SHORT).show();
+
                             params.add(new BasicNameValuePair("shelf", sh.toString()));
                             params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
 
@@ -401,19 +385,12 @@ public class AssignBookToShelfActivity extends Activity {
                             JSONObject json = jsonParser2.makeHttpRequest(
                                     url_book_to_shelf, "GET", params);
 
-                            Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
-
                             // json success tag
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
                                 if (success == 1) {
-                                    // successfully received product details
-                                    //JSONArray productObj = json
-                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
 
-                                    // get first user object from JSON Array
-                                    //JSONObject product = productObj.getJSONObject(0);
-                                    Toast.makeText(context,"ADDED",Toast.LENGTH_LONG).show();
+                                    successFlag=1;
 
                                 } else {
                                     // product with pid not found
@@ -423,6 +400,17 @@ public class AssignBookToShelfActivity extends Activity {
                             e.printStackTrace();
                         }
 
+                    }
+                    if(successFlag==1) {
+                        directDialog = new Dialog(context);
+                        directDialog.setContentView(R.layout.direction_dialog);
+                        directDialog.setTitle("Success");
+                        TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                        TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                        bookCase.setText("");
+                        shelff.setText("Books were assigned");
+                        ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                        image.setImageResource(R.drawable.success);
                     }
                 }
             });
