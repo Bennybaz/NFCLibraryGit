@@ -18,6 +18,7 @@ public class Book implements Parcelable {
     private String year;
     private String publisher;
     private String status;
+    private double fixedPosition;
 
     public Book(String author, String name) {
         this.author = author;
@@ -39,6 +40,7 @@ public class Book implements Parcelable {
         year = source.readString();
         publisher = source.readString();
         status = source.readString();
+        fixedPosition = source.readDouble();
     }
 
     public String getAuthor() {
@@ -113,6 +115,16 @@ public class Book implements Parcelable {
         this.status = status;
     }
 
+    public Double getFixedPosition()
+    {
+        return fixedPosition;
+    }
+
+    public void setFixedPosition(double fixedPosition)
+    {
+        this.fixedPosition = fixedPosition;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -130,7 +142,7 @@ public class Book implements Parcelable {
         dest.writeString(year);
         dest.writeString(publisher);
         dest.writeString(status);
-
+        dest.writeDouble(fixedPosition);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

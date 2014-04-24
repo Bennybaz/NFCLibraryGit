@@ -10,10 +10,7 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
+import android.os.*;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -42,16 +39,29 @@ public class ReturnRouteActivity extends Activity {
     ListView lv;
     public MySimpleArrayAdapter adapter;
     ArrayList<Book> b = new ArrayList<Book>();
+    //added for sorting
+    ArrayList<Integer> optimumRoute = new ArrayList<Integer>();
+    HashMap<Double, String> barcodeSector = new HashMap<Double, String>();
+    ArrayList<Book> sorted = new ArrayList<Book>();
+
+    ArrayList<String> sortCommands = new ArrayList<String>();
 
     Button calcBtn;
     private NfcAdapter mNfcAdapter;
     String barcode;
     int flag=0;
+    double fixedPos=0;
+    double it;
+
+    int shelf;
+    int sector;
+    int stand;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
     private JSONParser jsonParser2 = new JSONParser();
     private JSONParser jsonParser3 = new JSONParser();
+    private JSONParser jsonParser4 = new JSONParser();
 
     // username in db url
     private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
@@ -61,12 +71,14 @@ public class ReturnRouteActivity extends Activity {
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PRODUCT = "book";
-    //private static final String TAG_PID = "sid";
-    private static final String TAG_NAME = "name";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.return_route);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         setTitle("Return Books");
         context = this;
 
@@ -76,11 +88,38 @@ public class ReturnRouteActivity extends Activity {
         lv.setAdapter(adapter);
 
 
+        sectors.add(52);
+        barcodeSector.put(52.2, "954-30");
+        barcode = "954-30";
+        Book bk = new Book();
+        bk.setBarcode(barcode);
+        bk.setName("" + barcode);
+        bk.setAuthor("author1");
+        bk.setFixedPosition(52.2);
+        b.add(bk);
+
+        sectors.add(65);
+        barcodeSector.put(65.3, "563-40");
+        barcode = "563-40";
+        Book bk1 = new Book();
+        bk1.setBarcode(barcode);
+        bk1.setName("" + barcode);
+        bk1.setAuthor("author2");
+        bk1.setFixedPosition(65.3);
+        b.add(bk1);
+
+        fixedPos = 6.1;
+        sectors.add(6);
+        barcodeSector.put(6.1, "000057800066");
+        barcode = "000057800066";
+        new GetBookBarcode().execute();
+
+
         calcBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new UpdateBookStatus().execute();
+                //new UpdateBookStatus().execute();
                 try {
                     double[][] data2 = getDoubleTwoDimArray("dump.txt");
                     if(sectors.get(0)!=1) sectors.add(1);
@@ -91,15 +130,33 @@ public class ReturnRouteActivity extends Activity {
                     createAdj(data2, sectors);
 
                     BranchAndBound bnb = new BranchAndBound(adjacency_matrix,0, sectors);
-                    String result = bnb.execute();
-                    Toast.makeText(context, result,Toast.LENGTH_LONG).show();
+                    //String result = bnb.execute();
+                    optimumRoute = bnb.execute2();
+
+                    new GetBookBarcodeSorted().execute();
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        handleIntent(getIntent());
+//        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+//        handleIntent(getIntent());
+    }
+
+    public int bookPosInScannedBooks(String str, ArrayList<Book> al)
+    {
+        for(int i=0; i<al.size(); i++)
+        {
+            if(al.get(i).getBarcode().equals(str))
+            {
+                al.remove(i);
+                return i;
+            }
+
+        }
+        return -1;
     }
 
     public void createAdj(double[][] input, ArrayList<Integer> sectors){
@@ -139,29 +196,29 @@ public class ReturnRouteActivity extends Activity {
         return data;
     }
 
-   @Override
-    protected void onResume() {
-        super.onResume();
+//   @Override
+//    protected void onResume() {
+//        super.onResume();
 
 		/*
 		 * It's important, that the activity is in the foreground (resumed). Otherwise
 		 * an IllegalStateException is thrown.
 		 */
-        setupForegroundDispatch(this, mNfcAdapter);
-    }
+//        setupForegroundDispatch(this, mNfcAdapter);
+//    }
 
-    @Override
-    protected void onPause() {
+//   @Override
+//    protected void onPause() {
 		/*
 		 * Call this before onPause, otherwise an IllegalArgumentException is thrown as well.
 		 */
-        stopForegroundDispatch(this, mNfcAdapter);
+//        stopForegroundDispatch(this, mNfcAdapter);
 
-        super.onPause();
-    }
+//        super.onPause();
+//    }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
+//    @Override
+//    protected void onNewIntent(Intent intent) {
 		/*
 		 * This method gets called, when a new Intent gets associated with the current activity instance.
 		 * Instead of creating a new activity, onNewIntent will be called. For more information have a look
@@ -169,10 +226,10 @@ public class ReturnRouteActivity extends Activity {
 		 *
 		 * In our case this method gets called, when the user attaches a Tag to the device.
 		 */
-        handleIntent(intent);
-    }
+    //       handleIntent(intent);
+    //   }
 
-    private void handleIntent(Intent intent) {
+/*    private void handleIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
@@ -200,12 +257,12 @@ public class ReturnRouteActivity extends Activity {
             }
         }
     }
-
+*/
     /**
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
-    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+/*    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -226,19 +283,19 @@ public class ReturnRouteActivity extends Activity {
 
         adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
-
+*/
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
-    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+/*    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
 
     public void nfcStatusChanged(View view) {
         startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS),2 );
     }
-
+*/
     // create a distance matrix according to the input
 
 
@@ -249,7 +306,7 @@ public class ReturnRouteActivity extends Activity {
      *
      */
 
-    private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
+/*    private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         @Override
         protected String doInBackground(Tag... params) {
             Tag tag = params[0];
@@ -275,8 +332,8 @@ public class ReturnRouteActivity extends Activity {
 
             return null;
         }
-
-        private String readText(NdefRecord record) throws UnsupportedEncodingException {
+*/
+//        private String readText(NdefRecord record) throws UnsupportedEncodingException {
 			/*
 			 * See NFC forum specification for "Text Record Type Definition" at 3.2.1
 			 *
@@ -287,22 +344,22 @@ public class ReturnRouteActivity extends Activity {
 			 * bit_5..0 length of IANA language code
 			 */
 
-            byte[] payload = record.getPayload();
+//            byte[] payload = record.getPayload();
 
-            // Get the Text Encoding
-            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+    // Get the Text Encoding
+//            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
 
-            // Get the Language Code
-            int languageCodeLength = payload[0] & 0063;
+    // Get the Language Code
+//            int languageCodeLength = payload[0] & 0063;
 
-            // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
-            // e.g. "en"
+    // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
+    // e.g. "en"
 
-            // Get the Text
-            return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
-        }
+    // Get the Text
+//            return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+//        }
 
-        @Override
+/*        @Override
         protected void onPostExecute(String result) {
             if (result != null) {
                 String type = result.substring(0,2);
@@ -323,7 +380,7 @@ public class ReturnRouteActivity extends Activity {
             }
         }
     }
-
+*/
     class GetBookBarcode extends AsyncTask<String, String, String> {
 
         /**
@@ -362,6 +419,10 @@ public class ReturnRouteActivity extends Activity {
                                 bk.setBarcode(barcode);
                                 bk.setName(product.getString("title"));
                                 bk.setAuthor(product.getString("author"));
+                                bk.setFixedPosition(fixedPos);
+
+
+
                                 for(int i=0; i<b.size(); i++) {
                                     if(b.get(i).getBarcode().equals(barcode))
                                         flag=1;
@@ -422,16 +483,22 @@ public class ReturnRouteActivity extends Activity {
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
 
+                                shelf = product.getInt("shelf");
+                                sector = product.getInt("sector");
+                                stand = product.getInt("stand");
 
-                                int sector = product.getInt("sector");
+                                Integer sectorForAlg = (stand-1)*4+sector;
+                                fixedPos = sectorForAlg+shelf*0.1;
 
-                                if(!sectors.contains(sector)) {
-                                    sectors.add(sector);
+
+                                if(!sectors.contains(sectorForAlg)) {
+                                    sectors.add(sectorForAlg);
+                                    barcodeSector.put(fixedPos, barcode);
                                 }
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                        new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                    else
-                                        new GetBookBarcode().execute();
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                                    new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                else
+                                    new GetBookBarcode().execute();
 
 
 
@@ -499,6 +566,96 @@ public class ReturnRouteActivity extends Activity {
                     b.clear();
                     adapter.notifyDataSetChanged();
                 }
+            });
+
+            return null;
+        }
+    }
+
+    class GetBookBarcodeSorted extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    for (int i=1; i< optimumRoute.size()-1; i++)
+                    {
+                        int item=optimumRoute.get(i);
+                        for(int j=1; j<=5; j++)
+                        {
+                            it = (double)item+j*0.1;
+                            barcode = barcodeSector.get(it);
+                            if(barcode != null)
+                            {
+                                try {
+                                    // Building Parameters
+                                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                                    params.add(new BasicNameValuePair("barcode", barcode));
+                                    // getting student details by making HTTP request
+                                    // Note that product details url will use GET request
+                                    JSONObject json4 = jsonParser4.makeHttpRequest(
+                                            url_book_barcode_for_details, "GET", params);
+
+                                    // json success tag
+                                    if(json4!=null) {
+                                        success = json4.getInt(TAG_SUCCESS);
+                                        if (success == 1) {
+                                            // successfully received product details
+                                            JSONArray productObj = json4.getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                            // get first user object from JSON Array
+                                            JSONObject product = productObj.getJSONObject(0);
+
+                                            Book bk = new Book();
+                                            bk.setBarcode(barcode);
+                                            bk.setName(product.getString("title"));
+                                            bk.setAuthor(product.getString("author"));
+                                            bk.setFixedPosition(it);
+
+
+                                            int flag1=0;
+                                            for(int k=0; k<sorted.size() && flag==0; k++)
+                                                if(sorted.get(k).getBarcode().equals(barcode))
+                                                    flag1=1;
+                                            if(flag1==0)
+                                                sorted.add(bk);
+
+                                        } else {
+                                            // product with pid not found
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                    }//end for
+
+                    ArrayList<Book> unsorted = new ArrayList<Book>(b);
+
+                    for(int i=0; i<sorted.size(); i++)
+                    {
+                        int bookPos = bookPosInScannedBooks(sorted.get(i).getBarcode(), unsorted);
+                        if(bookPos==-1)
+                            Toast.makeText(context,"Error in sorting",Toast.LENGTH_SHORT).show();
+                        String msg = new String("Put book("+(bookPos+1)+") in position: "+(i+1)+" of the sorted pile");
+                        sortCommands.add(msg);
+                    }
+
+                    Intent intent = new Intent(ReturnRouteActivity.this, SortedList.class);
+                    intent.putParcelableArrayListExtra("books",sorted);
+                    intent.putStringArrayListExtra("srtCmd", sortCommands);
+                    startActivity(intent);
+                }
+
             });
 
             return null;

@@ -59,6 +59,32 @@ public class BranchAndBound {
         
         return result;         
     }
+
+    public ArrayList<Integer> execute2 () {
+
+        initialRoute = new ArrayList<Integer>();
+        initialRoute.add(sourceCity);
+        optimumRoute = new ArrayList<Integer>();
+        toPrint = new ArrayList<Integer>();
+        nodes++;
+
+        long startTime = System.currentTimeMillis();
+        search(sourceCity, initialRoute);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println(optimumRoute.size());
+        for(int k=0;k<optimumRoute.size();k++){
+            toPrint.add(sectors.get((int) optimumRoute.get(k)));
+            //System.out.println(k);
+        }
+        //result += "BEST SOLUTION: \t"+toPrint.toString() + "\nCOST: \t\t"+optimumCost+"\n";
+        //result += "NODES VISITED: \t"+nodes+"\n";
+        //result += "TIME PASSED: \t"+(endTime-startTime)+" ms\n";
+        //result += "-------------------------------------\n";
+
+        //return result;
+        return toPrint;
+    }
     
     
     /**

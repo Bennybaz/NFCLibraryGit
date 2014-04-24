@@ -76,6 +76,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".CopyListActivity"/>
+        <activity android:name=".SortedList"/>
+        <activity android:name=".FragmentForStepList"/>
+        <activity android:name=".FragmentForStep"/>
+        <activity android:name=".ReturnRouteInstructions"/>
     </application>
 
 </manifest>
