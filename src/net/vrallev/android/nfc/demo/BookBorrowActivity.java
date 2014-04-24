@@ -44,7 +44,7 @@ public class BookBorrowActivity extends Activity {
     private JSONParser jsonParser2 = new JSONParser();
 
 
-    // book details in db url
+    // username in db url
     private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
     private static final String url_book_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
 
@@ -52,18 +52,17 @@ public class BookBorrowActivity extends Activity {
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PRODUCT = "book";
 
+    String barcode;
     Context context;
     ListView lv;
     public MySimpleArrayAdapter adapter;
+    int flag = 0;
+    ArrayList<Book> b = new ArrayList<Book>();
     Dialog directDialog;
+    int successFlag=0;
+
     Button borrowBooksBtn;
     private NfcAdapter mNfcAdapter;
-
-    String barcode; //contains a barcode of specific book
-    int flag = 0; //indicates if new book is already in the ArrayList
-    ArrayList<Book> b = new ArrayList<Book>(); //contains the book for borrow
-
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +83,6 @@ public class BookBorrowActivity extends Activity {
         borrowBooksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //call async task for update the borrow in the DB
                 new UpdateBorrow().execute();
             }
         });
@@ -257,10 +255,9 @@ public class BookBorrowActivity extends Activity {
             if (result != null) {
                 String type = result.substring(0,2);
                 barcode=result.substring(2);
-                //check if the NFC tag is a book
+
                 if(type.equals("BK")){
                     super.onPostExecute(result);
-                    //call async task for get the book details
                     new GetBookBarcode().execute();
                 }
             }
@@ -271,7 +268,7 @@ public class BookBorrowActivity extends Activity {
     class UpdateBorrow extends AsyncTask<String, String, String> {
 
         /* *
-          * Updating the book status in background thread
+          * Getting product details in background thread
           **/
         protected String doInBackground(String... params) {
 
@@ -291,21 +288,11 @@ public class BookBorrowActivity extends Activity {
                             JSONObject json = jsonParser.makeHttpRequest(
                                     url_book_borrow, "GET", params);
 
-                            Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
-
                             // json success tag
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
                                 if (success == 1) {
-                                    directDialog = new Dialog(context);
-                                    directDialog.setContentView(R.layout.direction_dialog);
-                                    directDialog.setTitle("Success");
-                                    TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
-                                    TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
-                                    bookCase.setText("");
-                                    shelff.setText("Books were borrowed");
-                                    ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
-                                    image.setImageResource(success);
+                                    successFlag=1;
 
                                 } else {
                                     // product with pid not found
@@ -315,6 +302,17 @@ public class BookBorrowActivity extends Activity {
                             e.printStackTrace();
                         }
 
+                    }
+                    if(successFlag==1){
+                        directDialog = new Dialog(context);
+                        directDialog.setContentView(R.layout.direction_dialog);
+                        directDialog.setTitle("Success");
+                        TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                        TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                        bookCase.setText("");
+                        shelff.setText("Books were borrowed");
+                        ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                        image.setImageResource(R.drawable.success);
                     }
 
                     b.clear();
@@ -326,11 +324,10 @@ public class BookBorrowActivity extends Activity {
         }
     }
 
-    //async task for get the book details for view on ListView
     class GetBookBarcode extends AsyncTask<String, String, String> {
 
         /**
-         * Getting book details in background thread
+         * Getting product details in background thread
          * */
         protected String doInBackground(String... params) {
 
