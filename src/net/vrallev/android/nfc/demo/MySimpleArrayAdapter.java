@@ -19,7 +19,8 @@ public class MySimpleArrayAdapter extends ArrayAdapter<Book> {
     private Context context;
     public ArrayList<Book> values;
 
-    public MySimpleArrayAdapter(Context context, ArrayList<Book> values) {
+    public MySimpleArrayAdapter(Context context, ArrayList<Book> values)
+    {
         super(context, R.layout.row_layout, values);
         this.context = context;
         this.values = values;

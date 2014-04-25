@@ -68,9 +68,6 @@ public class StudentMainActivity extends Activity {
         // Getting complete user details in background thread
         new GetUserDetails().execute();
 
-
-
-
         greeting.setText("Hello, "+studentID);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {

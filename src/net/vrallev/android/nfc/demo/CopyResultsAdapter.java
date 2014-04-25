@@ -17,7 +17,8 @@ public class CopyResultsAdapter extends ArrayAdapter<Book>{
     private Context context;
     public ArrayList<Book> values;
 
-    public CopyResultsAdapter(Context context, ArrayList<Book> values) {
+    public CopyResultsAdapter(Context context, ArrayList<Book> values)
+    {
         super(context, R.layout.row_layout2, values);
         this.context = context;
         this.values = values;

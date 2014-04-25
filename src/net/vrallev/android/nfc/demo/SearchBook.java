@@ -33,7 +33,6 @@ public class SearchBook extends Activity {
     ArrayList<Book> books = new ArrayList<Book>(); //contains the books(search results)
     Context context;
 
-    String query_string;
 
     // JSON parser class
     JSONParser jsonParser = new JSONParser();

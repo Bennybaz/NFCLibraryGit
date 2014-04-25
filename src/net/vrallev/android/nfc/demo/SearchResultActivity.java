@@ -59,7 +59,6 @@ public class SearchResultActivity extends Activity{
     private static final String TAG_SUCCESS = "success";
     String FILENAME="cart";
 
-
     public void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);

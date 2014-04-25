@@ -23,7 +23,6 @@ public class SortedList extends Activity {
     TextView tv;
     Button nextStepBtn;
     Button returnRouteBtn;
-
     Context context;
     ListView lv;
     ArrayAdapter<String> adapter;

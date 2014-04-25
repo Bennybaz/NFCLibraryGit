@@ -192,8 +192,8 @@ public final class R {
     <drawable name="dialog_holo_dark_frame">@drawable/dialog_full_holo_dark</drawable>
     <drawable name="dialog_holo_light_frame">@drawable/dialog_full_holo_light</drawable>
          */
-        public static final int input_method_fullscreen_background=0x7f02001e;
-        public static final int input_method_fullscreen_background_holo=0x7f02001f;
+        public static final int input_method_fullscreen_background=0x7f02001f;
+        public static final int input_method_fullscreen_background_holo=0x7f020020;
         public static final int my_button=0x7f020004;
         public static final int my_list=0x7f020005;
         public static final int nfc_icon=0x7f020006;
@@ -201,29 +201,29 @@ public final class R {
         public static final int nfc_waiting_tag=0x7f020008;
         public static final int nfcscan1=0x7f020009;
         public static final int nfcscan2=0x7f02000a;
-        public static final int notification_item_background_color=0x7f020018;
-        public static final int notification_item_background_color_pressed=0x7f020019;
-        public static final int notification_template_icon_bg=0x7f020023;
-        public static final int notification_template_icon_low_bg=0x7f020024;
+        public static final int notification_item_background_color=0x7f020019;
+        public static final int notification_item_background_color_pressed=0x7f02001a;
+        public static final int notification_template_icon_bg=0x7f020024;
+        public static final int notification_template_icon_low_bg=0x7f020025;
         public static final int remove_icon=0x7f02000b;
-        public static final int safe_mode_background=0x7f02001b;
-        public static final int screen_background_dark=0x7f020015;
+        public static final int safe_mode_background=0x7f02001c;
+        public static final int screen_background_dark=0x7f020016;
         /**  Background drawable that can be used for a transparent activity to
          be able to display a dark UI: this darkens its background to make
          a dark (default theme) UI more visible. 
          */
-        public static final int screen_background_dark_transparent=0x7f02001c;
-        public static final int screen_background_holo_dark=0x7f020022;
+        public static final int screen_background_dark_transparent=0x7f02001d;
+        public static final int screen_background_holo_dark=0x7f020023;
         /**  For holo theme 
          */
-        public static final int screen_background_holo_light=0x7f020021;
-        public static final int screen_background_light=0x7f020014;
+        public static final int screen_background_holo_light=0x7f020022;
+        public static final int screen_background_light=0x7f020015;
         /**  Background drawable that can be used for a transparent activity to
          be able to display a light UI: this lightens its background to make
          a light UI more visible. 
          */
-        public static final int screen_background_light_transparent=0x7f02001d;
-        public static final int search_bar_default_color=0x7f02001a;
+        public static final int screen_background_light_transparent=0x7f02001e;
+        public static final int search_bar_default_color=0x7f02001b;
         public static final int sector_eight=0x7f02000c;
         public static final int sector_five=0x7f02000d;
         public static final int sector_four=0x7f02000e;
@@ -234,9 +234,10 @@ public final class R {
         public static final int sector_two=0x7f020013;
         /**  For date picker widget 
          */
-        public static final int selected_day_background=0x7f020020;
-        public static final int status_bar_closed_default_background=0x7f020016;
-        public static final int status_bar_opened_default_background=0x7f020017;
+        public static final int selected_day_background=0x7f020021;
+        public static final int status_bar_closed_default_background=0x7f020017;
+        public static final int status_bar_opened_default_background=0x7f020018;
+        public static final int success=0x7f020014;
     }
     public static final class id {
         public static final int addNewBookBtn=0x7f0c0025;

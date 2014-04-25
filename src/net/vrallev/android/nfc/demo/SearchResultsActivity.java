@@ -44,8 +44,6 @@ public class SearchResultsActivity extends Activity {
                 startActivity(intent2);
             }
         });
-
-
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event)
