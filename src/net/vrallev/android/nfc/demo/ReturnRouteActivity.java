@@ -89,8 +89,8 @@ public class ReturnRouteActivity extends Activity {
 
 
         sectors.add(52);
-        barcodeSector.put(52.2, "954-30");
-        barcode = "954-30";
+        barcodeSector.put(52.2, "624-10");
+        barcode = "624-10";
         Book bk = new Book();
         bk.setBarcode(barcode);
         bk.setName("" + barcode);
@@ -99,8 +99,8 @@ public class ReturnRouteActivity extends Activity {
         b.add(bk);
 
         sectors.add(65);
-        barcodeSector.put(65.3, "563-40");
-        barcode = "563-40";
+        barcodeSector.put(65.3, "1298-10");
+        barcode = "1298-10";
         Book bk1 = new Book();
         bk1.setBarcode(barcode);
         bk1.setName("" + barcode);
@@ -110,8 +110,8 @@ public class ReturnRouteActivity extends Activity {
 
         fixedPos = 6.1;
         sectors.add(6);
-        barcodeSector.put(6.1, "000057800066");
-        barcode = "000057800066";
+        barcodeSector.put(6.1, "602-10");
+        barcode = "602-10";
         new GetBookBarcode().execute();
 
 
@@ -618,6 +618,7 @@ public class ReturnRouteActivity extends Activity {
                                             bk.setName(product.getString("title"));
                                             bk.setAuthor(product.getString("author"));
                                             bk.setFixedPosition(it);
+                                           
 
 
                                             int flag1=0;
@@ -625,7 +626,9 @@ public class ReturnRouteActivity extends Activity {
                                                 if(sorted.get(k).getBarcode().equals(barcode))
                                                     flag1=1;
                                             if(flag1==0)
+                                            {
                                                 sorted.add(bk);
+                                            }
 
                                         } else {
                                             // product with pid not found
