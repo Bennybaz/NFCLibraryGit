@@ -82,9 +82,9 @@
         </activity>
         <activity android:name=".CopyListActivity"/>
         <activity android:name=".SortedList"/>
-        <activity android:name=".FragmentForStepList"/>
-        <activity android:name=".FragmentForStep"/>
         <activity android:name=".ReturnRouteInstructions"/>
+        <activity android:name=".ShelfManagementActivity"/>
+        <activity android:name=".ShelfManagementResult"/>
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ public class ManageInventoryActivity extends Activity {
 
     Button addNewBook;
     Button assignToShelf;
+    Button manageShelf;
     private Context context;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class ManageInventoryActivity extends Activity {
 
         addNewBook = (Button) findViewById(R.id.addNewBookBtn);
         assignToShelf = (Button) findViewById(R.id.assignToShelfBtn);
+        manageShelf = (Button) findViewById((R.id.manageShelfBtn));
 
         addNewBook.setOnClickListener(new View.OnClickListener() {
 
@@ -45,6 +47,16 @@ public class ManageInventoryActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, AssignBookToShelfActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
+        manageShelf.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(context, ShelfManagementActivity.class);
                 startActivity(intent);
             }
 
