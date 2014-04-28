@@ -295,7 +295,7 @@ public class SearchResultActivity extends Activity{
                                 dialogButtonScan.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Intent intent = new Intent();
+                                        Intent intent = new Intent(SearchResultActivity.this, ScanShelfActivity.class);
                                         intent.putExtra("barcode", bk.getBarcode().toString());
                                         startActivity(intent);
                                     }
