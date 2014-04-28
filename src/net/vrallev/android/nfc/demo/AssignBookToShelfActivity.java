@@ -411,6 +411,17 @@ public class AssignBookToShelfActivity extends Activity {
                         shelff.setText("Books were assigned");
                         ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
                         image.setImageResource(R.drawable.success);
+                        Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
+                        Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
+
+                        // if button is clicked, close the custom dialog
+                        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                directDialog.dismiss();
+                            }
+                        });
+                        directDialog.show();
                     }
                 }
             });

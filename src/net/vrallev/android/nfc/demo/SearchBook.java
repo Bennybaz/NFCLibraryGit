@@ -66,6 +66,7 @@ public class SearchBook extends Activity {
             @Override
             public void onClick(View arg0) {
                 // Getting complete search details in background thread
+                books.clear();
                 new GetSearchResults().execute();
             }
 

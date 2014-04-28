@@ -32,6 +32,7 @@
     <Button
             android:id="@+id/directionButtonScan"
             android:layout_width="fill_parent"
+            android:visibility="invisible"
             android:layout_height="wrap_content"
             android:text="Scan Shelf"
             android:layout_marginTop="10dp"

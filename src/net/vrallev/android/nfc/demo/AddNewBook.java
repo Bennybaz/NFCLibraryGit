@@ -44,7 +44,7 @@ public class AddNewBook extends Activity{
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        setTitle("Assign Books To Shelf");
+        setTitle("Add New Book");
         writeBtn = (Button) findViewById(R.id.writeNfcBtn);
         message = (TextView)findViewById(R.id.newBookET);
 

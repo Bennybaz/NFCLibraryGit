@@ -56,7 +56,7 @@ public class BookCartActivity extends Activity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        setTitle("Cart");
+        setTitle("Book Cart");
         context = this;
 
         lv = (ListView) findViewById(R.id.cartListView);

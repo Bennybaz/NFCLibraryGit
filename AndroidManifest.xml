@@ -49,6 +49,15 @@
                     android:name="android.nfc.action.TECH_DISCOVERED"
                     android:resource="@xml/nfc_tech_filter" />
         </activity>
+        <activity android:name=".ScanShelfActivity" android:parentActivityName=".SearchResultActivity">
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                    android:name="android.nfc.action.TECH_DISCOVERED"
+                    android:resource="@xml/nfc_tech_filter" />
+        </activity>
         <activity android:name=".AddNewBook" android:parentActivityName=".LibrarianMainActivity"></activity>
         <activity android:name=".StudentMainActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".LibrarianMainActivity" android:parentActivityName=".MainActivity"></activity>

@@ -3,6 +3,7 @@ package net.vrallev.android.nfc.demo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -36,6 +37,7 @@ public class SearchResultActivity extends Activity{
     private Button borrowBookBtn;
     private Dialog directDialog;
     private Button addToCartBtn;
+
     TextView title;
     TextView author;
     TextView publisher;
@@ -125,7 +127,7 @@ public class SearchResultActivity extends Activity{
                     fos.write(barcode.getText().toString().getBytes());
                     fos.write(System.getProperty("line.separator").getBytes());
                     fos.close();
-                    Toast.makeText(context,"OK",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Book"+bk.getBarcode().toString()+"added to cart",Toast.LENGTH_SHORT).show();
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -279,6 +281,7 @@ public class SearchResultActivity extends Activity{
                                 }
 
                                 Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
+                                Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
 
 
                                 // if button is clicked, close the custom dialog
@@ -286,6 +289,15 @@ public class SearchResultActivity extends Activity{
                                     @Override
                                     public void onClick(View v) {
                                         directDialog.dismiss();
+                                    }
+                                });
+
+                                dialogButtonScan.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent();
+                                        intent.putExtra("barcode", bk.getBarcode().toString());
+                                        startActivity(intent);
                                     }
                                 });
 
