@@ -3,10 +3,12 @@ package net.vrallev.android.nfc.demo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -59,11 +61,14 @@ public class LibrarianMainActivity extends Activity {
         searchBtn = (Button) findViewById(R.id.searchBtn);
         returnBtn = (Button) findViewById(R.id.bookReturnBtn);
         manageBtn = (Button) findViewById(R.id.manageBtn);
-        borrowBtn = (Button) findViewById(R.id.borrowBtn);
+        borrowBtn = (Button) findViewById(R.id.libBorrow);
         greeting = (TextView) findViewById(R.id.greetText2);
 
         //get the librarian id
-        librarianID = getIntent().getExtras().getString("ID").substring(2);
+        //librarianID = getIntent().getExtras().getString("ID").substring(2);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        librarianID = sharedPref.getString("ID", "OOPS").substring(2);
+
 
         // Getting complete user details in background thread
         GetUserDetails task1 = new GetUserDetails();
@@ -103,14 +108,14 @@ public class LibrarianMainActivity extends Activity {
             }
         });
 
-        /*borrowBtn.setOnClickListener(new View.OnClickListener() {
+        borrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, BookBorrowActivity.class);
                 intent.putExtra("ID", librarianID);
                 startActivity(intent);
             }
-        });*/
+        });
     }
 
     //Background Async Task to Get complete user details

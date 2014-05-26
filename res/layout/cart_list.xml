@@ -6,6 +6,16 @@
               android:layout_height="match_parent"
               android:padding="5dp">
 
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textAlignment="center"
+            android:text="Select books and scan them"
+            android:textSize="20dp"
+            android:textColor="@color/holo_blue_dark"
+            android:id="@+id/shelfTV"/>
+
     <LinearLayout
             android:id="@+id/listViewLayout"
             android:orientation="vertical"
@@ -13,7 +23,7 @@
             android:layout_height="wrap_content">
         <ListView
                 android:layout_width="match_parent"
-                android:layout_height="459dp"
+                android:layout_height="420dp"
                 android:id="@+id/cartListView"/>
     </LinearLayout>
     <Button

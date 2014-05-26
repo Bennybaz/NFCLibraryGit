@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import libalg.BranchAndBound;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Lidor on 28/04/14.
@@ -23,7 +19,7 @@ public class ShelfManagementResult extends Activity {
 
     Context context;
     ListView lv;
-    public SearchResultsAdapter adapter;
+    public SearchResultsActivity.SearchResultsAdapter adapter;
 
     Button nextShelf;
     Button finish;
@@ -45,7 +41,7 @@ public class ShelfManagementResult extends Activity {
         }
 
         lv = (ListView) findViewById(R.id.managementResultList);
-        adapter = new SearchResultsAdapter(this, notRelatedBooks);
+        adapter = new SearchResultsActivity.SearchResultsAdapter(this, notRelatedBooks);
         lv.setAdapter(adapter);
 
         nextShelf = (Button) findViewById(R.id.nextShelfBtn);

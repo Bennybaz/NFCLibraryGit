@@ -1,15 +1,14 @@
 package net.vrallev.android.nfc.demo;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.*;
 
 import java.util.ArrayList;
 
@@ -54,5 +53,35 @@ public class SearchResultsActivity extends Activity {
             adapter.notifyDataSetChanged();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * Created by Benny on 10/04/2014.
+     */
+
+    public static class SearchResultsAdapter extends ArrayAdapter<Book> {
+        private Context context;
+        public ArrayList<Book> values;
+
+        public SearchResultsAdapter(Context context, ArrayList<Book> values)
+        {
+            super(context, R.layout.row_layout2, values);
+            this.context = context;
+            this.values = values;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final int pos = position;
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.row_layout2, parent, false);
+            TextView textView1 = (TextView) rowView.findViewById(R.id.headline2);
+            TextView textView2 = (TextView) rowView.findViewById(R.id.baseline2);
+            textView1.setText(values.get(position).getName());
+            textView2.setText(values.get(position).getAuthor());
+            return rowView;
+        }
+
     }
 }

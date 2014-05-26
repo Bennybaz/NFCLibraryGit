@@ -52,6 +52,8 @@ public class AssignBookToShelfActivity extends Activity {
     String barcode;
     Dialog directDialog;
     int successFlag=0;
+    int shelfFlag=0;
+    int duplicateFlag=0;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
@@ -282,19 +284,23 @@ public class AssignBookToShelfActivity extends Activity {
                 //int row = Integer.parseInt(result.substring(2,4));
 
                 if(type.equals("BK")){
-                    super.onPostExecute(result);
+                    if(shelfFlag==0) Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_LONG).show();
+                    else {
+                        super.onPostExecute(result);
 
-                    barcode=result.substring(2);
+                        barcode = result.substring(2);
 
 
-                    // Getting complete user details in background thread
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                        new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    else
-                        new GetBookBarcode().execute();
+                        // Getting complete user details in background thread
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                            new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        else
+                            new GetBookBarcode().execute();
+                    }
                 }
                 if(type.equals("SH")){
                     super.onPostExecute(result);
+                    shelfFlag=1;
                     shelf.setText(result.substring(2,4));
                     lv.setVisibility(1);
                     writeToShelfBtn.setVisibility(1);
@@ -337,15 +343,23 @@ public class AssignBookToShelfActivity extends Activity {
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
 
-                                Book bk = new Book();
-                                bk.setBarcode(barcode);
-                                bk.setName(product.getString("title"));
-                                bk.setAuthor(product.getString("author"));
-                                b.add(bk);
-                                adapter.notifyDataSetChanged();
+                                for(int i=0;i<b.size();i++){
+                                    if(b.get(i).getBarcode().equals(barcode)) duplicateFlag=1;
+                                }
 
+                                if(duplicateFlag==0) {
+
+                                    Book bk = new Book();
+                                    bk.setBarcode(barcode);
+                                    bk.setName(product.getString("title"));
+                                    bk.setAuthor(product.getString("author"));
+                                    b.add(bk);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
                             } else {
                                 // product with pid not found
+                                Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -394,6 +408,7 @@ public class AssignBookToShelfActivity extends Activity {
 
                                 } else {
                                     // product with pid not found
+                                    Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }catch (JSONException e) {
@@ -422,6 +437,9 @@ public class AssignBookToShelfActivity extends Activity {
                             }
                         });
                         directDialog.show();
+                        b.clear();
+                        adapter.notifyDataSetChanged();
+                        shelf.setText("");
                     }
                 }
             });

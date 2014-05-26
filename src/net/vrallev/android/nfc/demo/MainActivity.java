@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -16,6 +17,7 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ public class MainActivity extends Activity {
 
 	private NfcAdapter mNfcAdapter;
     private Switch mNfcSwitch;
+    Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class MainActivity extends Activity {
 
         mNfcSwitch = (Switch) findViewById(R.id.switch1);
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        context=this;
 
 		if (mNfcAdapter == null) {
 			// Stop here, we definitely need NFC
@@ -243,21 +247,32 @@ public class MainActivity extends Activity {
 
                     Intent intent = new Intent(MainActivity.this, StudentMainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("ID", result);
+                    //intent.putExtra("ID", result);
+                    savePreferences("ID", result);
                     startActivity(intent);
                 }
 
-                if(type.equals("LB")){
+                else if(type.equals("LB")){
                     super.onPostExecute(result);
 
                     Intent intent = new Intent(MainActivity.this, LibrarianMainActivity.class);
-                    intent.putExtra("ID", result);
+                    //intent.putExtra("ID", result);
+                    savePreferences("ID", result);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
+                else Toast.makeText(context ,"Scan ID Tag Only", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
+
+    private void savePreferences(String key, String value) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -271,14 +286,14 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            /*case R.id.menu_about:
+            case R.id.menu_about:
                 this.startActivityForResult(new Intent((Context)(this), (Class)(AboutActivity.class)),1);
                 return true;
             case R.id.menu_exit:
                 getApplicationContext().deleteFile("cart");
                 this.finish();
                 return true;
-                */
+
             default:
                 return super.onOptionsItemSelected(item);
         }

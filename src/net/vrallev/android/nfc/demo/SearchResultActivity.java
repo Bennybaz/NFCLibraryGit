@@ -112,7 +112,9 @@ public class SearchResultActivity extends Activity{
             @Override
             public void onClick(View v) {
                 //call async task for borrow
-                new UpdateBorrow().execute();
+                //new UpdateBorrow().execute();
+                Intent intent = new Intent(context, BookBorrowActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -127,7 +129,7 @@ public class SearchResultActivity extends Activity{
                     fos.write(barcode.getText().toString().getBytes());
                     fos.write(System.getProperty("line.separator").getBytes());
                     fos.close();
-                    Toast.makeText(context,"Book"+bk.getBarcode().toString()+"added to cart",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Book "+bk.getBarcode().toString()+" added to cart",Toast.LENGTH_SHORT).show();
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -145,9 +147,11 @@ public class SearchResultActivity extends Activity{
             status.setText("Book is already borrowed");
             status.setTextColor(Color.RED);
             getDirectionsBtn.setClickable(false);
-            getDirectionsBtn.setBackgroundColor(Color.LTGRAY);
+            getDirectionsBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
             borrowBookBtn.setClickable(false);
-            borrowBookBtn.setBackgroundColor(Color.LTGRAY);
+            borrowBookBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+            addToCartBtn.setClickable(false);
+            addToCartBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
         }
     }
 

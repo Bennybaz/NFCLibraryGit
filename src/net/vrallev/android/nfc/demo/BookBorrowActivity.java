@@ -61,6 +61,7 @@ public class BookBorrowActivity extends Activity {
     Dialog directDialog;
     int successFlag=0;
 
+
     Button borrowBooksBtn;
     private NfcAdapter mNfcAdapter;
 
@@ -261,6 +262,7 @@ public class BookBorrowActivity extends Activity {
                     super.onPostExecute(result);
                     new GetBookBarcode().execute();
                 }
+                else Toast.makeText(context,"Please Scan a Book Tag", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -296,6 +298,7 @@ public class BookBorrowActivity extends Activity {
                                     successFlag=1;
 
                                 } else {
+                                    Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
                                     // product with pid not found
                                 }
                             }
@@ -314,10 +317,22 @@ public class BookBorrowActivity extends Activity {
                         shelff.setText("Books were borrowed");
                         ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
                         image.setImageResource(R.drawable.success);
+                        Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
+                        Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
+
+                        // if button is clicked, close the custom dialog
+                        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                directDialog.dismiss();
+                            }
+                        });
+                        directDialog.show();
+                        b.clear();
+                        adapter.notifyDataSetChanged();
                     }
 
-                    b.clear();
-                    adapter.notifyDataSetChanged();
+
                 }
             });
 
@@ -376,6 +391,7 @@ public class BookBorrowActivity extends Activity {
 
                             } else {
                                 // product with pid not found
+                                Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {

@@ -3,9 +3,11 @@ package net.vrallev.android.nfc.demo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -63,7 +65,9 @@ public class StudentMainActivity extends Activity {
         greeting = (TextView) findViewById(R.id.greetText);
 
         //get the student id
-        studentID = getIntent().getExtras().getString("ID").substring(2);
+        //studentID = getIntent().getExtras().getString("ID").substring(2);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        studentID = sharedPref.getString("ID", "OOPS").substring(2);
 
         // Getting complete user details in background thread
         new GetUserDetails().execute();
