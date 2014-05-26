@@ -10,6 +10,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Books that not belong to the shelf:"
             android:id="@+id/shelfText"/>
@@ -30,16 +31,28 @@
             android:layout_height="wrap_content">
     </LinearLayout>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Manage Another Shelf"
             android:id="@+id/nextShelfBtn"
+            android:padding="5dp"
+            android:gravity="center"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"/>
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Finish"
             android:id="@+id/finishManage"
+            android:padding="5dp"
+            android:gravity="center"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

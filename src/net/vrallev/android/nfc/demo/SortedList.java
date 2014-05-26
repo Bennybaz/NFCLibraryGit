@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 public class SortedList extends Activity {
 
     ArrayList<Book> books; //contains the books details for return procedure 
-    ArrayList<String> sortedCommands; //contains the commands for sorting 
+    ArrayList<String> sortedCommands; //contains the commands for sorting
+    ArrayList<String> steps = new ArrayList<String>();
     int currentStep=0; //index to the current step of return
     boolean enableClick = true; //flag for disable/enable the "next" button listener
 
@@ -40,9 +42,11 @@ public class SortedList extends Activity {
         lv = (ListView) findViewById(R.id.sort_steps);
 
         //build the step array for list view
-        String [] steps = new String[sortedCommands.size()];
+
+        //String [] steps = new String[sortedCommands.size()];
         for(int i=0;i<sortedCommands.size(); i++)
-            steps[i]="Step "+(i+1);
+            steps.add("Step "+(i+1));
+            //steps[i]="Step "+(i+1);
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, steps);
 
@@ -96,5 +100,19 @@ public class SortedList extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            books.clear();
+            sortedCommands.clear();
+            steps.clear();
+            adapter.notifyDataSetChanged();
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -74,7 +74,7 @@ public class ReturnRouteInstructions extends Activity {
         lv.setAdapter(adapter);
 
         tv = (TextView) findViewById(R.id.return_step_text);
-        tv.setText("Press Step 1 for start return procedure");
+        //tv.setText("Press Step 1 for start return procedure");
         nextStepBtn = (Button) findViewById(R.id.return_next_step_button);
         nextStepBtn.setVisibility(View.GONE);
 
@@ -144,8 +144,8 @@ public class ReturnRouteInstructions extends Activity {
             @Override
             public void onClick(View v) {
 
-                //Intent intent = new Intent(ReturnRouteInstructions.this, LibrarianMainActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(ReturnRouteInstructions.this, LibrarianMainActivity.class);
+                startActivity(intent);
             }
         });
 

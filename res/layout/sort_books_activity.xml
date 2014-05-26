@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent" android:weightSum="1">
 
     <ListView
             android:layout_width="104dp"
@@ -17,10 +17,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Begin Sorting By Steps"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="Press 'Step 1' to Begin"
                 android:id="@+id/step_text"
-                android:textSize="@dimen/text_size"
-                android:textColor="@color/holo_blue_dark"/>
+                android:textSize="@dimen/buttons"/>
         <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -30,7 +31,7 @@
                 android:gravity="center"
                 style="@style/myButton"
                 android:textColor="@color/black"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="110dp"
                 android:layout_gravity="center_horizontal"/>
         <Button
                 android:layout_width="fill_parent"
@@ -41,7 +42,7 @@
                 android:gravity="center"
                 style="@style/myButton"
                 android:textColor="@color/black"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="110dp"
                 android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 </LinearLayout>

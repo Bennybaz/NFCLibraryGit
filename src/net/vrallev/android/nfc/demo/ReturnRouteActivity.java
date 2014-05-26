@@ -12,6 +12,7 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.*;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 import libalg.BranchAndBound;
@@ -104,35 +105,41 @@ public class ReturnRouteActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                //new UpdateBookStatus().execute();
-                try {
-                    double[][] data2 = getDoubleTwoDimArray("dump.txt");
-                    firstSectorFlag=0;
-                    if(sectors.get(0)!=1)
-                    {
-                        sectors.add(1);
-                        firstSectorFlag=1;
+
+                if(b.size()>0)
+                {
+                    //new UpdateBookStatus().execute();
+                    try {
+                        double[][] data2 = getDoubleTwoDimArray("dump.txt");
+                        firstSectorFlag=0;
+                        if(sectors.get(0)!=1)
+                        {
+                            sectors.add(1);
+                            firstSectorFlag=1;
+                        }
+
+                        Collections.sort(sectors);
+                        adjacency_matrix = new double[sectors.size() + 1][sectors.size() + 1];
+
+                        createAdj(data2, sectors);
+
+                        BranchAndBound bnb = new BranchAndBound(adjacency_matrix,0, sectors);
+                        //String result = bnb.execute();
+                        optimumRoute = bnb.execute2();
+
+                        new GetBookBarcodeSorted().execute();
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                    Collections.sort(sectors);
-                    adjacency_matrix = new double[sectors.size() + 1][sectors.size() + 1];
-
-                    createAdj(data2, sectors);
-
-                    BranchAndBound bnb = new BranchAndBound(adjacency_matrix,0, sectors);
-                    //String result = bnb.execute();
-                    optimumRoute = bnb.execute2();
-
-                    new GetBookBarcodeSorted().execute();
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+                else Toast.makeText(context,"No books for return",Toast.LENGTH_SHORT).show();
             }
+
         });
-//        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-//        handleIntent(getIntent());
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        handleIntent(getIntent());
     }
 
     public int bookPosInScannedBooks(String str, ArrayList<Book> al)
@@ -186,29 +193,29 @@ public class ReturnRouteActivity extends Activity {
         return data;
     }
 
-//   @Override
-//    protected void onResume() {
-//        super.onResume();
+   @Override
+    protected void onResume() {
+        super.onResume();
 
 		/*
 		 * It's important, that the activity is in the foreground (resumed). Otherwise
 		 * an IllegalStateException is thrown.
 		 */
-//        setupForegroundDispatch(this, mNfcAdapter);
-//    }
+        setupForegroundDispatch(this, mNfcAdapter);
+    }
 
-//   @Override
-//    protected void onPause() {
+   @Override
+    protected void onPause() {
 		/*
 		 * Call this before onPause, otherwise an IllegalArgumentException is thrown as well.
 		 */
-//        stopForegroundDispatch(this, mNfcAdapter);
+        stopForegroundDispatch(this, mNfcAdapter);
 
-//        super.onPause();
-//    }
+        super.onPause();
+    }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
+    @Override
+    protected void onNewIntent(Intent intent) {
 		/*
 		 * This method gets called, when a new Intent gets associated with the current activity instance.
 		 * Instead of creating a new activity, onNewIntent will be called. For more information have a look
@@ -216,10 +223,10 @@ public class ReturnRouteActivity extends Activity {
 		 *
 		 * In our case this method gets called, when the user attaches a Tag to the device.
 		 */
-    //       handleIntent(intent);
-    //   }
+           handleIntent(intent);
+       }
 
-/*    private void handleIntent(Intent intent) {
+    private void handleIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
@@ -247,12 +254,12 @@ public class ReturnRouteActivity extends Activity {
             }
         }
     }
-*/
+
     /**
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
-/*    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -273,19 +280,19 @@ public class ReturnRouteActivity extends Activity {
 
         adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
-*/
+
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
-/*    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
 
     public void nfcStatusChanged(View view) {
         startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS),2 );
     }
-*/
+
     // create a distance matrix according to the input
 
 
@@ -296,7 +303,7 @@ public class ReturnRouteActivity extends Activity {
      *
      */
 
-/*    private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
+    private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         @Override
         protected String doInBackground(Tag... params) {
             Tag tag = params[0];
@@ -322,8 +329,8 @@ public class ReturnRouteActivity extends Activity {
 
             return null;
         }
-*/
-//        private String readText(NdefRecord record) throws UnsupportedEncodingException {
+
+        private String readText(NdefRecord record) throws UnsupportedEncodingException {
 			/*
 			 * See NFC forum specification for "Text Record Type Definition" at 3.2.1
 			 *
@@ -334,22 +341,22 @@ public class ReturnRouteActivity extends Activity {
 			 * bit_5..0 length of IANA language code
 			 */
 
-//            byte[] payload = record.getPayload();
+            byte[] payload = record.getPayload();
 
     // Get the Text Encoding
-//            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
 
     // Get the Language Code
-//            int languageCodeLength = payload[0] & 0063;
+            int languageCodeLength = payload[0] & 0063;
 
     // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
     // e.g. "en"
 
     // Get the Text
-//            return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
-//        }
+            return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+        }
 
-/*        @Override
+        @Override
         protected void onPostExecute(String result) {
             if (result != null) {
                 String type = result.substring(0,2);
@@ -370,7 +377,8 @@ public class ReturnRouteActivity extends Activity {
             }
         }
     }
-*/
+
+
     class GetBookBarcode extends AsyncTask<String, String, String> {
 
         /**
@@ -783,5 +791,20 @@ public class ReturnRouteActivity extends Activity {
 
             return null;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            b.clear();
+            sorted.clear();
+            sectors.clear();
+            optimumRoute.clear();
+            adapter.notifyDataSetChanged();
+            //finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

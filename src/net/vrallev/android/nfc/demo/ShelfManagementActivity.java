@@ -46,9 +46,11 @@ public class ShelfManagementActivity extends Activity {
     ArrayList<Book> shelfBooks = new ArrayList<Book>();
 
     Button shelfManage;
+    Button simulationBtn;
     TextView shelfText;
 
     String barcode;
+    int flag=0;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
@@ -75,10 +77,12 @@ public class ShelfManagementActivity extends Activity {
 
         shelfText = (TextView) findViewById(R.id.shelfScannedText);
         shelfManage = (Button) findViewById(R.id.shelfManageBtn);
+        simulationBtn = (Button) findViewById(R.id.simulationForShelfManagementBtn);
 
         //-----------------------------tests-----------------------------
-        /*shelfText.setText("4");
 
+
+        /*
         //shelf 4
         Book bk1 = new Book();
         bk1.setBarcode("624-10");
@@ -109,7 +113,18 @@ public class ShelfManagementActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new GetBookOfShelf().execute();
+                if(scannedBooks.size()>0)
+                    new GetBookOfShelf().execute();
+                else Toast.makeText(context,"Please scan books",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        simulationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new GetBookBarcodeForSimulation().execute();
 
             }
         });
@@ -456,5 +471,84 @@ public class ShelfManagementActivity extends Activity {
                 return i;
         }
         return -1;
+    }
+
+
+    class GetBookBarcodeForSimulation extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    ArrayList<String> simBarcode = new ArrayList<String>();
+
+                    shelfText.setText("4");
+                    simBarcode.add("624-10");
+                    simBarcode.add("1298-10");
+                    simBarcode.add("602-10");
+                    simBarcode.add("1568-20");
+
+                    for(int i=0; i<simBarcode.size(); i++)
+                    {
+                        barcode=simBarcode.get(i);
+
+                        try {
+                            // Building Parameters
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("barcode", barcode));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+
+                            JSONObject json = jsonParser.makeHttpRequest(
+                                    url_book_barcode_for_details, "GET", params);
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+                                    // successfully received product details
+                                    JSONArray productObj = json.getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                    // get first user object from JSON Array
+                                    JSONObject product = productObj.getJSONObject(0);
+
+                                    Book bk = new Book();
+                                    bk.setBarcode(barcode);
+                                    bk.setName(product.getString("title"));
+                                    bk.setAuthor(product.getString("author"));
+
+
+                                    for(int j=0; j<scannedBooks.size(); j++) {
+                                        if(scannedBooks.get(j).getBarcode().equals(barcode))
+                                            flag=1;
+                                        break;
+                                    }
+
+                                    if(flag==0) {
+                                        scannedBooks.add(bk);
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                } else {
+                                    // product with pid not found
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+            return null;
+        }
     }
 }
