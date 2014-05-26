@@ -51,6 +51,7 @@ public class ShelfManagementActivity extends Activity {
 
     String barcode;
     int flag=0;
+    int simulationFlag=0;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
@@ -78,6 +79,8 @@ public class ShelfManagementActivity extends Activity {
         shelfText = (TextView) findViewById(R.id.shelfScannedText);
         shelfManage = (Button) findViewById(R.id.shelfManageBtn);
         simulationBtn = (Button) findViewById(R.id.simulationForShelfManagementBtn);
+
+        simulationFlag=0;
 
         //-----------------------------tests-----------------------------
 
@@ -124,7 +127,12 @@ public class ShelfManagementActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                new GetBookBarcodeForSimulation().execute();
+                if(simulationFlag==0)
+                {
+                    new GetBookBarcodeForSimulation().execute();
+                    simulationFlag=1;
+                }
+                else Toast.makeText(context,"Simulation is already running",Toast.LENGTH_SHORT).show();
 
             }
         });

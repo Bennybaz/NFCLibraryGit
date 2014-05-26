@@ -55,6 +55,7 @@ public class ReturnRouteActivity extends Activity {
     double fixedPos=0;
     double it;
     int firstSectorFlag = 0; //flag for the returnRoute array size
+    int simulationFlag=0;
 
     int shelf;
     int sector;
@@ -91,12 +92,19 @@ public class ReturnRouteActivity extends Activity {
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
 
+        simulationFlag=0;
+
 
         simulationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                new GetBookSectorForSimulation().execute();
+                if(simulationFlag==0)
+                {
+                    new GetBookSectorForSimulation().execute();
+                    simulationFlag=1;
+                }
+                else Toast.makeText(context,"Simulation is already running",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -493,10 +501,62 @@ public class ReturnRouteActivity extends Activity {
                                     sectors.add(sectorForAlg);
                                     barcodeSector.put(fixedPos, barcode);
                                 }
+
+                                /*
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                     new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                 else
                                     new GetBookBarcode().execute();
+                                    */
+
+
+                                try {
+                                    // Building Parameters
+                                    List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+                                    params1.add(new BasicNameValuePair("barcode", barcode));
+
+                                    // getting student details by making HTTP request
+                                    // Note that product details url will use GET request
+
+                                    JSONObject json3 = jsonParser.makeHttpRequest(
+                                            url_book_barcode_for_details, "GET", params);
+
+                                    // json success tag
+                                    if(json3!=null) {
+                                        success = json3.getInt(TAG_SUCCESS);
+                                        if (success == 1) {
+                                            // successfully received product details
+                                            JSONArray productObj1 = json3.getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                            // get first user object from JSON Array
+                                            JSONObject product1 = productObj1.getJSONObject(0);
+
+                                            Book bk = new Book();
+                                            bk.setBarcode(barcode);
+                                            bk.setName(product1.getString("title"));
+                                            bk.setAuthor(product1.getString("author"));
+                                            bk.setFixedPosition(fixedPos);
+
+
+
+                                            for(int i=0; i<b.size(); i++) {
+                                                if(b.get(i).getBarcode().equals(barcode))
+                                                    flag=1;
+                                                break;
+                                            }
+
+                                            if(flag==0) {
+                                                b.add(bk);
+                                                adapter.notifyDataSetChanged();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context,"Error: cannot find the book details",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
 
 
@@ -650,7 +710,7 @@ public class ReturnRouteActivity extends Activity {
                         int bookPos = bookPosInScannedBooks(sorted.get(j).getBarcode(), unsorted);
                         if(bookPos==-1)
                             Toast.makeText(context,"Error in sorting",Toast.LENGTH_SHORT).show();
-                        String msg = new String("Put book("+(bookPos+1)+") in position: "+(j+1)+" of the sorted pile");
+                        String msg = new String("Put book #"+(bookPos+1)+" in position #"+(j+1)+" of the sorted pile");
                         sortCommands.add(msg);
                     }
 
