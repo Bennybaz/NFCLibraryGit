@@ -13,7 +13,7 @@
             android:padding="5dp"
             android:text="@string/add_new_book"
             android:id="@+id/addNewBookBtn"
-            android:layout_marginTop="46dp" android:textColor="@color/black"/>
+            android:layout_marginTop="160dp" android:textColor="@color/black"/>
 
     <Button
             android:layout_width="fill_parent"

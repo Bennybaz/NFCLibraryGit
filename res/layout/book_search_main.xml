@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/abackground"
         android:padding="5dp" android:orientation="vertical">
 
 
@@ -47,5 +48,5 @@
             android:text="@string/search_btn_url"
             android:layout_marginTop="20dp"
             android:id="@+id/buttonUrl" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
-            android:textColor="@color/holo_blue_dark" style="@style/myButton" android:padding="5dp"/>
+            android:textColor="@color/black" style="@style/myButton" android:padding="5dp"/>
 </LinearLayout>

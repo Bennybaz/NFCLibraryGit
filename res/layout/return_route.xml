@@ -4,7 +4,8 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-        android:padding="5dp">
+              android:padding="5dp"
+              android:background="@color/abackground">
 
     <LinearLayout
             android:id="@+id/listViewLayout"
@@ -22,7 +23,7 @@
                 android:id="@+id/booksForReturnTV"/>
         <ListView
                 android:layout_width="match_parent"
-                android:layout_height="328dp"
+                android:layout_height="377dp"
                 android:id="@+id/listView"/>
     </LinearLayout>
     <Button

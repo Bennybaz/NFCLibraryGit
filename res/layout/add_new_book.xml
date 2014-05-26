@@ -31,6 +31,6 @@
             android:padding="5dp"
             android:text="@string/write_nfc"
             android:id="@+id/writeNfcBtn"
-            android:textColor="@color/holo_blue_dark"
+            android:textColor="@color/black"
             android:layout_centerVertical="true" android:layout_centerHorizontal="true" style="@style/myButton"/>
 </LinearLayout>
