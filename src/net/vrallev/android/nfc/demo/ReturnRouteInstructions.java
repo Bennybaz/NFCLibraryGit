@@ -45,7 +45,6 @@ public class ReturnRouteInstructions extends Activity {
     TextView tv;
     Button nextStepBtn;
     Button returnRouteBtn;
-    private Dialog directDialog;
 
     Context context;
     ListView lv;
@@ -56,27 +55,14 @@ public class ReturnRouteInstructions extends Activity {
         super.onCreate(savedInstanceState);
 
         setTitle("Return Route");
-        setContentView(R.layout.sort_books_activity);
+        setContentView(R.layout.return_instructions);
         books =  getIntent().getParcelableArrayListExtra("books"); //get the books from previous intent
         pos=new int[books.size()][3];
-        
-        //new GetBookSector().execute();
-        //pos of barcode="000057800066"
-        pos[0][0]=1;
-        pos[0][1]=2;
-        pos[0][2]=2;
-        //pos of barcode="954-30"
-        pos[1][0]=2;
-        pos[1][1]=4;
-        pos[1][2]=13;
-        //pos of barcode="563-40"
-        pos[2][0]=3;
-        pos[2][1]=1;
-        pos[2][2]=17;
-        
-        
 
-        lv = (ListView) findViewById(R.id.sort_steps);
+
+        new GetBookSector().execute();
+
+        lv = (ListView) findViewById(R.id.return_sort_steps);
 
         //build the step array for list view
         String [] steps = new String[books.size()];
@@ -87,80 +73,79 @@ public class ReturnRouteInstructions extends Activity {
 
         lv.setAdapter(adapter);
 
-        tv = (TextView) findViewById(R.id.step_text);
+        tv = (TextView) findViewById(R.id.return_step_text);
         tv.setText("Press Step 1 for start return procedure");
-        nextStepBtn = (Button) findViewById(R.id.next_step_button);
+        nextStepBtn = (Button) findViewById(R.id.return_next_step_button);
         nextStepBtn.setVisibility(View.GONE);
 
-        returnRouteBtn = (Button) findViewById((R.id.return_route_button));
+        returnRouteBtn = (Button) findViewById((R.id.return_return_route_button));
         returnRouteBtn.setVisibility(View.GONE);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(enableClick && currentStep==position)
-                {
-                	// custom dialog
-                    directDialog = new Dialog(context);
-                    directDialog.setContentView(R.layout.direction_dialog);
-                    directDialog.setTitle("Directions");
-                    TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
-                    TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                if (enableClick && currentStep == position) {
+
+                    TextView bookCase = (TextView) findViewById(R.id.return_textBC);
+                    TextView shelff = (TextView) findViewById(R.id.return_textShelf);
 
                     // fill according to bookcase location
-                    if(pos[position][2]==1 || pos[position][2]==2) bookCase.setText("First BookCase on the left");
-                    if(pos[position][2]==3 || pos[position][2]==4) bookCase.setText("Second BookCase on the left");
-                    if(pos[position][2]==5 || pos[position][2]==6) bookCase.setText("Third BookCase on the left");
-                    if(pos[position][2]==7 || pos[position][2]==8) bookCase.setText("Fourth BookCase on the left");
-                    if(pos[position][2]==9 || pos[position][2]==10) bookCase.setText("Fifth BookCase on the left");
-                    if(pos[position][2]==11 || pos[position][2]==12) bookCase.setText("Sixth BookCase on the left");
-                    if(pos[position][2]==13 || pos[position][2]==14) bookCase.setText("First BookCase on the right");
-                    if(pos[position][2]==15 || pos[position][2]==16) bookCase.setText("Second BookCase on the right");
-                    if(pos[position][2]==17 || pos[position][2]==18) bookCase.setText("Third BookCase on the right");
-                    if(pos[position][2]==19 || pos[position][2]==20) bookCase.setText("Fourth BookCase on the right");
-                    if(pos[position][2]==21 || pos[position][2]==22) bookCase.setText("Fifth BookCase on the right");
-                    if(pos[position][2]==23 || pos[position][2]==24) bookCase.setText("Sixth BookCase on the right");
+                    if (pos[position][2] == 1 || pos[position][2] == 2) bookCase.setText("First BookCase on the left");
+                    if (pos[position][2] == 3 || pos[position][2] == 4) bookCase.setText("Second BookCase on the left");
+                    if (pos[position][2] == 5 || pos[position][2] == 6) bookCase.setText("Third BookCase on the left");
+                    if (pos[position][2] == 7 || pos[position][2] == 8) bookCase.setText("Fourth BookCase on the left");
+                    if (pos[position][2] == 9 || pos[position][2] == 10) bookCase.setText("Fifth BookCase on the left");
+                    if (pos[position][2] == 11 || pos[position][2] == 12)
+                        bookCase.setText("Sixth BookCase on the left");
+                    if (pos[position][2] == 13 || pos[position][2] == 14)
+                        bookCase.setText("First BookCase on the right");
+                    if (pos[position][2] == 15 || pos[position][2] == 16)
+                        bookCase.setText("Second BookCase on the right");
+                    if (pos[position][2] == 17 || pos[position][2] == 18)
+                        bookCase.setText("Third BookCase on the right");
+                    if (pos[position][2] == 19 || pos[position][2] == 20)
+                        bookCase.setText("Fourth BookCase on the right");
+                    if (pos[position][2] == 21 || pos[position][2] == 22)
+                        bookCase.setText("Fifth BookCase on the right");
+                    if (pos[position][2] == 23 || pos[position][2] == 24)
+                        bookCase.setText("Sixth BookCase on the right");
 
 
-                    if(pos[position][0]==1) shelff.setText("Top Shelf");
-                    if(pos[position][0]==2) shelff.setText("2nd Shelf from top");
-                    if(pos[position][0]==3) shelff.setText("3rd Shelf from top");
-                    if(pos[position][0]==4) shelff.setText("4th Shelf from top");
-                    if(pos[position][0]==5) shelff.setText("Bottom Shelf");
+                    if (pos[position][0] == 1) shelff.setText("Top Shelf");
+                    if (pos[position][0] == 2) shelff.setText("2nd Shelf from top");
+                    if (pos[position][0] == 3) shelff.setText("3rd Shelf from top");
+                    if (pos[position][0] == 4) shelff.setText("4th Shelf from top");
+                    if (pos[position][0] == 5) shelff.setText("Bottom Shelf");
 
-                    ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                    ImageView image = (ImageView) findViewById(R.id.return_directImage);
                     //change source according to book location
-                    if(pos[position][1]%2==0) {
-                        if(pos[position][1]==1) image.setImageResource(R.drawable.sector_five);
-                        if(pos[position][1]==2) image.setImageResource(R.drawable.sector_six);
-                        if(pos[position][1]==3) image.setImageResource(R.drawable.sector_seven);
-                        if(pos[position][1]==4) image.setImageResource(R.drawable.sector_eight);
+                    if (pos[position][1] % 2 == 0) {
+                        if (pos[position][1] == 1) image.setImageResource(R.drawable.sector_five);
+                        if (pos[position][1] == 2) image.setImageResource(R.drawable.sector_six);
+                        if (pos[position][1] == 3) image.setImageResource(R.drawable.sector_seven);
+                        if (pos[position][1] == 4) image.setImageResource(R.drawable.sector_eight);
 
+                    } else {
+                        if (pos[position][1] == 1) image.setImageResource(R.drawable.sector_one);
+                        if (pos[position][1] == 2) image.setImageResource(R.drawable.sector_two);
+                        if (pos[position][1] == 3) image.setImageResource(R.drawable.sector_three);
+                        if (pos[position][1] == 4) image.setImageResource(R.drawable.sector_four);
                     }
-                    else {
-                        if(pos[position][1]==1) image.setImageResource(R.drawable.sector_one);
-                        if(pos[position][1]==2) image.setImageResource(R.drawable.sector_two);
-                        if(pos[position][1]==3) image.setImageResource(R.drawable.sector_three);
-                        if(pos[position][1]==4) image.setImageResource(R.drawable.sector_four);
-                    }
 
-                    Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
-
-
-                    // if button is clicked, close the custom dialog
-                    dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            directDialog.dismiss();
-                        }
-                    });
-
-                    directDialog.show();
-                    tv.setText(books.get(position).getBarcode()+"");
+                    tv.setText(books.get(position).getBarcode() + "");
                     enableClick = false;
-                    lv.getChildAt(currentStep).setBackgroundColor(Color.BLUE);
+                    lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     nextStepBtn.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        returnRouteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //Intent intent = new Intent(ReturnRouteInstructions.this, LibrarianMainActivity.class);
+                //startActivity(intent);
             }
         });
 
@@ -175,13 +160,9 @@ public class ReturnRouteInstructions extends Activity {
                 }
                 if(currentStep<books.size())
                 {
-                    lv.getChildAt(currentStep).setBackgroundColor(Color.BLUE);
-                 // custom dialog
-                    directDialog = new Dialog(context);
-                    directDialog.setContentView(R.layout.direction_dialog);
-                    directDialog.setTitle("Directions");
-                    TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
-                    TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                    lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
+                    TextView bookCase = (TextView) findViewById(R.id.return_textBC);
+                    TextView shelff = (TextView) findViewById(R.id.return_textShelf);
 
                     // fill according to bookcase location
                     if(pos[currentStep][2]==1 || pos[currentStep][2]==2) bookCase.setText("First BookCase on the left");
@@ -204,7 +185,7 @@ public class ReturnRouteInstructions extends Activity {
                     if(pos[currentStep][0]==4) shelff.setText("4th Shelf from top");
                     if(pos[currentStep][0]==5) shelff.setText("Bottom Shelf");
 
-                    ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                    ImageView image = (ImageView) findViewById(R.id.return_directImage);
                     //change source according to book location
                     if(pos[currentStep][1]%2==0) {
                         if(pos[currentStep][1]==1) image.setImageResource(R.drawable.sector_five);
@@ -220,18 +201,6 @@ public class ReturnRouteInstructions extends Activity {
                         if(pos[currentStep][1]==4) image.setImageResource(R.drawable.sector_four);
                     }
 
-                    Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
-
-
-                    // if button is clicked, close the custom dialog
-                    dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            directDialog.dismiss();
-                        }
-                    });
-
-                    directDialog.show();
                     tv.setText(books.get(currentStep).getBarcode()+"");
                 }
             }
@@ -240,7 +209,7 @@ public class ReturnRouteInstructions extends Activity {
     }
 
 
-    /*class GetBookSector extends AsyncTask<String, String, String> {
+    class GetBookSector extends AsyncTask<String, String, String> {
 
      //
      // Getting product details in background thread
@@ -282,7 +251,7 @@ public class ReturnRouteInstructions extends Activity {
 		
 	
 	                            } else {
-	                                // product with pid not found
+                                    Toast.makeText(context,"Error: cannot find the book location",Toast.LENGTH_SHORT).show();
 	                            }
 	                        }
 	                    } catch (JSONException e) {
@@ -294,5 +263,5 @@ public class ReturnRouteInstructions extends Activity {
 
             return null;
         }
-    }*/
+    }
 }

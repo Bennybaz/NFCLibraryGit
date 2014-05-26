@@ -19,6 +19,17 @@
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="Add Simulation"
+            android:id="@+id/simulationButton"
+            android:padding="5dp"
+            android:gravity="center"
+            style="@style/myButton"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="Sort Books"
             android:id="@+id/calcRouteBtn"
             android:padding="5dp"

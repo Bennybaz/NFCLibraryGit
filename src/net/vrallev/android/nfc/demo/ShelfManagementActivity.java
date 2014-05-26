@@ -77,7 +77,7 @@ public class ShelfManagementActivity extends Activity {
         shelfManage = (Button) findViewById(R.id.shelfManageBtn);
 
         //-----------------------------tests-----------------------------
-        shelfText.setText("4");
+        /*shelfText.setText("4");
 
         //shelf 4
         Book bk1 = new Book();
@@ -97,7 +97,7 @@ public class ShelfManagementActivity extends Activity {
         bk3.setBarcode("603-10");
         bk3.setName("Advanced Turbo C /");
         bk3.setAuthor("Schildt, Herbert");
-        scannedBooks.add(bk3);
+        scannedBooks.add(bk3);*/
         //-----------------------------end tests-------------------------
 
         lv = (ListView) findViewById(R.id.managementList);
@@ -113,26 +113,26 @@ public class ShelfManagementActivity extends Activity {
 
             }
         });
-//        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-//        handleIntent(getIntent());
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        handleIntent(getIntent());
     }
 
-/*    @Override
+    @Override
     protected void onResume() {
         super.onResume();
 
-		*//*
+		/*
 		 * It's important, that the activity is in the foreground (resumed). Otherwise
 		 * an IllegalStateException is thrown.
-		 *//*
+		 */
         setupForegroundDispatch(this, mNfcAdapter);
     }
 
     @Override
     protected void onPause() {
-		*//*
+		/*
 		 * Call this before onPause, otherwise an IllegalArgumentException is thrown as well.
-		 *//*
+		 */
         stopForegroundDispatch(this, mNfcAdapter);
 
         super.onPause();
@@ -140,13 +140,13 @@ public class ShelfManagementActivity extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-		*//*
+		/*
 		 * This method gets called, when a new Intent gets associated with the current activity instance.
 		 * Instead of creating a new activity, onNewIntent will be called. For more information have a look
 		 * at the documentation.
 		 *
 		 * In our case this method gets called, when the user attaches a Tag to the device.
-		 *//*
+		 */
         handleIntent(intent);
     }
 
@@ -188,10 +188,10 @@ public class ShelfManagementActivity extends Activity {
         }
     }
 
-    *//**
+    /**
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
-     *//*
+     */
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -214,10 +214,10 @@ public class ShelfManagementActivity extends Activity {
         adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
 
-    *//**
+    /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
-     *//*
+     */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
@@ -229,12 +229,12 @@ public class ShelfManagementActivity extends Activity {
     // create a distance matrix according to the input
 
 
-    *//**
+    /**
      * Background task for reading the data. Do not block the UI thread while reading.
      *
      * @author Ralf Wondratschek
      *
-     *//*
+     */
 
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         @Override
@@ -264,7 +264,7 @@ public class ShelfManagementActivity extends Activity {
         }
 
         private String readText(NdefRecord record) throws UnsupportedEncodingException {
-			*//*
+			/*
 			 * See NFC forum specification for "Text Record Type Definition" at 3.2.1
 			 *
 			 * http://www.nfc-forum.org/specs/
@@ -272,7 +272,7 @@ public class ShelfManagementActivity extends Activity {
 			 * bit_7 defines encoding
 			 * bit_6 reserved for future use, must be 0
 			 * bit_5..0 length of IANA language code
-			 *//*
+			 */
 
             byte[] payload = record.getPayload();
 
@@ -316,7 +316,7 @@ public class ShelfManagementActivity extends Activity {
                 }
             }
         }
-    }*/
+    }
 
     class GetBookBarcode extends AsyncTask<String, String, String> {
 

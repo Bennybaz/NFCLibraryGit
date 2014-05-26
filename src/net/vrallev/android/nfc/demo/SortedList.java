@@ -36,6 +36,7 @@ public class SortedList extends Activity {
         books =  getIntent().getParcelableArrayListExtra("books");
         sortedCommands = getIntent().getStringArrayListExtra("srtCmd");
 
+
         lv = (ListView) findViewById(R.id.sort_steps);
 
         //build the step array for list view

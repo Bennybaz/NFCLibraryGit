@@ -22,15 +22,26 @@
                 android:textSize="@dimen/text_size"
                 android:textColor="@color/holo_blue_dark"/>
         <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Next Step"
-                android:id="@+id/next_step_button" android:layout_gravity="center_horizontal"/>
+                android:id="@+id/next_step_button"
+                android:padding="5dp"
+                android:gravity="center"
+                style="@style/myButton"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"/>
         <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Return Route"
                 android:id="@+id/return_route_button"
+                android:padding="5dp"
+                android:gravity="center"
+                style="@style/myButton"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"
                 android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 </LinearLayout>

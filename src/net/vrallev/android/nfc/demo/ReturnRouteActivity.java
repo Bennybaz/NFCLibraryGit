@@ -47,11 +47,13 @@ public class ReturnRouteActivity extends Activity {
     ArrayList<String> sortCommands = new ArrayList<String>();
 
     Button calcBtn;
+    Button simulationBtn;
     private NfcAdapter mNfcAdapter;
     String barcode;
     int flag=0;
     double fixedPos=0;
     double it;
+    int firstSectorFlag = 0; //flag for the returnRoute array size
 
     int shelf;
     int sector;
@@ -83,36 +85,19 @@ public class ReturnRouteActivity extends Activity {
         context = this;
 
         calcBtn = (Button) findViewById(R.id.calcRouteBtn);
+        simulationBtn = (Button) findViewById(R.id.simulationButton);
         lv = (ListView) findViewById(R.id.listView);
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
 
 
-        sectors.add(52);
-        barcodeSector.put(52.2, "624-10");
-        barcode = "624-10";
-        Book bk = new Book();
-        bk.setBarcode(barcode);
-        bk.setName("" + barcode);
-        bk.setAuthor("author1");
-        bk.setFixedPosition(52.2);
-        b.add(bk);
+        simulationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        sectors.add(65);
-        barcodeSector.put(65.3, "1298-10");
-        barcode = "1298-10";
-        Book bk1 = new Book();
-        bk1.setBarcode(barcode);
-        bk1.setName("" + barcode);
-        bk1.setAuthor("author2");
-        bk1.setFixedPosition(65.3);
-        b.add(bk1);
-
-        fixedPos = 6.1;
-        sectors.add(6);
-        barcodeSector.put(6.1, "602-10");
-        barcode = "602-10";
-        new GetBookBarcode().execute();
+                new GetBookSectorForSimulation().execute();
+            }
+        });
 
 
         calcBtn.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +107,12 @@ public class ReturnRouteActivity extends Activity {
                 //new UpdateBookStatus().execute();
                 try {
                     double[][] data2 = getDoubleTwoDimArray("dump.txt");
-                    if(sectors.get(0)!=1) sectors.add(1);
+                    firstSectorFlag=0;
+                    if(sectors.get(0)!=1)
+                    {
+                        sectors.add(1);
+                        firstSectorFlag=1;
+                    }
 
                     Collections.sort(sectors);
                     adjacency_matrix = new double[sectors.size() + 1][sectors.size() + 1];
@@ -435,7 +425,7 @@ public class ReturnRouteActivity extends Activity {
                                 }
 
                             } else {
-                                // product with pid not found
+                                Toast.makeText(context,"Error: cannot find the book details",Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -504,7 +494,7 @@ public class ReturnRouteActivity extends Activity {
 
 
                             } else {
-                                // product with pid not found
+                                Toast.makeText(context,"Error: cannot find the book location",Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -540,7 +530,7 @@ public class ReturnRouteActivity extends Activity {
                             JSONObject json = jsonParser3.makeHttpRequest(
                                     url_return_book_by_barcode, "GET", params);
 
-                            Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
 
                             // json success tag
                             if(json!=null) {
@@ -555,7 +545,7 @@ public class ReturnRouteActivity extends Activity {
                                     Toast.makeText(context,"CHANGED",Toast.LENGTH_LONG).show();
 
                                 } else {
-                                    // product with pid not found
+                                    Toast.makeText(context,"Error: cannot update the borrow in DB",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }catch (JSONException e) {
@@ -585,7 +575,12 @@ public class ReturnRouteActivity extends Activity {
                     // Check for success tag
                     int success;
 
-                    for (int i=1; i< optimumRoute.size()-1; i++)
+                    int i;
+                    if(firstSectorFlag==1)
+                        i=1;
+                    else
+                        i=0;
+                    for (   ; i< optimumRoute.size()-1; i++)
                     {
                         int item=optimumRoute.get(i);
                         for(int j=1; j<=5; j++)
@@ -618,8 +613,6 @@ public class ReturnRouteActivity extends Activity {
                                             bk.setName(product.getString("title"));
                                             bk.setAuthor(product.getString("author"));
                                             bk.setFixedPosition(it);
-                                           
-
 
                                             int flag1=0;
                                             for(int k=0; k<sorted.size() && flag==0; k++)
@@ -631,7 +624,7 @@ public class ReturnRouteActivity extends Activity {
                                             }
 
                                         } else {
-                                            // product with pid not found
+                                            Toast.makeText(context,"Error: cannot find the book details for sort",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 } catch (JSONException e) {
@@ -644,12 +637,12 @@ public class ReturnRouteActivity extends Activity {
 
                     ArrayList<Book> unsorted = new ArrayList<Book>(b);
 
-                    for(int i=0; i<sorted.size(); i++)
+                    for(int j=0; j<sorted.size(); j++)
                     {
-                        int bookPos = bookPosInScannedBooks(sorted.get(i).getBarcode(), unsorted);
+                        int bookPos = bookPosInScannedBooks(sorted.get(j).getBarcode(), unsorted);
                         if(bookPos==-1)
                             Toast.makeText(context,"Error in sorting",Toast.LENGTH_SHORT).show();
-                        String msg = new String("Put book("+(bookPos+1)+") in position: "+(i+1)+" of the sorted pile");
+                        String msg = new String("Put book("+(bookPos+1)+") in position: "+(j+1)+" of the sorted pile");
                         sortCommands.add(msg);
                     }
 
@@ -659,6 +652,133 @@ public class ReturnRouteActivity extends Activity {
                     startActivity(intent);
                 }
 
+            });
+
+            return null;
+        }
+    }
+
+
+    class GetBookSectorForSimulation extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    ArrayList<String> simBarcode = new ArrayList<String>();
+                    simBarcode.add("624-10");
+                    simBarcode.add("1298-10");
+                    simBarcode.add("602-10");
+                    simBarcode.add("1568-20");
+
+                    for(int i=0; i<simBarcode.size(); i++)
+                    {
+                        barcode = simBarcode.get(i);
+                        try {
+                            // Building Parameters
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("barcode", barcode));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+
+                            JSONObject json2 = jsonParser2.makeHttpRequest(
+                                    url_book_barcode_for_sector, "GET", params);
+
+                            // json success tag
+                            if(json2!=null) {
+                                success = json2.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+
+                                    // successfully received product details
+                                    JSONArray productObj = json2.getJSONArray("reader"); // JSON Array
+
+                                    // get first user object from JSON Array
+                                    JSONObject product = productObj.getJSONObject(0);
+
+                                    shelf = product.getInt("shelf");
+                                    sector = product.getInt("sector");
+                                    stand = product.getInt("stand");
+
+                                    Integer sectorForAlg = (stand-1)*4+sector;
+                                    fixedPos = sectorForAlg+shelf*0.1;
+
+
+                                    if(!sectors.contains(sectorForAlg)) {
+                                        sectors.add(sectorForAlg);
+                                        barcodeSector.put(fixedPos, barcode);
+                                    }
+                                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                                    //    new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    //else
+                                    //    new GetBookBarcode().execute();
+
+                                    try {
+                                        // Building Parameters
+                                        List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+                                        params1.add(new BasicNameValuePair("barcode", barcode));
+
+                                        // getting student details by making HTTP request
+                                        // Note that product details url will use GET request
+
+                                        JSONObject json3 = jsonParser.makeHttpRequest(
+                                                url_book_barcode_for_details, "GET", params);
+
+                                        // json success tag
+                                        if(json3!=null) {
+                                            success = json3.getInt(TAG_SUCCESS);
+                                            if (success == 1) {
+                                                // successfully received product details
+                                                JSONArray productObj1 = json3.getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                                // get first user object from JSON Array
+                                                JSONObject product1 = productObj1.getJSONObject(0);
+
+                                                Book bk = new Book();
+                                                bk.setBarcode(barcode);
+                                                bk.setName(product1.getString("title"));
+                                                bk.setAuthor(product1.getString("author"));
+                                                bk.setFixedPosition(fixedPos);
+
+
+
+                                                for(int j=0; j<b.size(); j++) {
+                                                    if(b.get(j).getBarcode().equals(barcode))
+                                                        flag=1;
+                                                    break;
+                                                }
+
+                                                if(flag==0) {
+                                                    b.add(bk);
+                                                    adapter.notifyDataSetChanged();
+                                                }
+
+                                            } else {
+                                                Toast.makeText(context,"Error: cannot find the book details",Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+
+                                } else {
+                                    Toast.makeText(context,"Error: cannot find the book details(location)",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }//end for
+                }
             });
 
             return null;
