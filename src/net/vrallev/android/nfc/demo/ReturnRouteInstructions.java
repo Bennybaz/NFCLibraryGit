@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.*;
 
@@ -49,6 +50,7 @@ public class ReturnRouteInstructions extends Activity {
     Context context;
     ListView lv;
     ArrayAdapter<String> adapter;
+    ArrayList<String> steps = new ArrayList<String>();
 
     public void onCreate(Bundle savedInstanceState) {
         context = this;
@@ -65,9 +67,10 @@ public class ReturnRouteInstructions extends Activity {
         lv = (ListView) findViewById(R.id.return_sort_steps);
 
         //build the step array for list view
-        String [] steps = new String[books.size()];
+        //String [] steps = new String[books.size()];
         for(int i=0;i<books.size(); i++)
-            steps[i]="Step "+(i+1);
+            //steps[i]="Step "+(i+1);
+            steps.add("Step "+(i+1));
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, steps);
 
@@ -263,5 +266,18 @@ public class ReturnRouteInstructions extends Activity {
 
             return null;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            books.clear();
+            steps.clear();
+            adapter.notifyDataSetChanged();
+            //finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -116,9 +116,15 @@ public class ShelfManagementActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                if(scannedBooks.size()>0)
+                if(scannedBooks.size()==0 && shelfText.getText().equals(""))
+                    Toast.makeText(context,"Please scan books and shelf tag",Toast.LENGTH_LONG).show();
+                else if(scannedBooks.size()==0)
+                    Toast.makeText(context,"Please scan books",Toast.LENGTH_LONG).show();
+                else if(shelfText.getText().equals(""))
+                    Toast.makeText(context,"Please scan shelf tag",Toast.LENGTH_LONG).show();
+
+                if(scannedBooks.size()>0 && !shelfText.getText().equals(""))
                     new GetBookOfShelf().execute();
-                else Toast.makeText(context,"Please scan books",Toast.LENGTH_SHORT).show();
 
             }
         });

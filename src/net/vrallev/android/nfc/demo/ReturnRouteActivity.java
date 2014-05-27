@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
  * Created by Benny on 24/03/2014.
@@ -42,7 +43,8 @@ public class ReturnRouteActivity extends Activity {
     ArrayList<Book> b = new ArrayList<Book>();
     //added for sorting
     ArrayList<Integer> optimumRoute = new ArrayList<Integer>();
-    HashMap<Double, String> barcodeSector = new HashMap<Double, String>();
+    //HashMap<Double, String> barcodeSector = new HashMap<Double, String>();
+    HashMap<Double, ArrayList<String>> barcodeSector = new HashMap<Double, ArrayList<String>>();
     ArrayList<Book> sorted = new ArrayList<Book>();
 
     ArrayList<String> sortCommands = new ArrayList<String>();
@@ -94,7 +96,6 @@ public class ReturnRouteActivity extends Activity {
 
         simulationFlag=0;
 
-
         simulationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +117,9 @@ public class ReturnRouteActivity extends Activity {
 
                 if(b.size()>0)
                 {
-                    //new UpdateBookStatus().execute();
+
+                    //update the book return on DB
+                    new UpdateBookStatus().execute();
                     try {
                         double[][] data2 = getDoubleTwoDimArray("dump.txt");
                         firstSectorFlag=0;
@@ -134,6 +137,9 @@ public class ReturnRouteActivity extends Activity {
                         BranchAndBound bnb = new BranchAndBound(adjacency_matrix,0, sectors);
                         //String result = bnb.execute();
                         optimumRoute = bnb.execute2();
+
+                        sortCommands.clear();
+                        sorted.clear();
 
                         new GetBookBarcodeSorted().execute();
 
@@ -499,8 +505,18 @@ public class ReturnRouteActivity extends Activity {
 
                                 if(!sectors.contains(sectorForAlg)) {
                                     sectors.add(sectorForAlg);
-                                    barcodeSector.put(fixedPos, barcode);
+                                    //barcodeSector.put(fixedPos, barcode);
                                 }
+
+                                /////////////////////////
+                                ArrayList<String> tempBar;
+                                tempBar = barcodeSector.get(fixedPos);
+                                if(tempBar == null)
+                                    tempBar = new ArrayList<String>();
+                                tempBar.add(barcode);
+                                //Toast.makeText(context,"barcode "+ barcode ,Toast.LENGTH_LONG).show();
+                                barcodeSector.put(fixedPos,tempBar);
+                                /////////////////////////
 
                                 /*
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -653,50 +669,63 @@ public class ReturnRouteActivity extends Activity {
                         int item=optimumRoute.get(i);
                         for(int j=1; j<=5; j++)
                         {
+                            int s=0;
                             it = (double)item+j*0.1;
-                            barcode = barcodeSector.get(it);
-                            if(barcode != null)
+                            ArrayList<String> barcodeList = new ArrayList<String>();
+                            barcodeList = barcodeSector.get(it);
+
+
+                            //barcode = barcodeSector.get(it);
+                            if(barcodeList != null)
+                            //if(barcode != null)
                             {
-                                try {
-                                    // Building Parameters
-                                    List<NameValuePair> params = new ArrayList<NameValuePair>();
-                                    params.add(new BasicNameValuePair("barcode", barcode));
-                                    // getting student details by making HTTP request
-                                    // Note that product details url will use GET request
-                                    JSONObject json4 = jsonParser4.makeHttpRequest(
-                                            url_book_barcode_for_details, "GET", params);
 
-                                    // json success tag
-                                    if(json4!=null) {
-                                        success = json4.getInt(TAG_SUCCESS);
-                                        if (success == 1) {
-                                            // successfully received product details
-                                            JSONArray productObj = json4.getJSONArray(TAG_PRODUCT); // JSON Array
+                                while(s<barcodeList.size())
+                                {
 
-                                            // get first user object from JSON Array
-                                            JSONObject product = productObj.getJSONObject(0);
+                                    barcode = barcodeList.get(s);
+                                    s++;
+                                    try {
+                                        // Building Parameters
+                                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                                        params.add(new BasicNameValuePair("barcode", barcode));
+                                        // getting student details by making HTTP request
+                                        // Note that product details url will use GET request
+                                        JSONObject json4 = jsonParser4.makeHttpRequest(
+                                                url_book_barcode_for_details, "GET", params);
 
-                                            Book bk = new Book();
-                                            bk.setBarcode(barcode);
-                                            bk.setName(product.getString("title"));
-                                            bk.setAuthor(product.getString("author"));
-                                            bk.setFixedPosition(it);
+                                        // json success tag
+                                        if(json4!=null) {
+                                            success = json4.getInt(TAG_SUCCESS);
+                                            if (success == 1) {
+                                                // successfully received product details
+                                                JSONArray productObj = json4.getJSONArray(TAG_PRODUCT); // JSON Array
 
-                                            int flag1=0;
-                                            for(int k=0; k<sorted.size() && flag==0; k++)
-                                                if(sorted.get(k).getBarcode().equals(barcode))
-                                                    flag1=1;
-                                            if(flag1==0)
-                                            {
-                                                sorted.add(bk);
+                                                // get first user object from JSON Array
+                                                JSONObject product = productObj.getJSONObject(0);
+
+                                                Book bk = new Book();
+                                                bk.setBarcode(barcode);
+                                                bk.setName(product.getString("title"));
+                                                bk.setAuthor(product.getString("author"));
+                                                bk.setFixedPosition(it);
+
+                                                int flag1=0;
+                                                for(int k=0; k<sorted.size() && flag==0; k++)
+                                                    if(sorted.get(k).getBarcode().equals(barcode))
+                                                        flag1=1;
+                                                if(flag1==0)
+                                                {
+                                                    sorted.add(bk);
+                                                }
+
+                                            } else {
+                                                Toast.makeText(context,"Error: cannot find the book details for sort",Toast.LENGTH_SHORT).show();
                                             }
-
-                                        } else {
-                                            Toast.makeText(context,"Error: cannot find the book details for sort",Toast.LENGTH_SHORT).show();
                                         }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
                             }
                         }
@@ -740,10 +769,13 @@ public class ReturnRouteActivity extends Activity {
                     // Check for success tag
                     int success;
                     ArrayList<String> simBarcode = new ArrayList<String>();
+
+                    simBarcode.add("1568-20");
                     simBarcode.add("624-10");
                     simBarcode.add("1298-10");
                     simBarcode.add("602-10");
-                    simBarcode.add("1568-20");
+                    simBarcode.add("1568-10");
+
 
                     for(int i=0; i<simBarcode.size(); i++)
                     {
@@ -780,8 +812,21 @@ public class ReturnRouteActivity extends Activity {
 
                                     if(!sectors.contains(sectorForAlg)) {
                                         sectors.add(sectorForAlg);
-                                        barcodeSector.put(fixedPos, barcode);
+                                        //barcodeSector.put(fixedPos, barcode);
                                     }
+
+                                    /////////////////////////
+                                    ArrayList<String> tempBar;
+                                    tempBar = barcodeSector.get(fixedPos);
+                                    if(tempBar == null)
+                                        tempBar = new ArrayList<String>();
+                                    tempBar.add(barcode);
+                                    //Toast.makeText(context,"barcode "+ barcode ,Toast.LENGTH_LONG).show();
+                                    barcodeSector.put(fixedPos,tempBar);
+                                    /////////////////////////
+
+
+
                                     //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                                     //    new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                     //else
@@ -862,6 +907,7 @@ public class ReturnRouteActivity extends Activity {
             sorted.clear();
             sectors.clear();
             optimumRoute.clear();
+            sortCommands.clear();
             adapter.notifyDataSetChanged();
             //finish();
         }
