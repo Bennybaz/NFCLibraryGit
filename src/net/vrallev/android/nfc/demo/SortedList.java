@@ -42,11 +42,8 @@ public class SortedList extends Activity {
         lv = (ListView) findViewById(R.id.sort_steps);
 
         //build the step array for list view
-
-        //String [] steps = new String[sortedCommands.size()];
         for(int i=0;i<sortedCommands.size(); i++)
             steps.add("Step "+(i+1));
-            //steps[i]="Step "+(i+1);
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, steps);
 
@@ -66,7 +63,6 @@ public class SortedList extends Activity {
                 {
                     tv.setText(sortedCommands.get(position));
                     enableClick = false;
-                    //lv.getChildAt(currentStep).setBackgroundColor(R.color.holo_purple);
                     lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     nextStepBtn.setVisibility(View.VISIBLE);
                 }
@@ -84,7 +80,6 @@ public class SortedList extends Activity {
                 }
                 if(currentStep<sortedCommands.size())
                 {
-                    //lv.getChildAt(currentStep).setBackgroundColor(R.color.holo_purple);
                     lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     tv.setText(sortedCommands.get(currentStep));
                 }

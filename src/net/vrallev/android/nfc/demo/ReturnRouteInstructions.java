@@ -61,15 +61,12 @@ public class ReturnRouteInstructions extends Activity {
         books =  getIntent().getParcelableArrayListExtra("books"); //get the books from previous intent
         pos=new int[books.size()][3];
 
-
         new GetBookSector().execute();
 
         lv = (ListView) findViewById(R.id.return_sort_steps);
 
         //build the step array for list view
-        //String [] steps = new String[books.size()];
         for(int i=0;i<books.size(); i++)
-            //steps[i]="Step "+(i+1);
             steps.add("Step "+(i+1));
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, steps);

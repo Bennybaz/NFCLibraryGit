@@ -41,10 +41,8 @@ public class ReturnRouteActivity extends Activity {
     ListView lv;
     public MySimpleArrayAdapter adapter;
     ArrayList<Book> b = new ArrayList<Book>();
-    //added for sorting
     ArrayList<Integer> optimumRoute = new ArrayList<Integer>();
-    //HashMap<Double, String> barcodeSector = new HashMap<Double, String>();
-    HashMap<Double, ArrayList<String>> barcodeSector = new HashMap<Double, ArrayList<String>>();
+    HashMap<Double, ArrayList<String>> barcodeSector = new HashMap<Double, ArrayList<String>>(); //added for sorting
     ArrayList<Book> sorted = new ArrayList<Book>();
 
     ArrayList<String> sortCommands = new ArrayList<String>();
@@ -57,7 +55,7 @@ public class ReturnRouteActivity extends Activity {
     double fixedPos=0;
     double it;
     int firstSectorFlag = 0; //flag for the returnRoute array size
-    int simulationFlag=0;
+    int simulationFlag=0; //flag for simulation, running or not
 
     int shelf;
     int sector;
@@ -433,8 +431,6 @@ public class ReturnRouteActivity extends Activity {
                                 bk.setAuthor(product.getString("author"));
                                 bk.setFixedPosition(fixedPos);
 
-
-
                                 for(int i=0; i<b.size(); i++) {
                                     if(b.get(i).getBarcode().equals(barcode))
                                         flag=1;
@@ -505,26 +501,14 @@ public class ReturnRouteActivity extends Activity {
 
                                 if(!sectors.contains(sectorForAlg)) {
                                     sectors.add(sectorForAlg);
-                                    //barcodeSector.put(fixedPos, barcode);
                                 }
 
-                                /////////////////////////
                                 ArrayList<String> tempBar;
                                 tempBar = barcodeSector.get(fixedPos);
                                 if(tempBar == null)
                                     tempBar = new ArrayList<String>();
                                 tempBar.add(barcode);
-                                //Toast.makeText(context,"barcode "+ barcode ,Toast.LENGTH_LONG).show();
                                 barcodeSector.put(fixedPos,tempBar);
-                                /////////////////////////
-
-                                /*
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                    new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                else
-                                    new GetBookBarcode().execute();
-                                    */
-
 
                                 try {
                                     // Building Parameters
@@ -553,8 +537,6 @@ public class ReturnRouteActivity extends Activity {
                                             bk.setAuthor(product1.getString("author"));
                                             bk.setFixedPosition(fixedPos);
 
-
-
                                             for(int i=0; i<b.size(); i++) {
                                                 if(b.get(i).getBarcode().equals(barcode))
                                                     flag=1;
@@ -573,9 +555,6 @@ public class ReturnRouteActivity extends Activity {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
-
-
 
                             } else {
                                 Toast.makeText(context,"Error: cannot find the book location",Toast.LENGTH_SHORT).show();
@@ -614,8 +593,6 @@ public class ReturnRouteActivity extends Activity {
                             JSONObject json = jsonParser3.makeHttpRequest(
                                     url_return_book_by_barcode, "GET", params);
 
-                            //Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
-
                             // json success tag
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
@@ -626,7 +603,7 @@ public class ReturnRouteActivity extends Activity {
 
                                     // get first user object from JSON Array
                                     //JSONObject product = productObj.getJSONObject(0);
-                                    Toast.makeText(context,"CHANGED",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context,"Books status changed",Toast.LENGTH_LONG).show();
 
                                 } else {
                                     Toast.makeText(context,"Error: cannot update the borrow in DB",Toast.LENGTH_SHORT).show();
@@ -674,15 +651,10 @@ public class ReturnRouteActivity extends Activity {
                             ArrayList<String> barcodeList = new ArrayList<String>();
                             barcodeList = barcodeSector.get(it);
 
-
-                            //barcode = barcodeSector.get(it);
                             if(barcodeList != null)
-                            //if(barcode != null)
                             {
-
                                 while(s<barcodeList.size())
                                 {
-
                                     barcode = barcodeList.get(s);
                                     s++;
                                     try {
@@ -812,25 +784,14 @@ public class ReturnRouteActivity extends Activity {
 
                                     if(!sectors.contains(sectorForAlg)) {
                                         sectors.add(sectorForAlg);
-                                        //barcodeSector.put(fixedPos, barcode);
                                     }
 
-                                    /////////////////////////
                                     ArrayList<String> tempBar;
                                     tempBar = barcodeSector.get(fixedPos);
                                     if(tempBar == null)
                                         tempBar = new ArrayList<String>();
                                     tempBar.add(barcode);
-                                    //Toast.makeText(context,"barcode "+ barcode ,Toast.LENGTH_LONG).show();
                                     barcodeSector.put(fixedPos,tempBar);
-                                    /////////////////////////
-
-
-
-                                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                                    //    new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                    //else
-                                    //    new GetBookBarcode().execute();
 
                                     try {
                                         // Building Parameters
@@ -859,8 +820,6 @@ public class ReturnRouteActivity extends Activity {
                                                 bk.setAuthor(product1.getString("author"));
                                                 bk.setFixedPosition(fixedPos);
 
-
-
                                                 for(int j=0; j<b.size(); j++) {
                                                     if(b.get(j).getBarcode().equals(barcode))
                                                         flag=1;
@@ -879,8 +838,6 @@ public class ReturnRouteActivity extends Activity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
-
 
                                 } else {
                                     Toast.makeText(context,"Error: cannot find the book details(location)",Toast.LENGTH_SHORT).show();
@@ -909,7 +866,6 @@ public class ReturnRouteActivity extends Activity {
             optimumRoute.clear();
             sortCommands.clear();
             adapter.notifyDataSetChanged();
-            //finish();
         }
         return super.onKeyDown(keyCode, event);
     }
