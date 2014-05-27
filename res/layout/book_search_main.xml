@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:hint="Enter search query here"
             android:id="@+id/queryET"
@@ -35,7 +36,7 @@
             android:textColor="@color/holo_blue_dark" android:textSize="@dimen/text_size"
             android:padding="10dp"/>
     <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/fieldSpinner"
             android:hint="Choose Search Field"

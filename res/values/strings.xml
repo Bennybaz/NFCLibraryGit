@@ -17,7 +17,7 @@
     <string name="add_new_book">Manage Tags</string>
     <string name="write_nfc">Write</string>
     <string name="type_tag_field">Choose Type of Tag:</string>
-    <string name="type_tag_field_hint">Choose Search Type</string>
+    <string name="type_tag_field_hint">Choose Tag Type</string>
 
     <string name="error_detected">TAG NOT DETECTED. WHERE DO YOU WANT WRITE!?!?</string>
     <string name="ok_writing_book">Book Tag Write Successful</string>

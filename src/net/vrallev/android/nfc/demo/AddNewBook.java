@@ -54,7 +54,7 @@ public class AddNewBook extends Activity{
             public void onClick(View arg0) {
 
                 if (message.getText().toString().equals(""))
-                    Toast.makeText(context, "No Barcode Input", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Please Enter an Input", Toast.LENGTH_SHORT).show();
                 else {
                     // custom dialog
                     dialog = new Dialog(context);
