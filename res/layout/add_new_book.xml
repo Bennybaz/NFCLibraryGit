@@ -11,6 +11,27 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/type_tag_field"
+            android:id="@+id/typeOfTagTV"
+            android:layout_gravity="center"
+            android:textColor="@color/holo_blue_dark"
+            android:textSize="@dimen/text_size"
+            android:padding="10dp"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/typeOfTagSpinner"
+            android:hint="Choose Type of Tag"
+            android:entries="@array/type_of_tag_arrays"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:layout_marginLeft="5dp"
+            android:spinnerMode="dialog"
+            android:prompt="@string/type_tag_field_hint"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Enter Book Code:"
             android:id="@+id/textView2"
             android:layout_gravity="center"

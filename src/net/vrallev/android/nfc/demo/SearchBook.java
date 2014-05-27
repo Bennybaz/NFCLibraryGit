@@ -67,7 +67,10 @@ public class SearchBook extends Activity {
                 // Getting complete search details in background thread
                 books.clear();
 
-                new GetSearchResults().execute();
+                if(query.getText().toString().equals(""))
+                    Toast.makeText(context, "No Keyword Input", Toast.LENGTH_SHORT).show();
+                else new GetSearchResults().execute();
+
             }
 
         });

@@ -12,10 +12,7 @@ import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,6 +24,7 @@ public class AddNewBook extends Activity{
 
     final Context context = this;
     private Button writeBtn;
+    private Spinner field;
     TextView message;
     Dialog dialog;
     NfcAdapter adapter;
@@ -44,9 +42,10 @@ public class AddNewBook extends Activity{
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        setTitle("Add New Book");
+        setTitle("Manage Tags");
         writeBtn = (Button) findViewById(R.id.writeNfcBtn);
         message = (TextView)findViewById(R.id.newBookET);
+        field = (Spinner) findViewById(R.id.typeOfTagSpinner);
 
         // add button listener
         writeBtn.setOnClickListener(new OnClickListener() {
@@ -55,7 +54,7 @@ public class AddNewBook extends Activity{
             public void onClick(View arg0) {
 
                 if (message.getText().toString().equals(""))
-                    Toast.makeText(context, "No barcode input", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No Barcode Input", Toast.LENGTH_SHORT).show();
                 else {
                     // custom dialog
                     dialog = new Dialog(context);
@@ -125,10 +124,18 @@ public class AddNewBook extends Activity{
             //write book barcode on its NFC tag
             try {
                 if (mytag == null) {
-                    Toast.makeText(ctx, ctx.getString(R.string.error_detected), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, ctx.getString(R.string.error_detected), Toast.LENGTH_SHORT).show();
                 } else {
-                    write("BK"+message.getText().toString(), mytag);
-                    Toast.makeText(ctx, ctx.getString(R.string.ok_writing), Toast.LENGTH_LONG).show();
+                    if(field.getSelectedItemPosition() == 0)
+                    {
+                        write("BK"+message.getText().toString(), mytag);
+                        Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
+                    }
+                    if(field.getSelectedItemPosition() == 1)
+                    {
+                        write("SH"+message.getText().toString(), mytag);
+                        Toast.makeText(ctx, ctx.getString(R.string.ok_writing_shelf), Toast.LENGTH_SHORT).show();
+                    }
                     dialog.dismiss();
                     message.setText("");
 
