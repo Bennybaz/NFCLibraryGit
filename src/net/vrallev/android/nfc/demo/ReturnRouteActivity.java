@@ -582,11 +582,12 @@ public class ReturnRouteActivity extends Activity {
                 public void run() {
                     // Check for success tag
                     int success;
-                    for(int i=0; i< b.size(); i++)
+                    ArrayList<Book> tempBooks = new ArrayList<Book>(b);
+                    for(int i=0; i< tempBooks.size(); i++)
                     {
                         try{
                             List<NameValuePair> params = new ArrayList<NameValuePair>();
-                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
+                            params.add(new BasicNameValuePair("barcode", tempBooks.get(i).getBarcode().toString()));
 
                             // getting student details by making HTTP request
                             // Note that product details url will use GET request
@@ -603,7 +604,7 @@ public class ReturnRouteActivity extends Activity {
 
                                     // get first user object from JSON Array
                                     //JSONObject product = productObj.getJSONObject(0);
-                                    Toast.makeText(context,"Books status changed",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context,"Books status changed",Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     Toast.makeText(context,"Error: cannot update the borrow in DB",Toast.LENGTH_SHORT).show();
@@ -614,8 +615,7 @@ public class ReturnRouteActivity extends Activity {
                         }
 
                     }
-                    b.clear();
-                    adapter.notifyDataSetChanged();
+                    tempBooks.clear();
                 }
             });
 
