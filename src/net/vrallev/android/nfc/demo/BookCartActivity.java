@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -50,6 +51,7 @@ public class BookCartActivity extends Activity {
     int successFlag=0;
     int readFlag=0;
     String barcode = "";
+    int bookCount=0;
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     private NfcAdapter mNfcAdapter;
@@ -81,27 +83,6 @@ public class BookCartActivity extends Activity {
         lv = (ListView) findViewById(R.id.cartListView);
         adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                barcode = adapter.getItem(position).getBarcode();
-                try {
-                    new NdefReaderTask().get(5, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (TimeoutException e) {
-                    e.printStackTrace();
-                }
-                if(readFlag==1) {
-                    ImageView image = (ImageView) findViewById(R.id.item_image);
-                    //RelativeLayout layout = (RelativeLayout) findViewById(R.id.listitemlayout);
-                    //layout.setBackgroundColor(getResources().getColor(R.color.emerald));
-                    image.setImageResource(R.drawable.success);
-                }
-            }
-        });
 
         borrowBtn = (Button) findViewById(R.id.borrowCartBtn);
 
@@ -133,7 +114,10 @@ public class BookCartActivity extends Activity {
         borrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UpdateBorrow().execute();
+                if(bookCount==b.size()) new UpdateBorrow().execute();
+                else Toast.makeText(context,"Please Scan All Books",Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
@@ -459,12 +443,17 @@ public class BookCartActivity extends Activity {
                     super.onPostExecute(result);
 
                     String barcode2 = result.substring(2);
-                    if(barcode2.equals(barcode)){
-                        readFlag=1;
-                        Toast.makeText(context,"ASA",Toast.LENGTH_SHORT).show();
-
+                    int i;
+                    for(i=0;i<b.size();i++) {
+                        if (barcode2.equals(adapter.getItem(i).getBarcode().toString())){
+                            bookCount++;
+                            break;
+                        }
                     }
+
+                    lv.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.emerald));
                 }
+                else  Toast.makeText(context,"Scan a Book Tag Only",Toast.LENGTH_SHORT).show();
             }
         }
     }

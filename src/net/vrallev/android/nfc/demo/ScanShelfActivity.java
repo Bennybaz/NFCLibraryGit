@@ -45,14 +45,23 @@ public class ScanShelfActivity extends Activity {
     String barcode;
     Dialog directDialog;
     int successFlag = 0;
+    Button goBack;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.assign_shelf);
+        setContentView(R.layout.scan_shelf);
         setTitle("Scan Shelf");
 
         context = this;
         barcode=getIntent().getStringExtra("barcode");
+        goBack = (Button) findViewById(R.id.goBackButton);
+
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
@@ -242,8 +251,9 @@ public class ScanShelfActivity extends Activity {
 
                     String barcode2 = result.substring(2);
                     if(barcode.equals(barcode2)){
-                        ImageView image = (ImageView) findViewById(R.id.imageView2);
+                        ImageView image = (ImageView) findViewById(R.id.bookScanImageView);
                         image.setVisibility(1);
+                        goBack.setVisibility(1);
                     }
                 }
             }

@@ -91,8 +91,8 @@ public class AssignBookToShelfActivity extends Activity {
         writeToShelfBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               new UpdateBookLocation().execute();
+                if(b.isEmpty()) Toast.makeText(context,"You need to scan some books first", Toast.LENGTH_SHORT).show();
+                else new UpdateBookLocation().execute();
 
             }
         });

@@ -15,15 +15,16 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:textAlignment="center"
-                android:text="Scan books for return"
-                android:textSize="20dp"
+                android:text="Scan Books For Return"
+                android:textSize="22dp"
+                android:layout_gravity="center"
                 android:textColor="@color/holo_blue_dark"
                 android:id="@+id/booksForReturnTV"/>
         <ListView
                 android:layout_width="match_parent"
-                android:layout_height="377dp"
+                android:layout_height="350dp"
                 android:id="@+id/listView"/>
     </LinearLayout>
     <Button

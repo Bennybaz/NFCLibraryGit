@@ -4,16 +4,18 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:padding="5dp">
+              android:padding="5dp"
+              android:background="@color/abackground">
 
     <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:textAlignment="center"
                 android:text="Scan a Shelf Tag"
-                android:textSize="20dp"
+                android:textSize="22dp"
+                android:layout_centerHorizontal="true"
                 android:textColor="@color/holo_blue_dark"
                 android:id="@+id/shelfTV"/>
 
@@ -22,14 +24,14 @@
                 android:layout_height="100dp"
                 android:id="@+id/imageView"
                 android:src="@drawable/nfcscan1"
-                android:layout_marginTop="42dp"
-                android:layout_below="@+id/textView_explanation" android:layout_centerHorizontal="true"/>
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/shelfTV" android:layout_centerHorizontal="true"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/shelfTextView" android:layout_centerVertical="true"
                 android:layout_below="@id/imageView"
-                android:layout_toRightOf="@+id/shelfTV"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:padding="5dp"
                 android:textAlignment="center"
@@ -45,7 +47,7 @@
             android:layout_height="wrap_content">
         <ListView
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
+                android:layout_height="230dp"
                 android:visibility="visible"
                 android:id="@+id/listViewShelf"/>
     </LinearLayout>
@@ -59,8 +61,8 @@
             android:visibility="invisible"
             style="@style/myButton"
             android:textColor="@color/black"
-            android:layout_marginTop="5dp"
-            android:layout_below="@+id/operation"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/listViewLayout2"
             android:layout_centerHorizontal="true"/>
 
 </LinearLayout>

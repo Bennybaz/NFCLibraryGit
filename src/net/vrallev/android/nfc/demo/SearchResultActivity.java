@@ -141,11 +141,11 @@ public class SearchResultActivity extends Activity{
 
         if(books.get(pos).getStatus().toString().equals("ok")) {
             status.setText("Book exists on shelf");
-            status.setTextColor(Color.GREEN);
+            status.setTextColor(getResources().getColor(R.color.emerald));
         }
         else {
             status.setText("Book is already borrowed");
-            status.setTextColor(Color.RED);
+            status.setTextColor(getResources().getColor(R.color.reddd));
             getDirectionsBtn.setClickable(false);
             getDirectionsBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
             borrowBookBtn.setClickable(false);
@@ -286,6 +286,7 @@ public class SearchResultActivity extends Activity{
 
                                 Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
                                 Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
+                                dialogButtonScan.setVisibility(1);
 
 
                                 // if button is clicked, close the custom dialog

@@ -16,13 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:weightSum="1">
         <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:padding="10dp"
+                android:layout_gravity="center"
                 android:text="Press 'Step 1' to Begin"
                 android:id="@+id/return_step_text"
-                android:textSize="@dimen/text_size"/>
+                android:textSize="20dp"/>
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -30,10 +30,10 @@
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/return_textBC"
-                      android:textAlignment="center"
                       android:padding="5dp"
                       android:gravity="center"
-                      android:textSize="@dimen/text_size"
+                      android:layout_gravity="center"
+                      android:textSize="20dp"
                       android:layout_centerHorizontal="true"
                     />
             <ImageView
@@ -48,10 +48,9 @@
                     android:id="@+id/return_textShelf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/buttons"
+                    android:textSize="20dp"
                     android:textColor="#000"
-                    android:textAlignment="center"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:layout_marginTop="15dp"
                     android:layout_below="@+id/directImage" android:layout_centerHorizontal="true"/><![CDATA[/>
 

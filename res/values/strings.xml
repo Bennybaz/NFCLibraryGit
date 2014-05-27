@@ -10,9 +10,9 @@
     <string name="bookReturn">Book Return</string>
     <string name="manageInventory">Manage Inventory</string>
     <string name="addBook">Add a New Book</string>
-    <string name="search_query">Type word or phrase:</string>
-    <string name="search_field">Field to search:</string>
-    <string name="search_field_hint">Title starting with</string>
+    <string name="search_query">Type Word or Phrase:</string>
+    <string name="search_field">Choose Field To Search:</string>
+    <string name="search_field_hint">Choose Search Type</string>
     <string name="search_btn_url">Search</string>
     <string name="add_new_book">Add a New Book</string>
     <string name="write_nfc">Write</string>
@@ -38,7 +38,6 @@
     <string-array name="field_arrays">
         <item>Title starting with</item>
         <item>Author starting with</item>
-        <item>Subject starting with</item>
     </string-array>
 
 </resources>

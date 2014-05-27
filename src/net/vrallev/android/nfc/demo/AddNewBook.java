@@ -54,20 +54,24 @@ public class AddNewBook extends Activity{
             @Override
             public void onClick(View arg0) {
 
-                // custom dialog
-                dialog = new Dialog(context);
-                dialog.setContentView(R.layout.dialog_write);
-                dialog.setTitle("Write on NFC Tag");
-                Button dialogButton = (Button) dialog.findViewById(R.id.write_cancel_button);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                if (message.getText().toString().equals(""))
+                    Toast.makeText(context, "No barcode input", Toast.LENGTH_SHORT).show();
+                else {
+                    // custom dialog
+                    dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.dialog_write);
+                    dialog.setTitle("Write on NFC Tag");
+                    Button dialogButton = (Button) dialog.findViewById(R.id.write_cancel_button);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
 
-                dialog.show();
+                    dialog.show();
+                }
             }
         });
         adapter = NfcAdapter.getDefaultAdapter(this);

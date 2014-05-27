@@ -38,7 +38,6 @@ public class SearchBook extends Activity {
     JSONParser jsonParser = new JSONParser();
 
     // books in db url
-    //private static final String url_user_name_details = "http://nfclibrary.site40.net/search_book_by_author_or_title.php";
     private static final String url_user_name_details = "http://nfclibrary.site40.net/search_book_test.php";
 
 

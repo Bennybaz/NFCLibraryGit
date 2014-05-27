@@ -62,6 +62,7 @@
         <activity android:name=".StudentMainActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".LibrarianMainActivity" android:parentActivityName=".MainActivity"></activity>
         <activity android:name=".BookCartActivity" android:parentActivityName=".StudentMainActivity"></activity>
+        <activity android:name=".SearchBook" android:parentActivityName=".StudentMainActivity"></activity>
 
 
         <activity
@@ -80,9 +81,9 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".CopyListActivity"/>
-        <activity android:name=".SortedList"/>
-        <activity android:name=".ReturnRouteInstructions"/>
+        <activity android:name=".CopyListActivity" android:parentActivityName=".SearchResultsActivity"/>
+        <activity android:name=".SortedList" android:parentActivityName=".ReturnRouteActivity"/>
+        <activity android:name=".ReturnRouteInstructions" android:parentActivityName=".SortedList"/>
         <activity android:name=".ShelfManagementActivity"/>
         <activity android:name=".ShelfManagementResult"/>
     </application>
