@@ -148,6 +148,7 @@ public class StudentMainActivity extends Activity {
 
                             } else {
                                 // user with id not found
+                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
 

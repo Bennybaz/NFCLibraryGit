@@ -158,6 +158,7 @@ public class LibrarianMainActivity extends Activity {
 
                             } else {
                                 // librarian with id not found
+                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
                         else {

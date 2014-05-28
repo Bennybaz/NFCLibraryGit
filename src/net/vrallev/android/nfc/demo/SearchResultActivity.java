@@ -186,7 +186,7 @@ public class SearchResultActivity extends Activity{
                                 Toast.makeText(context, "BORROWED", Toast.LENGTH_LONG).show();
 
                             } else {
-
+                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {

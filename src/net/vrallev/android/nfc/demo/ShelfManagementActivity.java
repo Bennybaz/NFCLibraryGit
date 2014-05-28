@@ -390,6 +390,7 @@ public class ShelfManagementActivity extends Activity {
 
                             } else {
                                 // product with pid not found
+                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -462,6 +463,7 @@ public class ShelfManagementActivity extends Activity {
 
                             } else {
                                 // product with pid not found
+                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -553,6 +555,7 @@ public class ShelfManagementActivity extends Activity {
 
                                 } else {
                                     // product with pid not found
+                                    Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (JSONException e) {

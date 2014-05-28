@@ -414,7 +414,7 @@ public class TagStatusActivity extends Activity {
                                 status.setText(product.getString("status"));
 
                             } else {
-                                // product with pid not found
+                                Toast.makeText(context, "Error: No Book Details ", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -472,7 +472,7 @@ public class TagStatusActivity extends Activity {
                                 caseT.setText(product.getString("stand"));
 
                             } else {
-                                // product with pid not found
+                                Toast.makeText(context, "Error: No Shelf Details", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -532,7 +532,7 @@ public class TagStatusActivity extends Activity {
                                 rank.setText(product.getString("type"));
 
                             } else {
-                                // product with pid not found
+                                Toast.makeText(context, "Error: No User Details", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
