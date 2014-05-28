@@ -183,7 +183,7 @@ public class SearchResultActivity extends Activity{
                         if (json != null) {
                             success = json.getInt(TAG_SUCCESS);
                             if (success == 1) {
-                                Toast.makeText(context, "BORROWED", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "BORROWED", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();

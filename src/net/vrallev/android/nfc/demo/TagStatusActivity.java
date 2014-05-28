@@ -352,17 +352,18 @@ public class TagStatusActivity extends Activity {
                     flag=1;
                     bar=result.substring(2);
                 }
-                if(type.equals("SH")){
+                else if(type.equals("SH")){
                     super.onPostExecute(result);
                     flag=2;
                     bar=result.substring(2);
                 }
-                if(type.equals("LB") || type.equals("ST"))
+                else if(type.equals("LB") || type.equals("ST"))
                 {
                     super.onPostExecute(result);
                     flag=3;
                     bar=result.substring(2);
                 }
+                else Toast.makeText(context,"Please Scan a Book/Shelf/User Tag Only", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -337,12 +337,13 @@ public class ShelfManagementActivity extends Activity {
                     else
                         new GetBookBarcode().execute();
                 }
-                if(type.equals("SH")){
+                else if(type.equals("SH")){
                     super.onPostExecute(result);
                     shelfText.setText(result.substring(2,4));
                     lv.setVisibility(1);
                     shelfManage.setVisibility(1);
                 }
+                else Toast.makeText(context,"Please Scan a Book/Shelf Tag Only", Toast.LENGTH_SHORT).show();
             }
         }
     }

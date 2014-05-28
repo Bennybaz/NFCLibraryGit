@@ -143,7 +143,7 @@ public class SearchBook extends Activity {
 
                             } else {
                                 // books with search id not found
-                                Toast.makeText(context, "No Such Item", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "No Such Item", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {

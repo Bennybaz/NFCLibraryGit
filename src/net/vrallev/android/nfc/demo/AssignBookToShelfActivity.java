@@ -284,7 +284,7 @@ public class AssignBookToShelfActivity extends Activity {
                 //int row = Integer.parseInt(result.substring(2,4));
 
                 if(type.equals("BK")){
-                    if(shelfFlag==0) Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_LONG).show();
+                    if(shelfFlag==0) Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
                     else {
                         super.onPostExecute(result);
 
@@ -298,13 +298,14 @@ public class AssignBookToShelfActivity extends Activity {
                             new GetBookBarcode().execute();
                     }
                 }
-                if(type.equals("SH")){
+                else if(type.equals("SH")){
                     super.onPostExecute(result);
                     shelfFlag=1;
                     shelf.setText(result.substring(2,4));
                     lv.setVisibility(1);
                     writeToShelfBtn.setVisibility(1);
                 }
+                else Toast.makeText(context,"Please Scan a Book/Shelf Tag Only", Toast.LENGTH_SHORT).show();
             }
         }
     }
