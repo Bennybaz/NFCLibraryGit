@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scan a Tag and Press 'Check Status'"
+                android:id="@+id/typeOfTagTV"
+                android:layout_gravity="center"
+                android:textColor="@color/holo_blue_dark"
+                android:textSize="@dimen/text_size"
+                android:padding="10dp"/>
+
+        <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:padding="5dp"
+                android:text="Check Status"
+                android:id="@+id/checkStatusBtn"
+                android:textColor="@color/black"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                style="@style/myButton"/>
+
+    </LinearLayout>
+    <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bookStatusLayout">
+
+
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="@string/book_title"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_titleTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_titleTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_titleTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="@string/book_author_name"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_authorTV"
+                    />
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_authorTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_authorTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="Publisher:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_publisherTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_publisherTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_publisherTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="Year:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_yearTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_yearTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_yearTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="@string/book_shelf_number"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_shelfTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_shelfTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_shelfTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="Barcode:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_deweyTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_deweyTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_deweyTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="Status:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_statusTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_statusTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_statusTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ShelfStatusLayout">
+
+        <RelativeLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="Tag Code:"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/status_tagCodeTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/status_tagCodeTextView"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/status_tagCodeTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="Case:"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/status_bookCaseTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/status_bookCaseTextView"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/status_bookCaseTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="Sector:"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/status_bookSectorTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/status_bookSectorTextView"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/status_bookSectorTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:text="Shelf:"
+                android:textSize="20dp"
+                android:textColor="@color/holo_blue_dark"
+                android:id="@+id/status_bookShelfTV"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/status_bookShelfTextView"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/status_bookShelfTV"
+                android:padding="5dp"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/UserStatusLayout">
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="ID:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_idTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_idTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_idTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="User Name:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_userNameTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_userNameTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_userNameTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="Phone:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_phoneTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_phoneTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_phoneTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="Email:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_emailTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_emailTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_emailTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+        </RelativeLayout>
+        <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:text="User Rank:"
+                    android:textSize="20dp"
+                    android:textColor="@color/holo_blue_dark"
+                    android:id="@+id/status_userRankTV"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/status_userRankTextView"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/status_userRankTV"
+                    android:padding="5dp"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+</LinearLayout>

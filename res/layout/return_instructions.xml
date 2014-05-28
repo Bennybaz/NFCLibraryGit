@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_gravity="center"
-                android:text="Press 'Step 1' to Begin"
+                android:text="Press 'Step 1' to Begin.           In Each Step, Take the First Book From the Pile"
                 android:id="@+id/return_step_text"
                 android:textSize="20dp"/>
         <LinearLayout

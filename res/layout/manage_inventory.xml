@@ -33,4 +33,13 @@
             android:id="@+id/manageShelfBtn"
             android:layout_marginTop="10dp" android:textColor="@color/black"/>
 
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/myButton"
+            android:padding="5dp"
+            android:text="@string/tag_status"
+            android:id="@+id/tagStatusBtn"
+            android:layout_marginTop="10dp" android:textColor="@color/black"/>
+
 </LinearLayout>

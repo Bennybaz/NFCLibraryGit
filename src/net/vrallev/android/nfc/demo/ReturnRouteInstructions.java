@@ -137,6 +137,12 @@ public class ReturnRouteInstructions extends Activity {
                     lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     nextStepBtn.setVisibility(View.VISIBLE);
                 }
+
+                if(books.size()==1)
+                {
+                    nextStepBtn.setVisibility(View.GONE);
+                    returnRouteBtn.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -273,7 +279,6 @@ public class ReturnRouteInstructions extends Activity {
             books.clear();
             steps.clear();
             adapter.notifyDataSetChanged();
-            //finish();
         }
         return super.onKeyDown(keyCode, event);
     }

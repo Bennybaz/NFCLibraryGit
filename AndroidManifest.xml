@@ -86,6 +86,7 @@
         <activity android:name=".ReturnRouteInstructions" android:parentActivityName=".SortedList"/>
         <activity android:name=".ShelfManagementActivity"/>
         <activity android:name=".ShelfManagementResult"/>
+        <activity android:name=".TagStatusActivity"/>
     </application>
 
 </manifest>

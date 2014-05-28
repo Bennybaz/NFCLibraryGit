@@ -66,6 +66,12 @@ public class SortedList extends Activity {
                     lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     nextStepBtn.setVisibility(View.VISIBLE);
                 }
+                if(sortedCommands.size()==1)
+                {
+                    nextStepBtn.setVisibility(View.GONE);
+                    returnRouteBtn.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
@@ -106,7 +112,6 @@ public class SortedList extends Activity {
             sortedCommands.clear();
             steps.clear();
             adapter.notifyDataSetChanged();
-            finish();
         }
         return super.onKeyDown(keyCode, event);
     }
