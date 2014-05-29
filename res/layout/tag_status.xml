@@ -3,7 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/abackground"
+              android:padding="5dp">
 
     <LinearLayout
             android:orientation="vertical"
@@ -13,30 +15,27 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Scan a Tag and Press 'Check Status'"
+                android:text="Scan a NFC Tag"
                 android:id="@+id/typeOfTagTV"
                 android:layout_gravity="center"
                 android:textColor="@color/holo_blue_dark"
                 android:textSize="@dimen/text_size"
                 android:padding="10dp"/>
-
-        <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:padding="5dp"
-                android:text="Check Status"
-                android:id="@+id/checkStatusBtn"
-                android:textColor="@color/black"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                style="@style/myButton"/>
+        <ImageView
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageView"
+                android:src="@drawable/nfcscan1"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/typeOfTagTV" android:layout_centerHorizontal="true"/>
 
     </LinearLayout>
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

@@ -175,7 +175,7 @@ public class BookCartActivity extends Activity {
 
                                 } else {
                                     // product with pid not found
-                                    Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context,"Book doesn't Exist", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (JSONException e) {
@@ -449,9 +449,11 @@ public class BookCartActivity extends Activity {
                             bookCount++;
                             break;
                         }
+                        else readFlag=1;
                     }
 
-                    lv.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.emerald));
+                    if (readFlag==0 )lv.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.emerald));
+                    else Toast.makeText(context,"Book does Not Belong To Cart",Toast.LENGTH_SHORT).show();
                 }
                 else  Toast.makeText(context,"Scan a Book Tag Only",Toast.LENGTH_SHORT).show();
             }

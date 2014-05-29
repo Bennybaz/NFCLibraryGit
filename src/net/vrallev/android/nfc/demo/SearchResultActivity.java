@@ -32,6 +32,8 @@ import java.util.List;
  */
 public class SearchResultActivity extends Activity{
 
+
+
     Context context = this;
     private Button getDirectionsBtn;
     private Button borrowBookBtn;
@@ -55,7 +57,10 @@ public class SearchResultActivity extends Activity{
 
     // book details in db url
     private static final String url_book_barcode_for_sector = "http://nfclibrary.site40.net/barcode_to_sector.php";
-    private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
+    private static final String url_book_tag_details = "http://nfclibrary.site40.net/barcode_for_book_details.php";
+
+    String bar;
+
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -97,6 +102,7 @@ public class SearchResultActivity extends Activity{
         year.setText(books.get(pos).getYear().toString());
         shelf.setText(books.get(pos).getShelf().toString());
         barcode.setText(books.get(pos).getBarcode().toString());
+        bar = books.get(pos).getBarcode().toString();
 
         // add button listener
         getDirectionsBtn.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +135,7 @@ public class SearchResultActivity extends Activity{
                     fos.write(barcode.getText().toString().getBytes());
                     fos.write(System.getProperty("line.separator").getBytes());
                     fos.close();
-                    Toast.makeText(context,"Book "+bk.getBarcode().toString()+" added to cart",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Book "+bk.getBarcode().toString()+" Added to Cart",Toast.LENGTH_SHORT).show();
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -155,51 +161,19 @@ public class SearchResultActivity extends Activity{
         }
     }
 
-    class UpdateBorrow extends AsyncTask<String, String, String> {
+    protected void onResume() {
+        super.onResume();
 
-        /* *
-          * Updating book borrow in background thread
-          **/
-        protected String doInBackground(String... params) {
+		/*
+		 * It's important, that the activity is in the foreground (resumed). Otherwise
+		 * an IllegalStateException is thrown.
+		 */
 
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    // Check for success tag
-                    int success;
+        new GetBookDetails().execute();
 
-                    try {
-                        List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("barcode", bk.getBarcode().toString()));
-
-                        // getting student details by making HTTP request
-                        // Note that product details url will use GET request
-                        JSONObject json = jsonParser.makeHttpRequest(
-                                url_book_borrow, "GET", params);
-
-                        Toast.makeText(context, json.toString(), Toast.LENGTH_SHORT).show();
-
-                        // json success tag
-                        if (json != null) {
-                            success = json.getInt(TAG_SUCCESS);
-                            if (success == 1) {
-                                Toast.makeText(context, "BORROWED", Toast.LENGTH_SHORT).show();
-
-                            } else {
-                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-            });
-
-            return null;
-        }
     }
+
+
 
     class GetBookSector extends AsyncTask<String, String, String> {
 
@@ -309,6 +283,70 @@ public class SearchResultActivity extends Activity{
                                 directDialog.show();
 
 
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            return null;
+        }
+    }
+
+    class GetBookDetails extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+
+                    try {
+                        // Building Parameters
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("barcode", bar));
+
+                        // getting student details by making HTTP request
+                        // Note that product details url will use GET request
+
+                        JSONObject json = jsonParser.makeHttpRequest(
+                                url_book_tag_details, "GET", params);
+
+                        // json success tag
+                        if(json!=null) {
+                            success = json.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+                                // successfully received product details
+                                JSONArray productObj = json.getJSONArray("book"); // JSON Array
+
+                                // get first user object from JSON Array
+                                JSONObject product = productObj.getJSONObject(0);
+
+                                //set the book details
+                                if(product.getString("status").equals("ok")) {
+                                    status.setText("Book exists on shelf");
+                                    status.setTextColor(getResources().getColor(R.color.emerald));
+                                }
+                                else {
+                                    status.setText("Book is already borrowed");
+                                    status.setTextColor(getResources().getColor(R.color.reddd));
+                                    getDirectionsBtn.setClickable(false);
+                                    getDirectionsBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+                                    borrowBookBtn.setClickable(false);
+                                    borrowBookBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+                                    addToCartBtn.setClickable(false);
+                                    addToCartBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+                                }
+
+                            } else {
+                                Toast.makeText(context, "Error: No Book Details ", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {

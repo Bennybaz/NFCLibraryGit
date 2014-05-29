@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">NFC Library</string>
-    <string name="identification">Attach NFC ID Tag.</string>
+    <string name="identification">Attach NFC ID Tag</string>
     <string name="nfcStatus">NFC Status:</string>
     <string name="operationChoose">Choose an Operation:</string>
     <string name="bookSearch">Book Search</string>

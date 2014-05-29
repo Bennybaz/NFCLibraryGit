@@ -84,9 +84,9 @@
         <activity android:name=".CopyListActivity" android:parentActivityName=".SearchResultsActivity"/>
         <activity android:name=".SortedList" android:parentActivityName=".ReturnRouteActivity"/>
         <activity android:name=".ReturnRouteInstructions" android:parentActivityName=".SortedList"/>
-        <activity android:name=".ShelfManagementActivity"/>
-        <activity android:name=".ShelfManagementResult"/>
-        <activity android:name=".TagStatusActivity"/>
+        <activity android:name=".ShelfManagementActivity" android:parentActivityName=".ManageInventoryActivity"/>
+        <activity android:name=".ShelfManagementResult" android:parentActivityName=".ShelfManagementActivity"/>
+        <activity android:name=".TagStatusActivity" android:parentActivityName=".ManageInventoryActivity"/>
     </application>
 
 </manifest>

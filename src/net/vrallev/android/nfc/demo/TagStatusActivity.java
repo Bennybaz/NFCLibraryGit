@@ -100,8 +100,6 @@ public class TagStatusActivity extends Activity {
 
         context = this;
 
-        checkStatusBtn = (Button) findViewById(R.id.checkStatusBtn);
-
         title = (TextView) findViewById(R.id.status_titleTextView);
         author = (TextView) findViewById(R.id.status_authorTextView);
         publisher = (TextView) findViewById(R.id.status_publisherTextView);
@@ -131,37 +129,6 @@ public class TagStatusActivity extends Activity {
         shelfLayout.setVisibility(View.INVISIBLE);
         userLayout.setVisibility(View.INVISIBLE);
 
-        // add button listener
-        checkStatusBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                //call async task for book position
-                if(flag==0)
-                    Toast.makeText(context, "Please Scan a Tag", Toast.LENGTH_SHORT).show();
-                else if(flag==1) //case of a book tag
-                {
-                    bookLayout.setVisibility(View.VISIBLE);
-                    shelfLayout.setVisibility(View.INVISIBLE);
-                    userLayout.setVisibility(View.INVISIBLE);
-                    new GetBookDetails().execute();
-                }
-                else if(flag==2) //case of shelf tag
-                {
-                    shelfLayout.setVisibility(View.VISIBLE);
-                    bookLayout.setVisibility(View.INVISIBLE);
-                    userLayout.setVisibility(View.INVISIBLE);
-                    new GetShelfDetails().execute();
-                }
-                else if(flag==3) //case of user tag
-                {
-                    userLayout.setVisibility(View.VISIBLE);
-                    bookLayout.setVisibility(View.INVISIBLE);
-                    shelfLayout.setVisibility(View.INVISIBLE);
-                    new GetUserDetails().execute();
-                }
-            }
-        });
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
     }
@@ -349,18 +316,27 @@ public class TagStatusActivity extends Activity {
                 if(type.equals("BK"))
                 {
                     super.onPostExecute(result);
-                    flag=1;
+                    bookLayout.setVisibility(View.VISIBLE);
+                    shelfLayout.setVisibility(View.INVISIBLE);
+                    userLayout.setVisibility(View.INVISIBLE);
+                    new GetBookDetails().execute();
                     bar=result.substring(2);
                 }
                 else if(type.equals("SH")){
                     super.onPostExecute(result);
-                    flag=2;
+                    shelfLayout.setVisibility(View.VISIBLE);
+                    bookLayout.setVisibility(View.INVISIBLE);
+                    userLayout.setVisibility(View.INVISIBLE);
+                    new GetShelfDetails().execute();
                     bar=result.substring(2);
                 }
                 else if(type.equals("LB") || type.equals("ST"))
                 {
                     super.onPostExecute(result);
-                    flag=3;
+                    userLayout.setVisibility(View.VISIBLE);
+                    bookLayout.setVisibility(View.INVISIBLE);
+                    shelfLayout.setVisibility(View.INVISIBLE);
+                    new GetUserDetails().execute();
                     bar=result.substring(2);
                 }
                 else Toast.makeText(context,"Please Scan a Book/Shelf/User Tag Only", Toast.LENGTH_SHORT).show();

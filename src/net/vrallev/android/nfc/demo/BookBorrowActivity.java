@@ -46,7 +46,7 @@ public class BookBorrowActivity extends Activity {
 
     // username in db url
     private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
-    private static final String url_book_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
+    private static final String url_book_details = "http://nfclibrary.site40.net/barcode_for_book_details.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -378,6 +378,7 @@ public class BookBorrowActivity extends Activity {
                                 bk.setBarcode(barcode);
                                 bk.setName(product.getString("title"));
                                 bk.setAuthor(product.getString("author"));
+                                bk.setStatus(product.getString("status"));
                                 for(int i=0; i<b.size(); i++) {
                                     if(b.get(i).getBarcode().equals(barcode))
                                         flag=1;
@@ -385,13 +386,17 @@ public class BookBorrowActivity extends Activity {
                                 }
 
                                 if(flag==0) {
-                                    b.add(bk);
-                                    adapter.notifyDataSetChanged();
+                                    if(bk.getStatus().equals("ok")) {
+                                        b.add(bk);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                    else Toast.makeText(context,"Book is Already Borrowed", Toast.LENGTH_SHORT).show();
                                 }
+                                else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
 
                             } else {
                                 // product with pid not found
-                                Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,"Book doesn't Exist", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -403,4 +408,6 @@ public class BookBorrowActivity extends Activity {
             return null;
         }
     }
+
+
 }

@@ -56,6 +56,7 @@ public class ReturnRouteActivity extends Activity {
     double it;
     int firstSectorFlag = 0; //flag for the returnRoute array size
     int simulationFlag=0; //flag for simulation, running or not
+    int duplicateFlag=0;
 
     int shelf;
     int sector;
@@ -146,7 +147,7 @@ public class ReturnRouteActivity extends Activity {
                         e.printStackTrace();
                     }
                 }
-                else Toast.makeText(context,"No books for return",Toast.LENGTH_SHORT).show();
+                else Toast.makeText(context,"No Books For Return",Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -384,7 +385,7 @@ public class ReturnRouteActivity extends Activity {
                     else
                         new GetBookSector().execute();
                 }
-                else Toast.makeText(context,"This is not a Book Tag",Toast.LENGTH_SHORT).show();
+                else Toast.makeText(context,"Scan a Book Tag Only",Toast.LENGTH_SHORT).show();
 
             }
         }
@@ -441,9 +442,10 @@ public class ReturnRouteActivity extends Activity {
                                     b.add(bk);
                                     adapter.notifyDataSetChanged();
                                 }
+                                else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
 
                             } else {
-                                Toast.makeText(context,"Error: cannot find the book details",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,"Book doesn't Exist",Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {
@@ -607,7 +609,7 @@ public class ReturnRouteActivity extends Activity {
                                     Toast.makeText(context,"Books status changed",Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    Toast.makeText(context,"Error: cannot update the borrow in DB",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context,"Book doesn't Exist",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }catch (JSONException e) {
@@ -710,8 +712,8 @@ public class ReturnRouteActivity extends Activity {
                     {
                         int bookPos = bookPosInScannedBooks(sorted.get(j).getBarcode(), unsorted);
                         if(bookPos==-1)
-                            Toast.makeText(context,"Error in sorting",Toast.LENGTH_SHORT).show();
-                        String msg = new String("Put book #"+(bookPos+1)+" in position #"+(j+1)+" of the sorted pile");
+                            Toast.makeText(context,"Sorting Error",Toast.LENGTH_SHORT).show();
+                        String msg = new String("Put Book #"+(bookPos+1)+" in position #"+(j+1)+" of the sorted pile");
                         sortCommands.add(msg);
                     }
 

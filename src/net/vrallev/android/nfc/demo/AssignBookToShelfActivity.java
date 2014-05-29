@@ -360,7 +360,7 @@ public class AssignBookToShelfActivity extends Activity {
                                 else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
                             } else {
                                 // product with pid not found
-                                Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,"Book doesn't Exist", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {

@@ -63,7 +63,7 @@ public class CopyListActivity extends Activity {
         adapter = new CopyResultsAdapter(this, copy);
         lv.setAdapter(adapter);
 
-        new GetSearchResults().execute();
+        //new GetSearchResults().execute();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,6 +75,19 @@ public class CopyListActivity extends Activity {
         startActivity(intent2);
             }
         });
+
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+		/*
+		 * It's important, that the activity is in the foreground (resumed). Otherwise
+		 * an IllegalStateException is thrown.
+		 */
+        copy.clear();
+        adapter.notifyDataSetChanged();
+        new GetSearchResults().execute();
 
     }
 

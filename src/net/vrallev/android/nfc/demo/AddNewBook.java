@@ -130,14 +130,17 @@ public class AddNewBook extends Activity{
                     {
                         write("BK"+message.getText().toString(), mytag);
                         Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        message.setText("");
                     }
                     if(field.getSelectedItemPosition() == 1)
                     {
                         write("SH"+message.getText().toString(), mytag);
                         Toast.makeText(ctx, ctx.getString(R.string.ok_writing_shelf), Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        message.setText("");
                     }
-                    dialog.dismiss();
-                    message.setText("");
+
 
                 }
             } catch (IOException e) {

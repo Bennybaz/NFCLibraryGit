@@ -33,12 +33,6 @@ public class ScanShelfActivity extends Activity {
     private NfcAdapter mNfcAdapter;
     Context context;
 
-    private Button writeToShelfBtn;
-
-    PendingIntent pendingIntent;
-    IntentFilter writeTagFilters[];
-    boolean writeMode;
-    Tag mytag;
     String barcode;
     Dialog directDialog;
     int successFlag = 0;

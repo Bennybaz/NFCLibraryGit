@@ -81,32 +81,6 @@ public class ShelfManagementActivity extends Activity {
         simulationBtn = (Button) findViewById(R.id.simulationForShelfManagementBtn);
 
         simulationFlag=0;
-
-        //-----------------------------tests-----------------------------
-
-
-        /*
-        //shelf 4
-        Book bk1 = new Book();
-        bk1.setBarcode("624-10");
-        bk1.setName("C programmers guide to serial communications /");
-        bk1.setAuthor("Campbell, Joe");
-        scannedBooks.add(bk1);
-
-        Book bk2 = new Book();
-        bk2.setBarcode("629-10");
-        bk2.setName("The C book, featuring the ANSI c standard /");
-        bk2.setAuthor("Banahan, Mike");
-        scannedBooks.add(bk2);
-
-        //not related book
-        Book bk3 = new Book();
-        bk3.setBarcode("603-10");
-        bk3.setName("Advanced Turbo C /");
-        bk3.setAuthor("Schildt, Herbert");
-        scannedBooks.add(bk3);*/
-        //-----------------------------end tests-------------------------
-
         lv = (ListView) findViewById(R.id.managementList);
         adapter = new MySimpleArrayAdapter(this, scannedBooks);
         lv.setAdapter(adapter);
@@ -117,11 +91,11 @@ public class ShelfManagementActivity extends Activity {
             public void onClick(View v) {
 
                 if(scannedBooks.size()==0 && shelfText.getText().equals(""))
-                    Toast.makeText(context,"Please scan books and shelf tag",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"Please Scan Books and Shelf Tag",Toast.LENGTH_LONG).show();
                 else if(scannedBooks.size()==0)
-                    Toast.makeText(context,"Please scan books",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"Please Scan Books",Toast.LENGTH_LONG).show();
                 else if(shelfText.getText().equals(""))
-                    Toast.makeText(context,"Please scan shelf tag",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"Please Scan Shelf Tag",Toast.LENGTH_LONG).show();
 
                 if(scannedBooks.size()>0 && !shelfText.getText().equals(""))
                     new GetBookOfShelf().execute();
