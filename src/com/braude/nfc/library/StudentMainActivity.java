@@ -1,4 +1,4 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,14 +8,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import libalg.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -160,21 +156,5 @@ public class StudentMainActivity extends Activity {
 
             return null;
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
-            getApplicationContext().deleteFile("cart");
-            finish();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    protected void onStop(){
-        super.onStop();
-        getApplicationContext().deleteFile("cart");
     }
 }

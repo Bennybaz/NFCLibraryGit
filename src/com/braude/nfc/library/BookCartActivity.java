@@ -1,4 +1,4 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -19,7 +18,6 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -29,11 +27,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Benny on 12/04/2014.
@@ -72,7 +66,7 @@ public class BookCartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart_list);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
+        if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
@@ -104,6 +98,7 @@ public class BookCartActivity extends Activity {
                 if(flag==0) barcodes.add(line);
             }
             databaseInputStream.close();
+
             new GetBookBarcode().execute();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -252,6 +247,7 @@ public class BookCartActivity extends Activity {
                         directDialog.show();
                         b.clear();
                         adapter.notifyDataSetChanged();
+                        getApplicationContext().deleteFile("cart");
                     }
                 }
             });
@@ -331,8 +327,8 @@ public class BookCartActivity extends Activity {
     }
 
     /**
-     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
@@ -358,7 +354,7 @@ public class BookCartActivity extends Activity {
 
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
@@ -438,12 +434,13 @@ public class BookCartActivity extends Activity {
                 String type = result.substring(0,2);
                 //int row = Integer.parseInt(result.substring(2,4));
 
-                if(type.equals("BK")){
+                if(type.equals("BK") && b.size()>0){
 
                     super.onPostExecute(result);
 
                     String barcode2 = result.substring(2);
                     int i;
+                    readFlag=0;
                     for(i=0;i<b.size();i++) {
                         if (barcode2.equals(adapter.getItem(i).getBarcode().toString())){
                             bookCount++;
@@ -452,8 +449,8 @@ public class BookCartActivity extends Activity {
                         else readFlag=1;
                     }
 
-                    if (readFlag==0 )lv.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.emerald));
-                    else Toast.makeText(context,"Book does Not Belong To Cart",Toast.LENGTH_SHORT).show();
+                    if (readFlag==0)lv.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.emerald));
+                    else Toast.makeText(context,"Book doesn't Belong To Cart",Toast.LENGTH_SHORT).show();
                 }
                 else  Toast.makeText(context,"Scan a Book Tag Only",Toast.LENGTH_SHORT).show();
             }

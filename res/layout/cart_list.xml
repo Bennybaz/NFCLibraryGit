@@ -30,7 +30,7 @@
             android:id="@+id/listViewLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:padding="10dp"
+            android:padding="5dp"
             android:layout_height="wrap_content">
         <ListView
                 android:layout_width="match_parent"

@@ -1,10 +1,9 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -72,7 +70,7 @@ public class SearchResultActivity extends Activity{
         setContentView(R.layout.search_result);
         setTitle("Book Info");
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
+        if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }

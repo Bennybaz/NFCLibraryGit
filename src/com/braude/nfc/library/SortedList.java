@@ -1,9 +1,8 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  */
 public class SortedList extends Activity {
 
-    ArrayList<Book> books; //contains the books details for return procedure 
+    ArrayList<Book> books; //contains the books details for return procedure
     ArrayList<String> sortedCommands; //contains the commands for sorting
     ArrayList<String> steps = new ArrayList<String>();
     int currentStep=0; //index to the current step of return

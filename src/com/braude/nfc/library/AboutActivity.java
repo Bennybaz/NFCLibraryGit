@@ -1,4 +1,4 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.os.Bundle;

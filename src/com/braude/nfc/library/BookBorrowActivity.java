@@ -1,4 +1,4 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -17,18 +17,15 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -85,7 +82,8 @@ public class BookBorrowActivity extends Activity {
         borrowBooksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UpdateBorrow().execute();
+                if(b.size()==0) Toast.makeText(context,"Scan Books First",Toast.LENGTH_SHORT).show();
+                else new UpdateBorrow().execute();
             }
         });
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -155,8 +153,8 @@ public class BookBorrowActivity extends Activity {
     }
 
     /**
-     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
@@ -182,7 +180,7 @@ public class BookBorrowActivity extends Activity {
 
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
@@ -260,7 +258,16 @@ public class BookBorrowActivity extends Activity {
 
                 if(type.equals("BK")){
                     super.onPostExecute(result);
-                    new GetBookBarcode().execute();
+
+                    int flagg=0;
+                    for(int i=0; i<b.size(); i++) {
+                        if (b.get(i).getBarcode().equals(barcode)) flagg = 1;
+                    }
+
+                    if(flagg==1) Toast.makeText(context, "Book Already Exists", Toast.LENGTH_SHORT).show();
+                    else  new GetBookBarcode().execute();
+
+
                 }
                 else Toast.makeText(context,"Please Scan a Book Tag", Toast.LENGTH_SHORT).show();
             }
@@ -379,6 +386,7 @@ public class BookBorrowActivity extends Activity {
                                 bk.setName(product.getString("title"));
                                 bk.setAuthor(product.getString("author"));
                                 bk.setStatus(product.getString("status"));
+                                flag=0;
                                 for(int i=0; i<b.size(); i++) {
                                     if(b.get(i).getBarcode().equals(barcode))
                                         flag=1;

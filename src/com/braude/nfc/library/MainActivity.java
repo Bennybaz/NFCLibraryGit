@@ -1,7 +1,4 @@
-package net.vrallev.android.nfc.demo;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -20,9 +17,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
-import android.widget.TextView;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 /**
  * Activity for reading data from an NDEF Tag.
@@ -61,13 +60,14 @@ public class MainActivity extends Activity {
 		} else {
             mNfcSwitch.setChecked(true);
 		}
-		
+        getApplicationContext().deleteFile("cart");
 		handleIntent(getIntent());
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+        getApplicationContext().deleteFile("cart");
 		
 		/*
 		 * It's important, that the activity is in the foreground (resumed). Otherwise
@@ -140,8 +140,8 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-	 * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+	 * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+	 * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
 	 */
 	public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
 		final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
@@ -161,13 +161,13 @@ public class MainActivity extends Activity {
 		} catch (MalformedMimeTypeException e) {
 			throw new RuntimeException("Check your mime type.");
 		}
-		
+
 		adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
 	}
 
 	/**
 	 * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-	 * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+	 * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
 	 */
 	public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
 		adapter.disableForegroundDispatch(activity);
@@ -299,7 +299,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    @Override
+    //@Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if ((keyCode == KeyEvent.KEYCODE_BACK))

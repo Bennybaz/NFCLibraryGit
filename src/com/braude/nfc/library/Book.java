@@ -1,9 +1,7 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.io.Serializable;
 
 /**
  * Created by Lidor on 25/03/14.
@@ -145,7 +143,7 @@ public class Book implements Parcelable {
         dest.writeDouble(fixedPosition);
     }
 
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Creator CREATOR = new Creator() {
         public Book createFromParcel(Parcel in) {
             return new Book(in);
         }

@@ -1,4 +1,4 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -10,11 +10,16 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 import libalg.BranchAndBound;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -24,7 +29,6 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
  * Created by Benny on 24/03/2014.
@@ -80,7 +84,7 @@ public class ReturnRouteActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.return_route);
-        if (android.os.Build.VERSION.SDK_INT > 9) {
+        if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
@@ -269,8 +273,8 @@ public class ReturnRouteActivity extends Activity {
     }
 
     /**
-     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
@@ -296,7 +300,7 @@ public class ReturnRouteActivity extends Activity {
 
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
@@ -377,13 +381,15 @@ public class ReturnRouteActivity extends Activity {
 
                 if(type.equals("BK")){
                     super.onPostExecute(result);
+                    int flagg=0;
+                    for(int i=0; i<b.size(); i++) {
+                        if (b.get(i).getBarcode().equals(barcode)) flagg = 1;
+                    }
+
+                    if(flagg==1) Toast.makeText(context, "Book Already Exists", Toast.LENGTH_SHORT).show();
+                        else new GetBookSector().execute();
 
 
-                    // Getting complete user details in background thread
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                        new GetBookSector().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    else
-                        new GetBookSector().execute();
                 }
                 else Toast.makeText(context,"Scan a Book Tag Only",Toast.LENGTH_SHORT).show();
 
@@ -432,6 +438,7 @@ public class ReturnRouteActivity extends Activity {
                                 bk.setAuthor(product.getString("author"));
                                 bk.setFixedPosition(fixedPos);
 
+
                                 for(int i=0; i<b.size(); i++) {
                                     if(b.get(i).getBarcode().equals(barcode))
                                         flag=1;
@@ -470,6 +477,7 @@ public class ReturnRouteActivity extends Activity {
                 public void run() {
                     // Check for success tag
                     int success;
+
 
                     try {
                         // Building Parameters
@@ -539,6 +547,7 @@ public class ReturnRouteActivity extends Activity {
                                             bk.setAuthor(product1.getString("author"));
                                             bk.setFixedPosition(fixedPos);
 
+
                                             for(int i=0; i<b.size(); i++) {
                                                 if(b.get(i).getBarcode().equals(barcode))
                                                     flag=1;
@@ -549,6 +558,7 @@ public class ReturnRouteActivity extends Activity {
                                                 b.add(bk);
                                                 adapter.notifyDataSetChanged();
                                             }
+                                            else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
 
                                         } else {
                                             Toast.makeText(context,"Error: cannot find the book details",Toast.LENGTH_SHORT).show();
@@ -606,7 +616,7 @@ public class ReturnRouteActivity extends Activity {
 
                                     // get first user object from JSON Array
                                     //JSONObject product = productObj.getJSONObject(0);
-                                    Toast.makeText(context,"Books status changed",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context,"Books Status Changed",Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     Toast.makeText(context,"Book doesn't Exist",Toast.LENGTH_SHORT).show();

@@ -1,6 +1,7 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +17,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -32,9 +30,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Lidor on 28/04/14.
+ * Created by Benny on 06/04/2014.
  */
-public class ShelfManagementActivity extends Activity {
+public class AssignBookToShelfActivity extends Activity {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
@@ -42,83 +40,69 @@ public class ShelfManagementActivity extends Activity {
     Context context;
     ListView lv;
     public MySimpleArrayAdapter adapter;
-    ArrayList<Book> scannedBooks = new ArrayList<Book>();
-    ArrayList<Book> shelfBooks = new ArrayList<Book>();
-
-    Button shelfManage;
-    Button simulationBtn;
-    TextView shelfText;
-
+    private Button writeToShelfBtn;
+    ArrayList<Book> b = new ArrayList<Book>();
+    StringBuilder allIDs=new StringBuilder();
+    Dialog dialog;
+    PendingIntent pendingIntent;
+    IntentFilter writeTagFilters[];
+    boolean writeMode;
+    Tag mytag;
+    TextView shelf;
     String barcode;
-    int flag=0;
-    int simulationFlag=0;
+    Dialog directDialog;
+    int successFlag=0;
+    int shelfFlag=0;
+    int duplicateFlag=0;
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser2 = new JSONParser();
 
     // username in db url
     private static final String url_book_barcode_for_details = "http://nfclibrary.site40.net/barcode_for_title_and_author.php";
-    private static final String url_shelf_code_for_books = "http://nfclibrary.site40.net/shelf_code_for_its_book_barcodes.php";
+    private static final String url_book_to_shelf = "http://nfclibrary.site40.net/attach_book_to_shelf.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_PRODUCT = "book";
+    //private static final String TAG_PID = "sid";
     private static final String TAG_NAME = "name";
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.shelf_management);
-        setTitle("Shelf Management");
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.assign_shelf);
+        setTitle("Assign Books To Shelf");
+
+        if (Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
         context = this;
 
-        shelfText = (TextView) findViewById(R.id.shelfScannedText);
-        shelfManage = (Button) findViewById(R.id.shelfManageBtn);
-        simulationBtn = (Button) findViewById(R.id.simulationForShelfManagementBtn);
-
-        simulationFlag=0;
-        lv = (ListView) findViewById(R.id.managementList);
-        adapter = new MySimpleArrayAdapter(this, scannedBooks);
+        writeToShelfBtn = (Button) findViewById(R.id.writeShelfBtn);
+        shelf = (TextView) findViewById(R.id.shelfTextView);
+        lv = (ListView) findViewById(R.id.listViewShelf);
+        adapter = new MySimpleArrayAdapter(this, b);
         lv.setAdapter(adapter);
 
 
-        shelfManage.setOnClickListener(new View.OnClickListener() {
+        writeToShelfBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(scannedBooks.size()==0 && shelfText.getText().equals(""))
-                    Toast.makeText(context,"Please Scan Books and Shelf Tag",Toast.LENGTH_LONG).show();
-                else if(scannedBooks.size()==0)
-                    Toast.makeText(context,"Please Scan Books",Toast.LENGTH_LONG).show();
-                else if(shelfText.getText().equals(""))
-                    Toast.makeText(context,"Please Scan Shelf Tag",Toast.LENGTH_LONG).show();
-
-                if(scannedBooks.size()>0 && !shelfText.getText().equals(""))
-                    new GetBookOfShelf().execute();
-
-            }
-        });
-
-        simulationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(simulationFlag==0)
-                {
-                    new GetBookBarcodeForSimulation().execute();
-                    simulationFlag=1;
-                }
-                else Toast.makeText(context,"Simulation is already running",Toast.LENGTH_SHORT).show();
+                if(b.isEmpty()) Toast.makeText(context,"You need to scan some books first", Toast.LENGTH_SHORT).show();
+                else new UpdateBookLocation().execute();
 
             }
         });
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
     }
+
+
+
+
 
     @Override
     protected void onResume() {
@@ -163,10 +147,10 @@ public class ShelfManagementActivity extends Activity {
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
                     new NdefReaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tag);
-                else
+                    else
                     new NdefReaderTask().execute(tag);
 
-                // new NdefReaderTask().execute(tag);
+               // new NdefReaderTask().execute(tag);
 
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);
@@ -192,8 +176,8 @@ public class ShelfManagementActivity extends Activity {
     }
 
     /**
-     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
@@ -219,7 +203,7 @@ public class ShelfManagementActivity extends Activity {
 
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
@@ -300,22 +284,26 @@ public class ShelfManagementActivity extends Activity {
                 //int row = Integer.parseInt(result.substring(2,4));
 
                 if(type.equals("BK")){
-                    super.onPostExecute(result);
+                    if(shelfFlag==0) Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
+                    else {
+                        super.onPostExecute(result);
 
-                    barcode=result.substring(2);
+                        barcode = result.substring(2);
 
 
-                    // Getting complete user details in background thread
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                        new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    else
-                        new GetBookBarcode().execute();
+                        // Getting complete user details in background thread
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                            new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        else
+                            new GetBookBarcode().execute();
+                    }
                 }
                 else if(type.equals("SH")){
                     super.onPostExecute(result);
-                    shelfText.setText(result.substring(2,4));
+                    shelfFlag=1;
+                    shelf.setText(result.substring(2,4));
                     lv.setVisibility(1);
-                    shelfManage.setVisibility(1);
+                    writeToShelfBtn.setVisibility(1);
                 }
                 else Toast.makeText(context,"Please Scan a Book/Shelf Tag Only", Toast.LENGTH_SHORT).show();
             }
@@ -343,199 +331,116 @@ public class ShelfManagementActivity extends Activity {
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request
 
-                        JSONObject json = jsonParser.makeHttpRequest(
+                        JSONObject json2 = jsonParser.makeHttpRequest(
                                 url_book_barcode_for_details, "GET", params);
 
                         // json success tag
-                        if(json!=null) {
-                            success = json.getInt(TAG_SUCCESS);
+                        if(json2!=null) {
+                            success = json2.getInt(TAG_SUCCESS);
                             if (success == 1) {
                                 // successfully received product details
-                                JSONArray productObj = json.getJSONArray(TAG_PRODUCT); // JSON Array
+                                JSONArray productObj = json2.getJSONArray(TAG_PRODUCT); // JSON Array
 
                                 // get first user object from JSON Array
                                 JSONObject product = productObj.getJSONObject(0);
 
-                                Book bk = new Book();
-                                bk.setBarcode(barcode);
-                                bk.setName(product.getString("title"));
-                                bk.setAuthor(product.getString("author"));
-                                scannedBooks.add(bk);
-                                adapter.notifyDataSetChanged();
-
-                            } else {
-                                // product with pid not found
-                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            return null;
-        }
-    }
-
-
-    class GetBookOfShelf extends AsyncTask<String, String, String> {
-
-        /**
-         * Getting product details in background thread
-         * */
-        protected String doInBackground(String... params) {
-
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    // Check for success tag
-                    int success;
-
-                    try {
-                        // Building Parameters
-                        List<NameValuePair> params = new ArrayList<NameValuePair>();
-                        params.add(new BasicNameValuePair("shelf", shelfText.getText().toString()));
-
-                        // getting student details by making HTTP request
-                        // Note that product details url will use GET request
-
-                        JSONObject json = jsonParser.makeHttpRequest(
-                                url_shelf_code_for_books, "GET", params);
-
-                        // json success tag
-                        if(json!=null) {
-                            success = json.getInt(TAG_SUCCESS);
-                            if (success == 1) {
-                                // successfully received product details
-                                JSONArray productObj = json
-                                        .getJSONArray("books"); // JSON Array
-
-                                for(int i=0; i<productObj.length(); i++)
-                                {
-                                    // get first user object from JSON Array
-                                    JSONObject product = productObj.getJSONObject(i);
-                                    Book b = new Book();
-                                    b.setBarcode(product.getString("barcode"));
-                                    shelfBooks.add(b);
+                                for(int i=0;i<b.size();i++){
+                                    if(b.get(i).getBarcode().equals(barcode)) duplicateFlag=1;
                                 }
 
-                                for(int i=0; i<scannedBooks.size(); i++)
-                                {
-                                    int index=containsBook(shelfBooks, scannedBooks.get(i).getBarcode());
-                                    if(index != -1)
-                                    {
-                                        shelfBooks.remove(index);
-                                        scannedBooks.remove(i);
-                                        i--;
-                                    }
-                                }
-                                //after this "for", books that don't belong to the shelf will be in the array list of scannedBooks
-
-                                Intent intent = new Intent(ShelfManagementActivity.this, ShelfManagementResult.class);
-                                intent.putParcelableArrayListExtra("bookList",scannedBooks);
-                                startActivity(intent);
-
-                            } else {
-                                // product with pid not found
-                                Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            return null;
-        }
-    }
-
-    // function gets array list and barcode and checks if the list contains the barcode
-    //function returns position of the barcode if it exists, or -1 if it does not exists
-    public int containsBook(ArrayList<Book> b, String bar)
-    {
-        for(int i=0; i<b.size(); i++)
-        {
-            String currentBar=b.get(i).getBarcode();
-            if(currentBar.equals(bar))
-                return i;
-        }
-        return -1;
-    }
-
-
-    class GetBookBarcodeForSimulation extends AsyncTask<String, String, String> {
-
-        /**
-         * Getting product details in background thread
-         * */
-        protected String doInBackground(String... params) {
-
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    // Check for success tag
-                    int success;
-
-                    ArrayList<String> simBarcode = new ArrayList<String>();
-
-                    shelfText.setText("4");
-                    simBarcode.add("624-10");
-                    simBarcode.add("1298-10");
-                    simBarcode.add("602-10");
-                    simBarcode.add("1568-20");
-
-                    for(int i=0; i<simBarcode.size(); i++)
-                    {
-                        barcode=simBarcode.get(i);
-
-                        try {
-                            // Building Parameters
-                            List<NameValuePair> params = new ArrayList<NameValuePair>();
-                            params.add(new BasicNameValuePair("barcode", barcode));
-
-                            // getting student details by making HTTP request
-                            // Note that product details url will use GET request
-
-                            JSONObject json = jsonParser.makeHttpRequest(
-                                    url_book_barcode_for_details, "GET", params);
-
-                            // json success tag
-                            if(json!=null) {
-                                success = json.getInt(TAG_SUCCESS);
-                                if (success == 1) {
-                                    // successfully received product details
-                                    JSONArray productObj = json.getJSONArray(TAG_PRODUCT); // JSON Array
-
-                                    // get first user object from JSON Array
-                                    JSONObject product = productObj.getJSONObject(0);
+                                if(duplicateFlag==0) {
 
                                     Book bk = new Book();
                                     bk.setBarcode(barcode);
                                     bk.setName(product.getString("title"));
                                     bk.setAuthor(product.getString("author"));
+                                    b.add(bk);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // product with pid not found
+                                Toast.makeText(context,"Book doesn't Exist", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            return null;
+        }
+    }
 
 
-                                    for(int j=0; j<scannedBooks.size(); j++) {
-                                        if(scannedBooks.get(j).getBarcode().equals(barcode))
-                                            flag=1;
-                                        break;
-                                    }
+    class UpdateBookLocation extends AsyncTask<String, String, String> {
 
-                                    if(flag==0) {
-                                        scannedBooks.add(bk);
-                                        adapter.notifyDataSetChanged();
-                                    }
+       /* *
+         * Getting product details in background thread
+         **/
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    for(int i=0; i< b.size(); i++)
+                    {
+                        try{
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            Integer sh = Integer.parseInt(shelf.getText().toString());
+
+                            params.add(new BasicNameValuePair("shelf", sh.toString()));
+                            params.add(new BasicNameValuePair("barcode", b.get(i).getBarcode().toString()));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+                            JSONObject json = jsonParser2.makeHttpRequest(
+                                    url_book_to_shelf, "GET", params);
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+
+                                    successFlag=1;
 
                                 } else {
                                     // product with pid not found
-                                    Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        } catch (JSONException e) {
+                        }catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                    }
+                    if(successFlag==1) {
+                        directDialog = new Dialog(context);
+                        directDialog.setContentView(R.layout.direction_dialog);
+                        directDialog.setTitle("Success");
+                        TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                        TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                        bookCase.setText("");
+                        shelff.setText("Books were assigned");
+                        ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                        image.setImageResource(R.drawable.success);
+                        Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
+                        Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
+
+                        // if button is clicked, close the custom dialog
+                        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                directDialog.dismiss();
+                            }
+                        });
+                        directDialog.show();
+                        b.clear();
+                        adapter.notifyDataSetChanged();
+                        shelf.setText("");
                     }
                 }
             });

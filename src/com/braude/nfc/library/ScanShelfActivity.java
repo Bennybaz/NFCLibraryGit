@@ -1,4 +1,4 @@
-package net.vrallev.android.nfc.demo;
+package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,13 +14,13 @@ import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -131,8 +131,8 @@ public class ScanShelfActivity extends Activity {
     }
 
     /**
-     * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
-     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
+     * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+     * @param adapter  The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
@@ -158,7 +158,7 @@ public class ScanShelfActivity extends Activity {
 
     /**
      * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
-     * @param adapter  The {@link NfcAdapter} used for the foreground dispatch.
+     * @param adapter  The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
