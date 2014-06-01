@@ -388,7 +388,15 @@ public class TagStatusActivity extends Activity {
                                 year.setText(product.getString("year"));
                                 shelf.setText(product.getString("shelf"));
                                 barcode.setText(product.getString("barcode"));
-                                status.setText(product.getString("status"));
+                                //status.setText(product.getString("status"));
+                                if(product.getString("status").equals("ok")) {
+                                    status.setText("Book exists on shelf");
+                                    status.setTextColor(getResources().getColor(R.color.emerald));
+                                }
+                                else {
+                                    status.setText("Book is already borrowed");
+                                    status.setTextColor(getResources().getColor(R.color.reddd));
+                                }
 
                             } else {
                                 Toast.makeText(context, "Error: No Book Details ", Toast.LENGTH_SHORT).show();

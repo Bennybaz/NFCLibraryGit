@@ -49,6 +49,7 @@ public class ShelfManagementActivity extends Activity {
     Button simulationBtn;
     TextView shelfText;
 
+    private int shelfFlag=0;
     String barcode;
     int flag=0;
     int simulationFlag=0;
@@ -299,19 +300,24 @@ public class ShelfManagementActivity extends Activity {
                 String type = result.substring(0,2);
                 //int row = Integer.parseInt(result.substring(2,4));
 
-                if(type.equals("BK")){
-                    super.onPostExecute(result);
 
-                    barcode=result.substring(2);
+                if(type.equals("BK") ){
+                    if(shelfFlag==1) {
+                        super.onPostExecute(result);
+
+                        barcode = result.substring(2);
 
 
-                    // Getting complete user details in background thread
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                        new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    else
-                        new GetBookBarcode().execute();
+                        // Getting complete user details in background thread
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                            new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        else
+                            new GetBookBarcode().execute();
+                    }
+                    Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
                 }
                 else if(type.equals("SH")){
+                    shelfFlag=1;
                     super.onPostExecute(result);
                     shelfText.setText(result.substring(2,4));
                     lv.setVisibility(1);

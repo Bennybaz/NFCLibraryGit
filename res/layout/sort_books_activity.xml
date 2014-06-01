@@ -20,6 +20,7 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:text="Press 'Step 1' to Begin"
                 android:id="@+id/step_text"
                 android:textSize="20dp"/>
@@ -44,6 +45,6 @@
                 style="@style/myButton"
                 android:textColor="@color/black"
                 android:layout_marginTop="110dp"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center"/>
     </LinearLayout>
 </LinearLayout>

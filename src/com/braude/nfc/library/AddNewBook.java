@@ -33,6 +33,7 @@ public class AddNewBook extends Activity{
     NfcAdapter adapter;
     PendingIntent pendingIntent;
     IntentFilter writeTagFilters[];
+    private int writeBtnClicked=0;
     boolean writeMode; //flag for enable/disable write on tag
     Tag mytag; //the NFC tag for write
     Context ctx;
@@ -60,6 +61,7 @@ public class AddNewBook extends Activity{
                     Toast.makeText(context, "Please Enter an Input", Toast.LENGTH_SHORT).show();
                 else {
                     // custom dialog
+                    writeBtnClicked=1;
                     dialog = new Dialog(context);
                     dialog.setContentView(R.layout.dialog_write);
                     dialog.setTitle("Write on NFC Tag");
@@ -95,6 +97,7 @@ public class AddNewBook extends Activity{
         ndef.writeNdefMessage(message);
         // Close the connection
         ndef.close();
+        writeBtnClicked=0;
     }
 
 
@@ -122,36 +125,37 @@ public class AddNewBook extends Activity{
 
     @Override
     protected void onNewIntent(Intent intent){
-        if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-            mytag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            //write book barcode on its NFC tag
-            try {
-                if (mytag == null) {
-                    Toast.makeText(ctx, ctx.getString(R.string.error_detected), Toast.LENGTH_SHORT).show();
-                } else {
-                    if(field.getSelectedItemPosition() == 0)
-                    {
-                        write("BK"+message.getText().toString(), mytag);
-                        Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        message.setText("");
-                    }
-                    if(field.getSelectedItemPosition() == 1)
-                    {
-                        write("SH"+message.getText().toString(), mytag);
-                        Toast.makeText(ctx, ctx.getString(R.string.ok_writing_shelf), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        message.setText("");
-                    }
+        if(writeBtnClicked==1) {
+            if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
+                mytag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                //write book barcode on its NFC tag
+                try {
+                    if (mytag == null) {
+                        Toast.makeText(ctx, ctx.getString(R.string.error_detected), Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (field.getSelectedItemPosition() == 0) {
+                            write("BK" + message.getText().toString(), mytag);
+                            Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            message.setText("");
+                        }
+                        if (field.getSelectedItemPosition() == 1) {
+                            write("SH" + message.getText().toString(), mytag);
+                            Toast.makeText(ctx, ctx.getString(R.string.ok_writing_shelf), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            message.setText("");
+                        }
 
 
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (FormatException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (FormatException e) {
-                e.printStackTrace();
             }
         }
+        else Toast.makeText(context,"Click Write Button First",Toast.LENGTH_SHORT).show();
     }
 
     //@Override

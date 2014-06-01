@@ -12,8 +12,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Books that not belong to the shelf:"
+            android:padding="10dp"
+            android:textSize="22dp"
+            android:layout_gravity="center"
+            android:textColor="@color/holo_blue_dark"
+            android:text="Misplaced Books:"
             android:id="@+id/shelfText"/>
     <LinearLayout
             android:orientation="vertical"
@@ -21,7 +24,7 @@
             android:layout_height="wrap_content">
         <ListView
                 android:layout_width="match_parent"
-                android:layout_height="199dp"
+                android:layout_height="350dp"
                 android:id="@+id/managementResultList"
                 android:focusable="false"
                 android:focusableInTouchMode="false"/>

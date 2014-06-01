@@ -16,7 +16,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -37,7 +39,7 @@ public class BookCartActivity extends Activity {
     Context context;
     public ArrayList<String> barcodes  = new ArrayList<String>();
     ListView lv;
-    public MySimpleArrayAdapter adapter;
+    public BookCartAdapter adapter;
     ArrayList<Book> b = new ArrayList<Book>(); //contains the books for ListView
     int flag = 0;
     Button borrowBtn;
@@ -45,7 +47,7 @@ public class BookCartActivity extends Activity {
     int successFlag=0;
     int readFlag=0;
     String barcode = "";
-    int bookCount=0;
+    public int bookCount=0;
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     private NfcAdapter mNfcAdapter;
@@ -75,7 +77,7 @@ public class BookCartActivity extends Activity {
         context = this;
 
         lv = (ListView) findViewById(R.id.cartListView);
-        adapter = new MySimpleArrayAdapter(this, b);
+        adapter = new BookCartAdapter(this, b);
         lv.setAdapter(adapter);
 
         borrowBtn = (Button) findViewById(R.id.borrowCartBtn);
@@ -89,13 +91,14 @@ public class BookCartActivity extends Activity {
             String line=null;
 
             while((line=reader.readLine())!=null) {
-
+                flag=0;
                 for (int j = 0; j < barcodes.size(); j++) {
                     if (barcodes.get(j).toString().equals(line.toString()))
                         flag = 1;
-                    break;
                 }
-                if(flag==0) barcodes.add(line);
+                if(flag==0) {
+                    barcodes.add(line);
+                }
             }
             databaseInputStream.close();
 
@@ -109,8 +112,11 @@ public class BookCartActivity extends Activity {
         borrowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bookCount==b.size()) new UpdateBorrow().execute();
-                else Toast.makeText(context,"Please Scan All Books",Toast.LENGTH_SHORT).show();
+                if (b.size()>0){
+                    if (bookCount==b.size()) new UpdateBorrow().execute();
+                    else Toast.makeText(context,"Please Scan All Books",Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(context,"No Books in Cart",Toast.LENGTH_SHORT).show();
 
 
             }
@@ -353,7 +359,7 @@ public class BookCartActivity extends Activity {
     }
 
     /**
-     * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
+     * @param activity The corresponding {@link //BaseActivity} requesting to stop the foreground dispatch.
      * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
      */
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
@@ -431,29 +437,70 @@ public class BookCartActivity extends Activity {
         protected void onPostExecute(String result) {
 
             if (result != null) {
-                String type = result.substring(0,2);
+                String type = result.substring(0, 2);
                 //int row = Integer.parseInt(result.substring(2,4));
 
-                if(type.equals("BK") && b.size()>0){
-
-                    super.onPostExecute(result);
-
-                    String barcode2 = result.substring(2);
-                    int i;
-                    readFlag=0;
-                    for(i=0;i<b.size();i++) {
-                        if (barcode2.equals(adapter.getItem(i).getBarcode().toString())){
-                            bookCount++;
-                            break;
+                if (b.size() > 0) {
+                    if (type.equals("BK")) {
+                        super.onPostExecute(result);
+                        String barcode2 = result.substring(2);
+                        int pos = -1;
+                        for (int i = 0; i < b.size(); i++) {
+                            readFlag = 0;
+                            if (barcode2.equals(adapter.getItem(i).getBarcode())) {
+                                bookCount++;
+                                pos = i;
+                                break;
+                            } else {
+                                readFlag = 1;
+                            }
                         }
-                        else readFlag=1;
-                    }
 
-                    if (readFlag==0)lv.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.emerald));
-                    else Toast.makeText(context,"Book doesn't Belong To Cart",Toast.LENGTH_SHORT).show();
+                        if (readFlag == 0)
+                            lv.getChildAt(pos).setBackgroundColor(getResources().getColor(R.color.emerald));
+                        else Toast.makeText(context, "Book doesn't Belong To Cart", Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(context, "Scan a Book Tag Only", Toast.LENGTH_SHORT).show();
                 }
-                else  Toast.makeText(context,"Scan a Book Tag Only",Toast.LENGTH_SHORT).show();
+                else Toast.makeText(context, "Cart is Empty", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public class BookCartAdapter extends ArrayAdapter<Book> {
+        private Context context;
+        public ArrayList<Book> values;
+
+        public BookCartAdapter(Context context, ArrayList<Book> values)
+        {
+            super(context, R.layout.row_layout, values);
+            this.context = context;
+            this.values = values;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final int pos = position;
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View rowView = inflater.inflate(R.layout.row_layout, parent, false);
+            TextView textView1 = (TextView) rowView.findViewById(R.id.headline);
+            TextView textView2 = (TextView) rowView.findViewById(R.id.baseline);
+            ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image_right);
+            textView1.setText(values.get(position).getName());
+            textView2.setText(values.get(position).getAuthor());
+            imageView.setImageResource(R.drawable.remove_icon);
+            imageView.setFocusable(false);
+            imageView.setFocusableInTouchMode(false);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    values.remove(pos);
+                    notifyDataSetChanged();
+                    bookCount--;
+                }
+            });
+            return rowView;
+        }
+
     }
 }

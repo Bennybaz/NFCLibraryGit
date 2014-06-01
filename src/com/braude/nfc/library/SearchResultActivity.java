@@ -2,12 +2,20 @@ package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,7 +30,9 @@ import org.json.JSONObject;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,13 +40,12 @@ import java.util.List;
  */
 public class SearchResultActivity extends Activity{
 
-
-
     Context context = this;
     private Button getDirectionsBtn;
     private Button borrowBookBtn;
     private Dialog directDialog;
     private Button addToCartBtn;
+    private Dialog borrowDialog;
 
     TextView title;
     TextView author;
@@ -46,9 +55,17 @@ public class SearchResultActivity extends Activity{
     TextView barcode;
     TextView status;
 
+    private int borrowBtnClicked=0;
+    private int successFlag=0;
+
+    public static final String MIME_TEXT_PLAIN = "text/plain";
+    public static final String TAG = "NfcDemo";
+    private NfcAdapter mNfcAdapter;
+
+
     ArrayList<Book> books; //contains the books from the search query
-    int pos; //position of specific book
-    Book bk; //the chosen book
+    private int pos; //position of specific book
+    private Book bk; //the chosen book
 
     private JSONParser jsonParser = new JSONParser();
     private JSONParser jsonParser2 = new JSONParser();
@@ -56,8 +73,10 @@ public class SearchResultActivity extends Activity{
     // book details in db url
     private static final String url_book_barcode_for_sector = "http://nfclibrary.site40.net/barcode_to_sector.php";
     private static final String url_book_tag_details = "http://nfclibrary.site40.net/barcode_for_book_details.php";
+    private static final String url_book_borrow = "http://nfclibrary.site40.net/borrow_book_by_barcode.php";
 
-    String bar;
+    private String bar;
+    private int alreadyAddedFlag=0;
 
 
     // JSON Node names
@@ -117,8 +136,24 @@ public class SearchResultActivity extends Activity{
             public void onClick(View v) {
                 //call async task for borrow
                 //new UpdateBorrow().execute();
-                Intent intent = new Intent(context, BookBorrowActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(context, BookBorrowActivity.class);
+                //startActivity(intent);
+                borrowBtnClicked=1;
+                borrowDialog = new Dialog(context);
+                borrowDialog.setContentView(R.layout.dialog_write);
+                borrowDialog.setTitle("Scan a Book Tag");
+                Button dialogButton = (Button) borrowDialog.findViewById(R.id.write_cancel_button);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        borrowDialog.dismiss();
+                        borrowBtnClicked=0;
+                    }
+                });
+                borrowDialog.show();
+
+
 
             }
         });
@@ -126,20 +161,24 @@ public class SearchResultActivity extends Activity{
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //add book to cart
-                FileOutputStream fos = null;
-                try {
-                    fos = openFileOutput(FILENAME, Context.MODE_APPEND);
-                    fos.write(barcode.getText().toString().getBytes());
-                    fos.write(System.getProperty("line.separator").getBytes());
-                    fos.close();
-                    Toast.makeText(context,"Book "+bk.getBarcode().toString()+" Added to Cart",Toast.LENGTH_SHORT).show();
+                if (alreadyAddedFlag == 0) {
+                    //add book to cart
+                    FileOutputStream fos = null;
+                    try {
+                        fos = openFileOutput(FILENAME, Context.MODE_APPEND);
+                        fos.write(barcode.getText().toString().getBytes());
+                        fos.write(System.getProperty("line.separator").getBytes());
+                        fos.close();
+                        Toast.makeText(context, "Book " + bk.getBarcode().toString() + " Added to Cart", Toast.LENGTH_SHORT).show();
+                        alreadyAddedFlag = 1;
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+                else Toast.makeText(context,"Book is Already in Cart",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -157,6 +196,9 @@ public class SearchResultActivity extends Activity{
             addToCartBtn.setClickable(false);
             addToCartBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
         }
+
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        handleIntent(getIntent());
     }
 
     protected void onResume() {
@@ -168,10 +210,258 @@ public class SearchResultActivity extends Activity{
 		 */
 
         new GetBookDetails().execute();
+        setupForegroundDispatch(this, mNfcAdapter);
 
     }
+    @Override
+    protected void onPause() {
+		/*
+		 * Call this before onPause, otherwise an IllegalArgumentException is thrown as well.
+		 */
+        stopForegroundDispatch(this, mNfcAdapter);
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+		/*
+		 * This method gets called, when a new Intent gets associated with the current activity instance.
+		 * Instead of creating a new activity, onNewIntent will be called. For more information have a look
+		 * at the documentation.
+		 *
+		 * In our case this method gets called, when the user attaches a Tag to the device.
+		 */
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+
+            String type = intent.getType();
+            if (MIME_TEXT_PLAIN.equals(type)) {
+
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    new NdefReaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tag);
+                else
+                    new NdefReaderTask().execute(tag);
+
+                // new NdefReaderTask().execute(tag);
+
+            } else {
+                Log.d(TAG, "Wrong mime type: " + type);
+            }
+        } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+
+            // In case we would still use the Tech Discovered Intent
+            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            String[] techList = tag.getTechList();
+            String searchedTech = Ndef.class.getName();
+
+            for (String tech : techList) {
+                if (searchedTech.equals(tech)) {
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                        new NdefReaderTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, tag);
+                    else
+                        new NdefReaderTask().execute(tag);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param activity The corresponding {@link android.app.Activity} requesting the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
+     */
+    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+        final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
+
+        IntentFilter[] filters = new IntentFilter[1];
+        String[][] techList = new String[][]{};
+
+        // Notice that this is the same filter as in our manifest.
+        filters[0] = new IntentFilter();
+        filters[0].addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        filters[0].addCategory(Intent.CATEGORY_DEFAULT);
+        try {
+            filters[0].addDataType(MIME_TEXT_PLAIN);
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            throw new RuntimeException("Check your mime type.");
+        }
+
+        adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
+    }
+
+    /**
+     * @param activity The corresponding {@link BaseActivity} requesting to stop the foreground dispatch.
+     * @param adapter The {@link android.nfc.NfcAdapter} used for the foreground dispatch.
+     */
+    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+        adapter.disableForegroundDispatch(activity);
+    }
+
+    public void nfcStatusChanged(View view) {
+        startActivityForResult(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS), 2);
+    }
+
+    // create a distance matrix according to the input
 
 
+    /**
+     * Background task for reading the data. Do not block the UI thread while reading.
+     *
+     * @author Ralf Wondratschek
+     *
+     */
+
+    private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
+        @Override
+        protected String doInBackground(Tag... params) {
+            Tag tag = params[0];
+
+            Ndef ndef = Ndef.get(tag);
+            if (ndef == null) {
+                // NDEF is not supported by this Tag.
+                return null;
+            }
+
+            NdefMessage ndefMessage = ndef.getCachedNdefMessage();
+
+            NdefRecord[] records = ndefMessage.getRecords();
+            for (NdefRecord ndefRecord : records) {
+                if (ndefRecord.getTnf() == NdefRecord.TNF_WELL_KNOWN && Arrays.equals(ndefRecord.getType(), NdefRecord.RTD_TEXT)) {
+                    try {
+                        return readText(ndefRecord);
+                    } catch (UnsupportedEncodingException e) {
+                        Log.e(TAG, "Unsupported Encoding", e);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private String readText(NdefRecord record) throws UnsupportedEncodingException {
+			/*
+			 * See NFC forum specification for "Text Record Type Definition" at 3.2.1
+			 *
+			 * http://www.nfc-forum.org/specs/
+			 *
+			 * bit_7 defines encoding
+			 * bit_6 reserved for future use, must be 0
+			 * bit_5..0 length of IANA language code
+			 */
+
+            byte[] payload = record.getPayload();
+
+            // Get the Text Encoding
+            String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+
+            // Get the Language Code
+            int languageCodeLength = payload[0] & 0063;
+
+            // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
+            // e.g. "en"
+
+            // Get the Text
+            return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if (borrowBtnClicked == 1) {
+                if (result != null) {
+                    String type = result.substring(0, 2);
+                    //int row = Integer.parseInt(result.substring(2,4));
+
+                    if (type.equals("BK")) {
+                        bar = result.substring(2);
+                        if(bar.equals(bk.getBarcode().toString())) {
+                            super.onPostExecute(result);
+                            new UpdateBorrow().execute();
+                        }
+                        else Toast.makeText(context, "Scan Appropriate Book Tag", Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(context, "Please Scan a Book/Shelf/User Tag Only", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    class UpdateBorrow extends AsyncTask<String, String, String> {
+
+        /* *
+          * Getting product details in background thread
+          **/
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    try{
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("barcode", bar ));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+                            JSONObject json = jsonParser.makeHttpRequest(
+                                    url_book_borrow, "GET", params);
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+                                    successFlag=1;
+
+                                } else {
+                                    Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
+                                    // product with pid not found
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    if(successFlag==1){
+                        directDialog = new Dialog(context);
+                        directDialog.setContentView(R.layout.direction_dialog);
+                        directDialog.setTitle("Success");
+                        TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
+                        TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                        bookCase.setText("");
+                        shelff.setText("Book Successfully Borrowed");
+                        ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                        image.setImageResource(R.drawable.success);
+                        Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
+                        // if button is clicked, close the custom dialog
+                        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new GetBookDetails().execute();
+                                directDialog.dismiss();
+                            }
+                        });
+                        directDialog.show();
+                        borrowDialog.dismiss();
+                    }
+
+
+                }
+            });
+
+            return null;
+        }
+    }
 
     class GetBookSector extends AsyncTask<String, String, String> {
 
