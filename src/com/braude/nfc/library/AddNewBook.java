@@ -9,13 +9,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.*;
 import android.nfc.tech.Ndef;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +44,15 @@ public class AddNewBook extends Activity{
     boolean writeMode; //flag for enable/disable write on tag
     Tag mytag; //the NFC tag for write
     Context ctx;
+
+    // JSON parser class
+    private JSONParser jsonParser = new JSONParser();
+
+    // username in db url
+    private static final String url_book_tag_update = "http://nfclibrary.site40.net/book_tag_status_update.php";
+
+    // JSON Node names
+    private static final String TAG_SUCCESS = "success";
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -179,6 +195,7 @@ public class AddNewBook extends Activity{
                     } else {
                         if (field.getSelectedItemPosition() == 0) {
                             write("BK" + message.getText().toString(), mytag);
+                            new UpdateTagOnDB().execute();
                             Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                             message.setText("");
@@ -222,5 +239,45 @@ public class AddNewBook extends Activity{
     private void WriteModeOff(){
         writeMode = false;
         adapter.disableForegroundDispatch(this);
+    }
+
+    class UpdateTagOnDB extends AsyncTask<String, String, String> {
+
+        /* *
+          * Getting product details in background thread
+          **/
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    try{
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                        params.add(new BasicNameValuePair("barcode", message.getText().toString()));
+
+                        // getting student details by making HTTP request
+                        // Note that product details url will use GET request
+                        JSONObject json = jsonParser.makeHttpRequest(
+                                url_book_tag_update, "GET", params);
+
+                        // json success tag
+                        if(json!=null) {
+                            success = json.getInt(TAG_SUCCESS);
+                            if (success == 1) {
+                            } else {
+                                Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
+                                // product with pid not found
+                            }
+                        }
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            return null;
+        }
     }
 }

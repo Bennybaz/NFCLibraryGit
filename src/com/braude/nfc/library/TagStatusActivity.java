@@ -53,6 +53,7 @@ public class TagStatusActivity extends Activity {
     TextView shelf;
     TextView barcode;
     TextView status;
+    TextView location;
 
     //for shelf layout
     TextView tagCode;
@@ -107,6 +108,7 @@ public class TagStatusActivity extends Activity {
         shelf = (TextView) findViewById(R.id.status_shelfTextView);
         barcode = (TextView) findViewById(R.id.status_deweyTextView);
         status = (TextView) findViewById(R.id.status_statusTextView);
+        location = (TextView) findViewById(R.id.location_of_bookTextView);
 
         tagCode = (TextView) findViewById(R.id.status_tagCodeTextView);
         shelfT = (TextView) findViewById(R.id.status_bookShelfTextView);
@@ -128,6 +130,7 @@ public class TagStatusActivity extends Activity {
         bookLayout.setVisibility(View.INVISIBLE);
         shelfLayout.setVisibility(View.INVISIBLE);
         userLayout.setVisibility(View.INVISIBLE);
+
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());
@@ -386,8 +389,9 @@ public class TagStatusActivity extends Activity {
                                 author.setText(product.getString("author"));
                                 publisher.setText(product.getString("publisher"));
                                 year.setText(product.getString("year"));
-                                shelf.setText(product.getString("shelf"));
+                                shelf.setText(product.getString("shelfD"));
                                 barcode.setText(product.getString("barcode"));
+                                location.setText("Shelf: "+product.getString("shelfT")+", Sector: "+product.getString("sectorT")+", Stand: "+product.getString("standT"));
                                 //status.setText(product.getString("status"));
                                 if(product.getString("status").equals("ok")) {
                                     status.setText("Book exists on shelf");
