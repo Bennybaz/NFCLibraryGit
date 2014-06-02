@@ -12,13 +12,12 @@ import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Benny on 20/03/2014.
@@ -28,6 +27,7 @@ public class AddNewBook extends Activity{
     final Context context = this;
     private Button writeBtn;
     private Spinner field;
+    private TextView inst;
     TextView message;
     Dialog dialog;
     NfcAdapter adapter;
@@ -50,6 +50,20 @@ public class AddNewBook extends Activity{
         writeBtn = (Button) findViewById(R.id.writeNfcBtn);
         message = (TextView)findViewById(R.id.newBookET);
         field = (Spinner) findViewById(R.id.typeOfTagSpinner);
+        inst = (TextView) findViewById(R.id.textView2newBook);
+
+        field.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position==0) inst.setText("Enter Book Code:");
+                if(position==1) inst.setText("Enter Shelf Number:");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // add button listener
         writeBtn.setOnClickListener(new OnClickListener() {
@@ -60,23 +74,53 @@ public class AddNewBook extends Activity{
                 if (message.getText().toString().equals(""))
                     Toast.makeText(context, "Please Enter an Input", Toast.LENGTH_SHORT).show();
                 else {
-                    // custom dialog
-                    writeBtnClicked=1;
-                    dialog = new Dialog(context);
-                    dialog.setContentView(R.layout.dialog_write);
-                    dialog.setTitle("Write on NFC Tag");
-                    Button dialogButton = (Button) dialog.findViewById(R.id.write_cancel_button);
-                    // if button is clicked, close the custom dialog
-                    dialogButton.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                        }
-                    });
+                    if (field.getSelectedItemPosition() == 0) {
+                        String pat = "([0-9]+[-][0-9]+)|([0-9]+)";
+                        Pattern pattern = Pattern.compile(pat);
+                        Matcher matcher = pattern.matcher(message.getText().toString());
+                        if (matcher.matches()) {
+                            // custom dialog
+                            writeBtnClicked = 1;
+                            dialog = new Dialog(context);
+                            dialog.setContentView(R.layout.dialog_write);
+                            dialog.setTitle("Write on NFC Tag");
+                            Button dialogButton = (Button) dialog.findViewById(R.id.write_cancel_button);
+                            // if button is clicked, close the custom dialog
+                            dialogButton.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                    dialog.show();
+                            dialog.show();
+                        } else Toast.makeText(context, "Wrong Input Pattern", Toast.LENGTH_SHORT).show();
+                    }
+
+                        if (field.getSelectedItemPosition() == 1) {
+                            String pat2 = "[0-9]+";
+                            Pattern pattern2 = Pattern.compile(pat2);
+                            Matcher matcher2 = pattern2.matcher(message.getText().toString());
+                            if (matcher2.matches()) {
+                                // custom dialog
+                                writeBtnClicked = 1;
+                                dialog = new Dialog(context);
+                                dialog.setContentView(R.layout.dialog_write);
+                                dialog.setTitle("Write on NFC Tag");
+                                Button dialogButton = (Button) dialog.findViewById(R.id.write_cancel_button);
+                                // if button is clicked, close the custom dialog
+                                dialogButton.setOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                dialog.show();
+                            } else Toast.makeText(context, "Wrong Input Pattern", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-            }
         });
         adapter = NfcAdapter.getDefaultAdapter(this);
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
