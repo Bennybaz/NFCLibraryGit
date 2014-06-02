@@ -301,7 +301,7 @@ public class AssignBookToShelfActivity extends Activity {
                 else if(type.equals("SH")){
                     super.onPostExecute(result);
                     shelfFlag=1;
-                    shelf.setText(result.substring(2,4));
+                    shelf.setText(result.substring(2));
                     lv.setVisibility(1);
                     writeToShelfBtn.setVisibility(1);
                 }

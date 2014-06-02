@@ -319,7 +319,7 @@ public class ShelfManagementActivity extends Activity {
                 else if(type.equals("SH")){
                     shelfFlag=1;
                     super.onPostExecute(result);
-                    shelfText.setText(result.substring(2,4));
+                    shelfText.setText(result.substring(2));
                     lv.setVisibility(1);
                     shelfManage.setVisibility(1);
                 }
