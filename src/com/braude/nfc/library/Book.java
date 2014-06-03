@@ -16,6 +16,7 @@ public class Book implements Parcelable {
     private String year;
     private String publisher;
     private String status;
+    private String isTagged;
     private double fixedPosition;
 
     public Book(String author, String name) {
@@ -39,6 +40,7 @@ public class Book implements Parcelable {
         publisher = source.readString();
         status = source.readString();
         fixedPosition = source.readDouble();
+        isTagged = source.readString();
     }
 
     public String getAuthor() {
@@ -123,6 +125,14 @@ public class Book implements Parcelable {
         this.fixedPosition = fixedPosition;
     }
 
+    public String getTagged() {
+        return isTagged;
+    }
+
+    public void setTagged(String tagged) {
+        this.isTagged = tagged;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -141,6 +151,7 @@ public class Book implements Parcelable {
         dest.writeString(publisher);
         dest.writeString(status);
         dest.writeDouble(fixedPosition);
+        dest.writeString(isTagged);
     }
 
     public static final Creator CREATOR = new Creator() {

@@ -62,8 +62,8 @@
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/borrow_history"
-            android:id="@+id/historyBtn"
+            android:text="Book Information"
+            android:id="@+id/infoBtn"
             android:gravity="center"
             android:padding="5dp"
             android:layout_marginTop="10dp"

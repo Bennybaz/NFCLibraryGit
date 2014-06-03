@@ -69,6 +69,7 @@ public class ManageInventoryActivity extends Activity {
             @Override
             public void onClick(View arg0) {
                 Intent intent = new Intent(context, TagStatusActivity.class);
+                intent.putExtra("rankFlag", 0);
                 startActivity(intent);
             }
 

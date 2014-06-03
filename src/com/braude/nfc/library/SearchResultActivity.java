@@ -54,6 +54,7 @@ public class SearchResultActivity extends Activity{
     TextView shelf;
     TextView barcode;
     TextView status;
+    TextView isTagged;
 
     private int borrowBtnClicked=0;
     private int successFlag=0;
@@ -111,6 +112,8 @@ public class SearchResultActivity extends Activity{
         shelf = (TextView) findViewById(R.id.shelfTextView);
         barcode = (TextView) findViewById(R.id.deweyTextView);
         status = (TextView) findViewById(R.id.statusTextView);
+        isTagged = (TextView) findViewById(R.id.taggedTextView);
+
 
         //set the book details
         title.setText(books.get(pos).getName().toString());
@@ -120,6 +123,7 @@ public class SearchResultActivity extends Activity{
         shelf.setText(books.get(pos).getShelf().toString());
         barcode.setText(books.get(pos).getBarcode().toString());
         bar = books.get(pos).getBarcode().toString();
+        isTagged.setText(books.get(pos).getTagged().toString());
 
         // add button listener
         getDirectionsBtn.setOnClickListener(new View.OnClickListener() {
@@ -152,9 +156,6 @@ public class SearchResultActivity extends Activity{
                     }
                 });
                 borrowDialog.show();
-
-
-
             }
         });
 
@@ -182,13 +183,28 @@ public class SearchResultActivity extends Activity{
             }
         });
 
-        if(books.get(pos).getStatus().toString().equals("ok")) {
-            status.setText("Book exists on shelf");
-            status.setTextColor(getResources().getColor(R.color.emerald));
+        if(books.get(pos).getTagged().toString().equals("Yes")) {
+            isTagged.setText("Book is tagged");
+            isTagged.setTextColor(getResources().getColor(R.color.emerald));
+
+            if(books.get(pos).getStatus().toString().equals("ok")) {
+                status.setText("Book exists on shelf");
+                status.setTextColor(getResources().getColor(R.color.emerald));
+            }
+            else {
+                isTagged.setText("Book is already borrowed");
+                isTagged.setTextColor(getResources().getColor(R.color.reddd));
+                getDirectionsBtn.setClickable(false);
+                getDirectionsBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+                borrowBookBtn.setClickable(false);
+                borrowBookBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+                addToCartBtn.setClickable(false);
+                addToCartBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
+            }
         }
         else {
-            status.setText("Book is already borrowed");
-            status.setTextColor(getResources().getColor(R.color.reddd));
+            isTagged.setText("Book is not tagged");
+            isTagged.setTextColor(getResources().getColor(R.color.reddd));
             getDirectionsBtn.setClickable(false);
             getDirectionsBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
             borrowBookBtn.setClickable(false);
@@ -510,7 +526,7 @@ public class SearchResultActivity extends Activity{
                                 TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
 
                                 // fill according to bookcase location
-                                if(stand==1 || stand==2) bookCase.setText("First BookCase on the left");
+                                /*if(stand==1 || stand==2) bookCase.setText("First BookCase on the left");
                                 if(stand==3 || stand==4) bookCase.setText("Second BookCase on the left");
                                 if(stand==5 || stand==6) bookCase.setText("Third BookCase on the left");
                                 if(stand==7 || stand==8) bookCase.setText("Fourth BookCase on the left");
@@ -521,7 +537,31 @@ public class SearchResultActivity extends Activity{
                                 if(stand==17 || stand==18) bookCase.setText("Third BookCase on the right");
                                 if(stand==19 || stand==20) bookCase.setText("Fourth BookCase on the right");
                                 if(stand==21 || stand==22) bookCase.setText("Fifth BookCase on the right");
-                                if(stand==23 || stand==24) bookCase.setText("Sixth BookCase on the right");
+                                if(stand==23 || stand==24) bookCase.setText("Sixth BookCase on the right");*/
+                                if(stand==1) bookCase.setText("BookCase #2");
+                                if(stand==2) bookCase.setText("BookCase #3");
+                                if(stand==3) bookCase.setText("BookCase #4");
+                                if(stand==4) bookCase.setText("BookCase #5");
+                                if(stand==5) bookCase.setText("BookCase #6");
+                                if(stand==6) bookCase.setText("BookCase #7");
+                                if(stand==7) bookCase.setText("BookCase #8");
+                                if(stand==8) bookCase.setText("BookCase #9");
+                                if(stand==9) bookCase.setText("BookCase #10");
+                                if(stand==10) bookCase.setText("BookCase #11");
+                                if(stand==11) bookCase.setText("BookCase #13");
+                                if(stand==12) bookCase.setText("BookCase #14");
+                                if(stand==13) bookCase.setText("BookCase #33");
+                                if(stand==14) bookCase.setText("BookCase #34");
+                                if(stand==15) bookCase.setText("BookCase #35");
+                                if(stand==16) bookCase.setText("BookCase #36");
+                                if(stand==17) bookCase.setText("BookCase #37");
+                                if(stand==18) bookCase.setText("BookCase #38");
+                                if(stand==19) bookCase.setText("BookCase #39");
+                                if(stand==20) bookCase.setText("BookCase #40");
+                                if(stand==21) bookCase.setText("BookCase #41");
+                                if(stand==22) bookCase.setText("BookCase #42");
+                                if(stand==23) bookCase.setText("BookCase #43");
+                                if(stand==24) bookCase.setText("BookCase #44");
 
 
                                 if(shelf==1) shelff.setText("Top Shelf");
@@ -548,7 +588,7 @@ public class SearchResultActivity extends Activity{
 
                                 Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
                                 Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
-                                dialogButtonScan.setVisibility(1);
+                                dialogButtonScan.setVisibility(View.VISIBLE);
 
 
                                 // if button is clicked, close the custom dialog

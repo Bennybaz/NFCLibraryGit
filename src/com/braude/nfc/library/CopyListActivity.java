@@ -140,6 +140,7 @@ public class CopyListActivity extends Activity {
                                     b.setYear(bk.getYear());
                                     b.setPublisher(bk.getPublisher());
                                     b.setStatus(product.getString("status"));
+                                    b.setTagged(product.getString("isTagged"));
                                     copy.add(b);
                                     adapter.notifyDataSetChanged();
                                 }

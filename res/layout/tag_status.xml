@@ -35,7 +35,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="10dp">
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                         android:layout_toRightOf="@+id/status_titleTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -84,7 +84,7 @@
                         android:layout_toRightOf="@+id/status_authorTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -106,7 +106,7 @@
                         android:layout_toRightOf="@+id/status_publisherTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -128,7 +128,7 @@
                         android:layout_toRightOf="@+id/status_yearTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -150,7 +150,7 @@
                         android:layout_toRightOf="@+id/status_shelfTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -172,7 +172,7 @@
                         android:layout_toRightOf="@+id/status_deweyTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -194,7 +194,7 @@
                         android:layout_toRightOf="@+id/status_statusTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -217,7 +217,7 @@
                         android:layout_toRightOf="@+id/location_of_bookTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
 
             </RelativeLayout>
@@ -250,7 +250,7 @@
                         android:layout_toRightOf="@+id/status_tagCodeTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -272,7 +272,7 @@
                         android:layout_toRightOf="@+id/status_bookCaseTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -294,7 +294,7 @@
                         android:layout_toRightOf="@+id/status_bookSectorTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -316,7 +316,7 @@
                         android:layout_toRightOf="@+id/status_bookShelfTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -347,7 +347,7 @@
                         android:layout_toRightOf="@+id/status_idTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -369,7 +369,7 @@
                         android:layout_toRightOf="@+id/status_userNameTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -391,7 +391,7 @@
                         android:layout_toRightOf="@+id/status_phoneTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 
@@ -413,7 +413,7 @@
                         android:layout_toRightOf="@+id/status_emailTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
             <RelativeLayout android:layout_marginTop="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content">
@@ -434,7 +434,7 @@
                         android:layout_toRightOf="@+id/status_userRankTV"
                         android:padding="5dp"
                         android:textAlignment="center"
-                        android:textSize="16dp"
+                        android:textSize="18dp"
                         />
             </RelativeLayout>
 

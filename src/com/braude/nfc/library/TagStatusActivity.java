@@ -74,6 +74,7 @@ public class TagStatusActivity extends Activity {
     LinearLayout userLayout;
 
     int flag=0; // type of scanned tag flag
+    int rankFlag;
     String bar;
 
     private JSONParser jsonParser = new JSONParser();
@@ -100,6 +101,8 @@ public class TagStatusActivity extends Activity {
         }
 
         context = this;
+
+        rankFlag = getIntent().getIntExtra("rankFlag",0);
 
         title = (TextView) findViewById(R.id.status_titleTextView);
         author = (TextView) findViewById(R.id.status_authorTextView);
@@ -311,38 +314,48 @@ public class TagStatusActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
 
-            if (result != null)
-            {
-                String type = result.substring(0,2);
+            if (result != null) {
+                String type = result.substring(0, 2);
                 //int row = Integer.parseInt(result.substring(2,4));
 
-                if(type.equals("BK"))
-                {
-                    super.onPostExecute(result);
-                    bookLayout.setVisibility(View.VISIBLE);
-                    shelfLayout.setVisibility(View.INVISIBLE);
-                    userLayout.setVisibility(View.INVISIBLE);
-                    new GetBookDetails().execute();
-                    bar=result.substring(2);
+                if (rankFlag == 0) {
+
+                    if (type.equals("BK")) {
+                        super.onPostExecute(result);
+                        bookLayout.setVisibility(View.VISIBLE);
+                        shelfLayout.setVisibility(View.INVISIBLE);
+                        userLayout.setVisibility(View.INVISIBLE);
+                        new GetBookDetails().execute();
+                        bar = result.substring(2);
+                    } else if (type.equals("SH")) {
+                        super.onPostExecute(result);
+                        shelfLayout.setVisibility(View.VISIBLE);
+                        bookLayout.setVisibility(View.INVISIBLE);
+                        userLayout.setVisibility(View.INVISIBLE);
+                        new GetShelfDetails().execute();
+                        bar = result.substring(2);
+                    } else if (type.equals("LB") || type.equals("ST")) {
+                        super.onPostExecute(result);
+                        userLayout.setVisibility(View.VISIBLE);
+                        bookLayout.setVisibility(View.INVISIBLE);
+                        shelfLayout.setVisibility(View.INVISIBLE);
+                        new GetUserDetails().execute();
+                        bar = result.substring(2);
+                    } else Toast.makeText(context, "Please Scan a Book/Shelf/User Tag Only", Toast.LENGTH_SHORT).show();
                 }
-                else if(type.equals("SH")){
-                    super.onPostExecute(result);
-                    shelfLayout.setVisibility(View.VISIBLE);
-                    bookLayout.setVisibility(View.INVISIBLE);
-                    userLayout.setVisibility(View.INVISIBLE);
-                    new GetShelfDetails().execute();
-                    bar=result.substring(2);
+                else if (rankFlag==1){
+                    if (type.equals("BK")) {
+                        super.onPostExecute(result);
+                        bookLayout.setVisibility(View.VISIBLE);
+                        shelfLayout.setVisibility(View.INVISIBLE);
+                        userLayout.setVisibility(View.INVISIBLE);
+                        new GetBookDetails().execute();
+                        bar = result.substring(2);
+                    }
+                    else Toast.makeText(context, "Please Scan a Book Tag Only", Toast.LENGTH_SHORT).show();
+
                 }
-                else if(type.equals("LB") || type.equals("ST"))
-                {
-                    super.onPostExecute(result);
-                    userLayout.setVisibility(View.VISIBLE);
-                    bookLayout.setVisibility(View.INVISIBLE);
-                    shelfLayout.setVisibility(View.INVISIBLE);
-                    new GetUserDetails().execute();
-                    bar=result.substring(2);
-                }
-                else Toast.makeText(context,"Please Scan a Book/Shelf/User Tag Only", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -391,7 +404,7 @@ public class TagStatusActivity extends Activity {
                                 year.setText(product.getString("year"));
                                 shelf.setText(product.getString("shelfD"));
                                 barcode.setText(product.getString("barcode"));
-                                location.setText("Shelf: "+product.getString("shelfT")+", Sector: "+product.getString("sectorT")+", Stand: "+product.getString("standT"));
+                                location.setText("Shelf: "+product.getString("shelfT")+", Sector: "+product.getString("sectorT")+", Stand: "+(Integer.parseInt(product.getString("standT"))+1));
                                 //status.setText(product.getString("status"));
                                 if(product.getString("status").equals("ok")) {
                                     status.setText("Book exists on shelf");

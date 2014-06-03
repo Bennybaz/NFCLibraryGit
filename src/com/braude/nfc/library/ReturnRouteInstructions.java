@@ -84,7 +84,7 @@ public class ReturnRouteInstructions extends Activity {
                     TextView shelff = (TextView) findViewById(R.id.return_textShelf);
 
                     // fill according to bookcase location
-                    if (pos[position][2] == 1 || pos[position][2] == 2) bookCase.setText("First BookCase on the left");
+                    /*if (pos[position][2] == 1 || pos[position][2] == 2) bookCase.setText("First BookCase on the left");
                     if (pos[position][2] == 3 || pos[position][2] == 4) bookCase.setText("Second BookCase on the left");
                     if (pos[position][2] == 5 || pos[position][2] == 6) bookCase.setText("Third BookCase on the left");
                     if (pos[position][2] == 7 || pos[position][2] == 8) bookCase.setText("Fourth BookCase on the left");
@@ -102,7 +102,32 @@ public class ReturnRouteInstructions extends Activity {
                     if (pos[position][2] == 21 || pos[position][2] == 22)
                         bookCase.setText("Fifth BookCase on the right");
                     if (pos[position][2] == 23 || pos[position][2] == 24)
-                        bookCase.setText("Sixth BookCase on the right");
+                        bookCase.setText("Sixth BookCase on the right");*/
+
+                    if(pos[position][2]==1) bookCase.setText("BookCase #2");
+                    if(pos[position][2]==2) bookCase.setText("BookCase #3");
+                    if(pos[position][2]==3) bookCase.setText("BookCase #4");
+                    if(pos[position][2]==4) bookCase.setText("BookCase #5");
+                    if(pos[position][2]==5) bookCase.setText("BookCase #6");
+                    if(pos[position][2]==6) bookCase.setText("BookCase #7");
+                    if(pos[position][2]==7) bookCase.setText("BookCase #8");
+                    if(pos[position][2]==8) bookCase.setText("BookCase #9");
+                    if(pos[position][2]==9) bookCase.setText("BookCase #10");
+                    if(pos[position][2]==10) bookCase.setText("BookCase #11");
+                    if(pos[position][2]==11) bookCase.setText("BookCase #13");
+                    if(pos[position][2]==12) bookCase.setText("BookCase #14");
+                    if(pos[position][2]==13) bookCase.setText("BookCase #33");
+                    if(pos[position][2]==14) bookCase.setText("BookCase #34");
+                    if(pos[position][2]==15) bookCase.setText("BookCase #35");
+                    if(pos[position][2]==16) bookCase.setText("BookCase #36");
+                    if(pos[position][2]==17) bookCase.setText("BookCase #37");
+                    if(pos[position][2]==18) bookCase.setText("BookCase #38");
+                    if(pos[position][2]==19) bookCase.setText("BookCase #39");
+                    if(pos[position][2]==20) bookCase.setText("BookCase #40");
+                    if(pos[position][2]==21) bookCase.setText("BookCase #41");
+                    if(pos[position][2]==22) bookCase.setText("BookCase #42");
+                    if(pos[position][2]==23) bookCase.setText("BookCase #43");
+                    if(pos[position][2]==24) bookCase.setText("BookCase #44");
 
 
                     if (pos[position][0] == 1) shelff.setText("Top Shelf");
@@ -165,7 +190,7 @@ public class ReturnRouteInstructions extends Activity {
                     TextView shelff = (TextView) findViewById(R.id.return_textShelf);
 
                     // fill according to bookcase location
-                    if(pos[currentStep][2]==1 || pos[currentStep][2]==2) bookCase.setText("First BookCase on the left");
+                    /*if(pos[currentStep][2]==1 || pos[currentStep][2]==2) bookCase.setText("First BookCase on the left");
                     if(pos[currentStep][2]==3 || pos[currentStep][2]==4) bookCase.setText("Second BookCase on the left");
                     if(pos[currentStep][2]==5 || pos[currentStep][2]==6) bookCase.setText("Third BookCase on the left");
                     if(pos[currentStep][2]==7 || pos[currentStep][2]==8) bookCase.setText("Fourth BookCase on the left");
@@ -176,7 +201,32 @@ public class ReturnRouteInstructions extends Activity {
                     if(pos[currentStep][2]==17 || pos[currentStep][2]==18) bookCase.setText("Third BookCase on the right");
                     if(pos[currentStep][2]==19 || pos[currentStep][2]==20) bookCase.setText("Fourth BookCase on the right");
                     if(pos[currentStep][2]==21 || pos[currentStep][2]==22) bookCase.setText("Fifth BookCase on the right");
-                    if(pos[currentStep][2]==23 || pos[currentStep][2]==24) bookCase.setText("Sixth BookCase on the right");
+                    if(pos[currentStep][2]==23 || pos[currentStep][2]==24) bookCase.setText("Sixth BookCase on the right");*/
+
+                    if(pos[currentStep][2]==1) bookCase.setText("BookCase #2");
+                    if(pos[currentStep][2]==2) bookCase.setText("BookCase #3");
+                    if(pos[currentStep][2]==3) bookCase.setText("BookCase #4");
+                    if(pos[currentStep][2]==4) bookCase.setText("BookCase #5");
+                    if(pos[currentStep][2]==5) bookCase.setText("BookCase #6");
+                    if(pos[currentStep][2]==6) bookCase.setText("BookCase #7");
+                    if(pos[currentStep][2]==7) bookCase.setText("BookCase #8");
+                    if(pos[currentStep][2]==8) bookCase.setText("BookCase #9");
+                    if(pos[currentStep][2]==9) bookCase.setText("BookCase #10");
+                    if(pos[currentStep][2]==10) bookCase.setText("BookCase #11");
+                    if(pos[currentStep][2]==11) bookCase.setText("BookCase #13");
+                    if(pos[currentStep][2]==12) bookCase.setText("BookCase #14");
+                    if(pos[currentStep][2]==13) bookCase.setText("BookCase #33");
+                    if(pos[currentStep][2]==14) bookCase.setText("BookCase #34");
+                    if(pos[currentStep][2]==15) bookCase.setText("BookCase #35");
+                    if(pos[currentStep][2]==16) bookCase.setText("BookCase #36");
+                    if(pos[currentStep][2]==17) bookCase.setText("BookCase #37");
+                    if(pos[currentStep][2]==18) bookCase.setText("BookCase #38");
+                    if(pos[currentStep][2]==19) bookCase.setText("BookCase #39");
+                    if(pos[currentStep][2]==20) bookCase.setText("BookCase #40");
+                    if(pos[currentStep][2]==21) bookCase.setText("BookCase #41");
+                    if(pos[currentStep][2]==22) bookCase.setText("BookCase #42");
+                    if(pos[currentStep][2]==23) bookCase.setText("BookCase #43");
+                    if(pos[currentStep][2]==24) bookCase.setText("BookCase #44");
 
 
                     if(pos[currentStep][0]==1) shelff.setText("Top Shelf");

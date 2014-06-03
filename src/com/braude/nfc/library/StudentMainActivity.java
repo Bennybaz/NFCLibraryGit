@@ -29,6 +29,7 @@ public class StudentMainActivity extends Activity {
     private Button searchBtn;
     private Button borrowBtn;
     private Button cartBtn;
+    private Button infoBtn;
     private TextView greeting;
     private String studentID;
     private Context context;
@@ -58,6 +59,7 @@ public class StudentMainActivity extends Activity {
         searchBtn = (Button) findViewById(R.id.searchBtn);
         borrowBtn = (Button) findViewById(R.id.readerBorrowBtn);
         cartBtn = (Button) findViewById(R.id.cartBtn);
+        infoBtn = (Button) findViewById(R.id.infoBtn);
         greeting = (TextView) findViewById(R.id.greetText);
 
         //get the student id
@@ -99,6 +101,17 @@ public class StudentMainActivity extends Activity {
                 intent.putExtra("ID", studentID);
                 startActivity(intent);
             }
+        });
+
+        infoBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(context, TagStatusActivity.class);
+                intent.putExtra("rankFlag", 1);
+                startActivity(intent);
+            }
+
         });
     }
 
