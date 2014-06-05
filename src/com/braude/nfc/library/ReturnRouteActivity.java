@@ -107,7 +107,7 @@ public class ReturnRouteActivity extends Activity {
 
                 if(simulationFlag==0)
                 {
-                    new GetBookSectorForSimulation().execute();
+                    new GetBookSectorForSimulation2().execute();
                     simulationFlag=1;
                 }
                 else Toast.makeText(context,"Simulation is already running",Toast.LENGTH_SHORT).show();
@@ -831,6 +831,151 @@ public class ReturnRouteActivity extends Activity {
 
     }
 
+
+    class GetBookSectorForSimulation2 extends AsyncTask<String, String, String> {
+
+        /**
+         * Getting product details in background thread
+         * */
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    ArrayList<String> simBarcode = new ArrayList<String>();
+                    Integer sectorForAlg;
+                    ArrayList<String> tempBar;
+
+                    simBarcode.add("1568-20");
+                    ///////////
+                    barcode="1568-20";
+                    shelf = 4;
+                    sector = 1;
+                    stand = 1;
+                    sectorForAlg = (stand-1)*4+sector;
+                    fixedPos = sectorForAlg+shelf*0.1;
+                    if(!sectors.contains(sectorForAlg)) {
+                        sectors.add(sectorForAlg);
+                    }
+                    tempBar = barcodeSector.get(fixedPos);
+                    if(tempBar == null)
+                        tempBar = new ArrayList<String>();
+                    tempBar.add(barcode);
+                    barcodeSector.put(fixedPos,tempBar);
+                    Book bk = new Book();
+                    bk.setBarcode(barcode);
+                    bk.setName("The C++ programming language");
+                    bk.setAuthor("Stroustrup, Bjarne");
+                    bk.setFixedPosition(fixedPos);
+                    for(int j=0; j<b.size(); j++) {
+                        if(b.get(j).getBarcode().equals(barcode))
+                            flag=1;
+                        break;
+                    }
+                    if(flag==0) {
+                        b.add(bk);
+                        adapter.notifyDataSetChanged();
+                    }
+                    ///////////
+                    simBarcode.add("624-10");
+                    barcode="624-10";
+                    shelf = 5;
+                    sector = 4;
+                    stand = 3;
+                    sectorForAlg = (stand-1)*4+sector;
+                    fixedPos = sectorForAlg+shelf*0.1;
+                    if(!sectors.contains(sectorForAlg)) {
+                        sectors.add(sectorForAlg);
+                    }
+                    tempBar = barcodeSector.get(fixedPos);
+                    if(tempBar == null)
+                        tempBar = new ArrayList<String>();
+                    tempBar.add(barcode);
+                    barcodeSector.put(fixedPos,tempBar);
+                    Book bk1 = new Book();
+                    bk1.setBarcode(barcode);
+                    bk1.setName("C programmers guide to serial communications");
+                    bk1.setAuthor("Campbell, Joe");
+                    bk1.setFixedPosition(fixedPos);
+                    for(int j=0; j<b.size(); j++) {
+                        if(b.get(j).getBarcode().equals(barcode))
+                            flag=1;
+                        break;
+                    }
+                    if(flag==0) {
+                        b.add(bk1);
+                        adapter.notifyDataSetChanged();
+                    }
+                    //////////
+                    simBarcode.add("1298-10");
+                    barcode="1298-10";
+                    shelf = 5;
+                    sector = 2;
+                    stand = 2;
+                    sectorForAlg = (stand-1)*4+sector;
+                    fixedPos = sectorForAlg+shelf*0.1;
+                    if(!sectors.contains(sectorForAlg)) {
+                        sectors.add(sectorForAlg);
+                    }
+                    tempBar = barcodeSector.get(fixedPos);
+                    if(tempBar == null)
+                        tempBar = new ArrayList<String>();
+                    tempBar.add(barcode);
+                    barcodeSector.put(fixedPos,tempBar);
+                    Book bk2 = new Book();
+                    bk2.setBarcode(barcode);
+                    bk2.setName("Problem-Solving principles programming with Pascal...");
+                    bk2.setAuthor("Prather, Ronald E.");
+                    bk2.setFixedPosition(fixedPos);
+                    for(int j=0; j<b.size(); j++) {
+                        if(b.get(j).getBarcode().equals(barcode))
+                            flag=1;
+                        break;
+                    }
+                    if(flag==0) {
+                        b.add(bk2);
+                        adapter.notifyDataSetChanged();
+                    }
+                    ////////////
+                    simBarcode.add("7249-20");
+                    barcode="7249-20";
+                    shelf = 1;
+                    sector = 1;
+                    stand = 2;
+                    sectorForAlg = (stand-1)*4+sector;
+                    fixedPos = sectorForAlg+shelf*0.1;
+                    if(!sectors.contains(sectorForAlg)) {
+                        sectors.add(sectorForAlg);
+                    }
+                    tempBar = barcodeSector.get(fixedPos);
+                    if(tempBar == null)
+                        tempBar = new ArrayList<String>();
+                    tempBar.add(barcode);
+                    barcodeSector.put(fixedPos,tempBar);
+                    Book bk3 = new Book();
+                    bk3.setBarcode(barcode);
+                    bk3.setName("Microprocessor pocket book");
+                    bk3.setAuthor("Money, Steve A.");
+                    bk3.setFixedPosition(fixedPos);
+                    for(int j=0; j<b.size(); j++) {
+                        if(b.get(j).getBarcode().equals(barcode))
+                            flag=1;
+                        break;
+                    }
+                    if(flag==0) {
+                        b.add(bk3);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            });
+
+            return null;
+        }
+
+
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)

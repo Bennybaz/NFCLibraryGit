@@ -404,7 +404,36 @@ public class TagStatusActivity extends Activity {
                                 year.setText(product.getString("year"));
                                 shelf.setText(product.getString("shelfD"));
                                 barcode.setText(product.getString("barcode"));
-                                location.setText("Shelf: "+product.getString("shelfT")+", Sector: "+product.getString("sectorT")+", Stand: "+(Integer.parseInt(product.getString("standT"))+1));
+
+                                int standd = product.getInt("standT");
+                                String bc=new String();
+
+                                if(standd==1) bc="2";
+                                if(standd==2) bc="3";
+                                if(standd==3) bc="4";
+                                if(standd==4) bc="5";
+                                if(standd==5) bc="6";
+                                if(standd==6) bc="7";
+                                if(standd==7) bc="8";
+                                if(standd==8) bc="9";
+                                if(standd==9) bc="10";
+                                if(standd==10) bc="11";
+                                if(standd==11) bc="13";
+                                if(standd==12) bc="14";
+                                if(standd==13) bc="33";
+                                if(standd==14) bc="34";
+                                if(standd==15) bc="35";
+                                if(standd==16) bc="36";
+                                if(standd==17) bc="37";
+                                if(standd==18) bc="38";
+                                if(standd==19) bc="39";
+                                if(standd==20) bc="40";
+                                if(standd==21) bc="41";
+                                if(standd==22) bc="42";
+                                if(standd==23) bc="43";
+                                if(standd==24) bc="44";
+
+                                location.setText("Shelf: "+product.getString("shelfT")+", Sector: "+product.getString("sectorT")+", Stand: "+bc);
                                 //status.setText(product.getString("status"));
                                 if(product.getString("status").equals("ok")) {
                                     status.setText("Book exists on shelf");
