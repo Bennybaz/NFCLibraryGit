@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -307,12 +308,13 @@ public class ShelfManagementActivity extends Activity {
 
                         barcode = result.substring(2);
 
+                        int flagg=0;
+                        for(int i=0; i<scannedBooks.size(); i++) {
+                            if (scannedBooks.get(i).getBarcode().equals(barcode)) flagg = 1;
+                        }
 
-                        // Getting complete user details in background thread
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                            new GetBookBarcode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        else
-                            new GetBookBarcode().execute();
+                        if(flagg==1) Toast.makeText(context, "Book Already Exists", Toast.LENGTH_SHORT).show();
+                        else new GetBookBarcode().execute();
                     }
                     Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
                 }
@@ -366,6 +368,7 @@ public class ShelfManagementActivity extends Activity {
                                 bk.setBarcode(barcode);
                                 bk.setName(product.getString("title"));
                                 bk.setAuthor(product.getString("author"));
+
                                 scannedBooks.add(bk);
                                 adapter.notifyDataSetChanged();
 
@@ -548,5 +551,17 @@ public class ShelfManagementActivity extends Activity {
 
             return null;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            scannedBooks.clear();
+            shelfBooks.clear();
+            adapter.notifyDataSetChanged();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

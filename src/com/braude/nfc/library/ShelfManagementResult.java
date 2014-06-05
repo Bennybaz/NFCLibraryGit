@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -64,5 +65,16 @@ public class ShelfManagementResult extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            notRelatedBooks.clear();
+            adapter.notifyDataSetChanged();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

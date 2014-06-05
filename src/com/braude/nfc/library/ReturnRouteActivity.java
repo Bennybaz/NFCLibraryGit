@@ -650,19 +650,34 @@ public class ReturnRouteActivity extends Activity {
 
                     ArrayList<Book> unsorted = new ArrayList<Book>(b);
 
-                    for(int j=0; j<sorted.size(); j++)
-                    {
-                        int bookPos = bookPosInScannedBooks(sorted.get(j).getBarcode(), unsorted);
-                        if(bookPos==-1)
-                            Toast.makeText(context,"Sorting Error",Toast.LENGTH_SHORT).show();
-                        String msg = new String("Put Book #"+(bookPos+1)+" in position #"+(j+1)+" of the sorted pile");
-                        sortCommands.add(msg);
-                    }
+                    int sameSectorFlag=0;
 
-                    Intent intent = new Intent(ReturnRouteActivity.this, SortedList.class);
-                    intent.putParcelableArrayListExtra("books",sorted);
-                    intent.putStringArrayListExtra("srtCmd", sortCommands);
-                    startActivity(intent);
+                    for(int j=0; j<b.size()-1; j++)
+                        if(b.get(j).getFixedPosition()!=b.get(j+1).getFixedPosition())
+                            sameSectorFlag=1;
+
+                    if(sameSectorFlag==1)
+                    {
+                        for(int j=0; j<sorted.size(); j++)
+                        {
+                            int bookPos = bookPosInScannedBooks(sorted.get(j).getBarcode(), unsorted);
+                            if(bookPos==-1)
+                                Toast.makeText(context,"Sorting Error",Toast.LENGTH_SHORT).show();
+                            String msg = new String("Put Book #"+(bookPos+1)+" in position #"+(j+1)+" of the sorted pile");
+                            sortCommands.add(msg);
+                        }
+
+                        Intent intent = new Intent(ReturnRouteActivity.this, SortedList.class);
+                        intent.putParcelableArrayListExtra("books",sorted);
+                        intent.putStringArrayListExtra("srtCmd", sortCommands);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(ReturnRouteActivity.this, ReturnRouteInstructions.class);
+                        intent.putParcelableArrayListExtra("books",sorted);
+                        startActivity(intent);
+                    }
                 }
 
             });
