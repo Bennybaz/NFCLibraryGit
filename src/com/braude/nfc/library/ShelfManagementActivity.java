@@ -131,6 +131,10 @@ public class ShelfManagementActivity extends Activity {
 		 * an IllegalStateException is thrown.
 		 */
         setupForegroundDispatch(this, mNfcAdapter);
+
+        scannedBooks.clear();
+        shelfBooks.clear();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -316,7 +320,7 @@ public class ShelfManagementActivity extends Activity {
                         if(flagg==1) Toast.makeText(context, "Book Already Exists", Toast.LENGTH_SHORT).show();
                         else new GetBookBarcode().execute();
                     }
-                    Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
                 }
                 else if(type.equals("SH")){
                     shelfFlag=1;
@@ -565,4 +569,5 @@ public class ShelfManagementActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }
