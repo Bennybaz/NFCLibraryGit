@@ -45,6 +45,7 @@ public class ReturnRouteInstructions extends Activity {
     ListView lv;
     ArrayAdapter<String> adapter;
     ArrayList<String> steps = new ArrayList<String>();
+    int sameFlag;
 
     public void onCreate(Bundle savedInstanceState) {
         context = this;
@@ -54,14 +55,20 @@ public class ReturnRouteInstructions extends Activity {
         setContentView(R.layout.return_instructions);
         books =  getIntent().getParcelableArrayListExtra("books"); //get the books from previous intent
         pos=new int[books.size()][3];
+        sameFlag = getIntent().getIntExtra("sameFlag", 0);
 
         new GetBookSector().execute();
 
         lv = (ListView) findViewById(R.id.return_sort_steps);
 
         //build the step array for list view
-        for(int i=0;i<books.size(); i++)
-            steps.add("Step "+(i+1));
+        if(sameFlag==1)
+        {
+            for(int i=0;i<books.size(); i++)
+                steps.add("Step "+(i+1));
+        }
+        else
+            steps.add("Step 1");
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, steps);
 
@@ -157,7 +164,7 @@ public class ReturnRouteInstructions extends Activity {
                     nextStepBtn.setVisibility(View.VISIBLE);
                 }
 
-                if(books.size()==1)
+                if(books.size()==1 || sameFlag==0)
                 {
                     nextStepBtn.setVisibility(View.GONE);
                     returnRouteBtn.setVisibility(View.VISIBLE);

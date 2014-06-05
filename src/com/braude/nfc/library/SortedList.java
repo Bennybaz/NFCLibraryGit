@@ -27,6 +27,7 @@ public class SortedList extends Activity {
     Context context;
     ListView lv;
     ArrayAdapter<String> adapter;
+    int sameFlag;
 
     public void onCreate(Bundle savedInstanceState) {
         context = this;
@@ -36,6 +37,7 @@ public class SortedList extends Activity {
         setContentView(R.layout.sort_books_activity);
         books =  getIntent().getParcelableArrayListExtra("books");
         sortedCommands = getIntent().getStringArrayListExtra("srtCmd");
+        sameFlag = getIntent().getIntExtra("sameFlag", 0);
 
 
         lv = (ListView) findViewById(R.id.sort_steps);
@@ -96,6 +98,7 @@ public class SortedList extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(SortedList.this, ReturnRouteInstructions.class);
                 intent.putParcelableArrayListExtra("books",books);
+                intent.putExtra("SameFlag", sameFlag);
                 startActivity(intent);
             }
         });

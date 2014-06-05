@@ -653,8 +653,12 @@ public class ReturnRouteActivity extends Activity {
                     int sameSectorFlag=0;
 
                     for(int j=0; j<b.size()-1; j++)
-                        if(b.get(j).getFixedPosition()!=b.get(j+1).getFixedPosition())
+                    {
+                        int num1=(int) b.get(j).getFixedPosition().doubleValue();
+                        int num2=(int) b.get(j+1).getFixedPosition().doubleValue();
+                        if(num1!=num2)
                             sameSectorFlag=1;
+                    }
 
                     if(sameSectorFlag==1)
                     {
@@ -670,12 +674,14 @@ public class ReturnRouteActivity extends Activity {
                         Intent intent = new Intent(ReturnRouteActivity.this, SortedList.class);
                         intent.putParcelableArrayListExtra("books",sorted);
                         intent.putStringArrayListExtra("srtCmd", sortCommands);
+                        intent.putExtra("SameFlag", sameSectorFlag);
                         startActivity(intent);
                     }
                     else
                     {
                         Intent intent = new Intent(ReturnRouteActivity.this, ReturnRouteInstructions.class);
                         intent.putParcelableArrayListExtra("books",sorted);
+                        intent.putExtra("SameFlag", sameSectorFlag);
                         startActivity(intent);
                     }
                 }
