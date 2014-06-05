@@ -67,6 +67,7 @@ public class ShelfManagementResult extends Activity {
         });
     }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {

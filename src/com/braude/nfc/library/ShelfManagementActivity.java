@@ -553,6 +553,7 @@ public class ShelfManagementActivity extends Activity {
         }
     }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
