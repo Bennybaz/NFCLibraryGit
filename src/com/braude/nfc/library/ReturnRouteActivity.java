@@ -2,6 +2,7 @@ package com.braude.nfc.library;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -48,6 +49,7 @@ public class ReturnRouteActivity extends Activity {
     ArrayList<Integer> optimumRoute = new ArrayList<Integer>();
     HashMap<Double, ArrayList<String>> barcodeSector = new HashMap<Double, ArrayList<String>>(); //added for sorting
     ArrayList<Book> sorted = new ArrayList<Book>();
+    ProgressDialog pDialog;
 
     ArrayList<String> sortCommands = new ArrayList<String>();
 
@@ -569,10 +571,14 @@ public class ReturnRouteActivity extends Activity {
 
     class GetBookBarcodeSorted extends AsyncTask<String, String, String> {
 
+
+
         /**
          * Getting product details in background thread
          * */
         protected String doInBackground(String... params) {
+
+
 
             // updating UI from Background Thread
             runOnUiThread(new Runnable() {
@@ -674,6 +680,7 @@ public class ReturnRouteActivity extends Activity {
                         Intent intent = new Intent(ReturnRouteActivity.this, SortedList.class);
                         intent.putParcelableArrayListExtra("books",sorted);
                         intent.putStringArrayListExtra("srtCmd", sortCommands);
+
                         intent.putExtra("SameFlag", sameSectorFlag);
                         startActivity(intent);
                     }
@@ -681,15 +688,17 @@ public class ReturnRouteActivity extends Activity {
                     {
                         Intent intent = new Intent(ReturnRouteActivity.this, ReturnRouteInstructions.class);
                         intent.putParcelableArrayListExtra("books",sorted);
+
                         intent.putExtra("SameFlag", sameSectorFlag);
                         startActivity(intent);
                     }
                 }
 
             });
-
             return null;
         }
+
+
     }
 
 
@@ -818,6 +827,8 @@ public class ReturnRouteActivity extends Activity {
 
             return null;
         }
+
+
     }
 
 

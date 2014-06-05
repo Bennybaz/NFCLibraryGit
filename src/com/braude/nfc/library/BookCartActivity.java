@@ -487,7 +487,7 @@ public class BookCartActivity extends Activity {
             TextView textView2 = (TextView) rowView.findViewById(R.id.baseline);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.item_image_right);
             textView1.setText(values.get(position).getName());
-            textView2.setText(values.get(position).getAuthor());
+            textView2.setText(values.get(position).getAuthor()+", Barcode:"+values.get(position).getBarcode());
             imageView.setImageResource(R.drawable.remove_icon);
             imageView.setFocusable(false);
             imageView.setFocusableInTouchMode(false);

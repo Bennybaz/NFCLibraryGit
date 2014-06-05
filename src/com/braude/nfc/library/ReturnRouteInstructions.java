@@ -55,7 +55,9 @@ public class ReturnRouteInstructions extends Activity {
         setContentView(R.layout.return_instructions);
         books =  getIntent().getParcelableArrayListExtra("books"); //get the books from previous intent
         pos=new int[books.size()][3];
-        sameFlag = getIntent().getIntExtra("sameFlag", 0);
+
+
+        sameFlag = getIntent().getIntExtra("SameFlag", 0);
 
         new GetBookSector().execute();
 
@@ -67,7 +69,7 @@ public class ReturnRouteInstructions extends Activity {
             for(int i=0;i<books.size(); i++)
                 steps.add("Step "+(i+1));
         }
-        else
+        else if(sameFlag==0)
             steps.add("Step 1");
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, steps);
@@ -158,7 +160,10 @@ public class ReturnRouteInstructions extends Activity {
                         if (pos[position][1] == 4) image.setImageResource(R.drawable.sector_four);
                     }
 
-                    tv.setText(books.get(position).getBarcode() + "");
+                    if(sameFlag==1)
+                        tv.setText("Place First Book Here:");
+                    if(sameFlag==0)
+                        tv.setText("Place All the Book Here:");
                     enableClick = false;
                     lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     nextStepBtn.setVisibility(View.VISIBLE);
@@ -258,7 +263,10 @@ public class ReturnRouteInstructions extends Activity {
                         if(pos[currentStep][1]==4) image.setImageResource(R.drawable.sector_four);
                     }
 
-                    tv.setText(books.get(currentStep).getBarcode()+"");
+                    if(sameFlag==1)
+                        tv.setText("Place First Book Here:");
+                    if(sameFlag==0)
+                        tv.setText("Place All the Book Here:");
                 }
             }
         });
