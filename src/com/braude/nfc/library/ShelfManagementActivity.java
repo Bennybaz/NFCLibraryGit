@@ -131,10 +131,6 @@ public class ShelfManagementActivity extends Activity {
 		 * an IllegalStateException is thrown.
 		 */
         setupForegroundDispatch(this, mNfcAdapter);
-
-        scannedBooks.clear();
-        shelfBooks.clear();
-        adapter.notifyDataSetChanged();
     }
 
     @Override
