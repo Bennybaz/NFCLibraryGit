@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="5dp"
+              android:background="@color/abackground" >
+
+
+    <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView">
+        <LinearLayout android:layout_width="match_parent" android:orientation="vertical"
+                      android:padding="5dp" android:layout_height="match_parent">
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Book Return"
+                      android:textStyle="bold"
+                      android:textSize="20dp"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="5dp"
+                      android:text="1. Scan all the books intended for return.\n2. Press Sort button and start the sorting procedure. \n3. When finished sorting proceed to Return Route. \n4. Follow return route instructions."
+                      android:textSize="18dp" />
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Manage Tags"
+                      android:layout_marginTop="15dp"
+                      android:textStyle="bold"
+                      android:textSize="20dp"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="5dp"
+                      android:text="1. Choose type of new Tag.\n2. Enter code. \n3. Click the ''Write'' Button. \n4. Scan the NFC Tag to write."
+                      android:textSize="18dp" />
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Assign Books To Shelf"
+                      android:layout_marginTop="15dp"
+                      android:textStyle="bold"
+                      android:textSize="20dp"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="5dp"
+                      android:text="1. Scan a Shelf Tag.\n2. Scan the books' Tags. \n3. Click the 'Assign Books To Shelf' Button."
+                      android:textSize="18dp" />
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Shelf Management"
+                      android:layout_marginTop="15dp"
+                      android:textStyle="bold"
+                      android:textSize="20dp"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="5dp"
+                      android:text="1. Scan a Shelf Tag.\n2. Scan the books' Tags. \n3. Click the 'Manage Shelf' Button."
+                      android:textSize="18dp" />
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="Tag Status"
+                      android:layout_marginTop="15dp"
+                      android:textStyle="bold"
+                      android:textSize="20dp"/>
+
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="5dp"
+                      android:text="1. Scan any NFC Tag.\n2. View the tag's information."
+                      android:textSize="18dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

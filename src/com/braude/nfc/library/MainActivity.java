@@ -286,6 +286,9 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
+            case R.id.menu_help:
+                this.startActivityForResult(new Intent((Context)(this), (Class)(HelpActivity.class)),1);
+                return true;
             case R.id.menu_about:
                 this.startActivityForResult(new Intent((Context)(this), (Class)(AboutActivity.class)),1);
                 return true;

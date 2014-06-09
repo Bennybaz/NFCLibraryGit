@@ -84,6 +84,7 @@
         </activity>
         <activity android:name=".CopyListActivity" android:parentActivityName=".SearchResultsActivity"/>
         <activity android:name=".SortedList" android:parentActivityName=".ReturnRouteActivity"/>
+        <activity android:name=".HelpActivity"></activity>
         <activity android:name=".ReturnRouteInstructions" android:parentActivityName=".SortedList"/>
         <activity android:name=".ShelfManagementActivity" android:parentActivityName=".ManageInventoryActivity"/>
         <activity android:name=".ShelfManagementResult" android:parentActivityName=".ShelfManagementActivity"/>
