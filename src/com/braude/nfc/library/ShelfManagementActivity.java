@@ -322,8 +322,8 @@ public class ShelfManagementActivity extends Activity {
                     shelfFlag=1;
                     super.onPostExecute(result);
                     shelfText.setText(result.substring(2));
-                    lv.setVisibility(1);
-                    shelfManage.setVisibility(1);
+                    lv.setVisibility(View.VISIBLE);
+                    shelfManage.setVisibility(View.VISIBLE);
                 }
                 else Toast.makeText(context,"Please Scan a Book/Shelf Tag Only", Toast.LENGTH_SHORT).show();
             }
@@ -371,6 +371,14 @@ public class ShelfManagementActivity extends Activity {
 
                                 scannedBooks.add(bk);
                                 adapter.notifyDataSetChanged();
+
+                                lv.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Select the last row so it will scroll into view...
+                                        lv.setSelection(lv.getCount() - 1);
+                                    }
+                                });
 
                             } else {
                                 // product with pid not found

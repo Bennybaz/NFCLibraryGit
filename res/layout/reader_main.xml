@@ -37,7 +37,7 @@
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/bookBorrow"
+            android:text="Checkout"
             android:id="@+id/readerBorrowBtn"
             android:gravity="center"
             android:padding="5dp"

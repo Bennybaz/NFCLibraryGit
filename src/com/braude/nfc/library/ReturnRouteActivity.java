@@ -491,6 +491,13 @@ public class ReturnRouteActivity extends Activity {
                                             if(flag==0) {
                                                 b.add(bk);
                                                 adapter.notifyDataSetChanged();
+                                                lv.post(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        // Select the last row so it will scroll into view...
+                                                        lv.setSelection(lv.getCount() - 1);
+                                                    }
+                                                });
                                             }
                                             else Toast.makeText(context,"Book Already Exists", Toast.LENGTH_SHORT).show();
 

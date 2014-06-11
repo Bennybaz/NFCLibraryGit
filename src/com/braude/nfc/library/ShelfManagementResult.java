@@ -82,6 +82,7 @@ public class ShelfManagementResult extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(ShelfManagementResult.this, ShelfManagementActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
