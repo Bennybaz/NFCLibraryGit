@@ -11,6 +11,7 @@ import android.nfc.*;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -185,6 +186,10 @@ public class AddNewBook extends Activity{
 
     @Override
     protected void onNewIntent(Intent intent){
+
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        v.vibrate(300);
         if(writeBtnClicked==1) {
             if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
                 mytag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -256,7 +261,6 @@ public class AddNewBook extends Activity{
                     try{
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
                         params.add(new BasicNameValuePair("barcode", message.getText().toString()));
-                        Toast.makeText(ctx, message.getText().toString(), Toast.LENGTH_LONG).show();
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request
                         JSONObject json = jsonParser.makeHttpRequest(

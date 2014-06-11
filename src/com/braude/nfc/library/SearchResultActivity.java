@@ -11,10 +11,7 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.StrictMode;
+import android.os.*;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -392,6 +389,10 @@ public class SearchResultActivity extends Activity{
 
         @Override
         protected void onPostExecute(String result) {
+
+            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            // Vibrate for 500 milliseconds
+            v.vibrate(300);
 
             if (borrowBtnClicked == 1) {
                 if (result != null) {

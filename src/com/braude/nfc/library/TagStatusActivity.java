@@ -10,10 +10,7 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.StrictMode;
+import android.os.*;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -314,6 +311,10 @@ public class TagStatusActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
 
+            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            // Vibrate for 500 milliseconds
+            v.vibrate(300);
+
             if (result != null) {
                 String type = result.substring(0, 2);
                 //int row = Integer.parseInt(result.substring(2,4));
@@ -497,10 +498,38 @@ public class TagStatusActivity extends Activity {
 
                                 //set the shelf details
 
+                                int standd = product.getInt("stand");
+                                String bc=new String();
+
+                                if(standd==1) bc="2";
+                                if(standd==2) bc="3";
+                                if(standd==3) bc="4";
+                                if(standd==4) bc="5";
+                                if(standd==5) bc="6";
+                                if(standd==6) bc="7";
+                                if(standd==7) bc="8";
+                                if(standd==8) bc="9";
+                                if(standd==9) bc="10";
+                                if(standd==10) bc="11";
+                                if(standd==11) bc="13";
+                                if(standd==12) bc="14";
+                                if(standd==13) bc="33";
+                                if(standd==14) bc="34";
+                                if(standd==15) bc="35";
+                                if(standd==16) bc="36";
+                                if(standd==17) bc="37";
+                                if(standd==18) bc="38";
+                                if(standd==19) bc="39";
+                                if(standd==20) bc="40";
+                                if(standd==21) bc="41";
+                                if(standd==22) bc="42";
+                                if(standd==23) bc="43";
+                                if(standd==24) bc="44";
+
                                 tagCode.setText(bar);
                                 shelfT.setText(product.getString("shelf"));
                                 sectorT.setText(product.getString("sector"));
-                                caseT.setText(product.getString("stand"));
+                                caseT.setText(bc.toString());
 
                             } else {
                                 Toast.makeText(context, "Error: No Shelf Details", Toast.LENGTH_SHORT).show();
