@@ -445,7 +445,7 @@ public class TagStatusActivity extends Activity {
                                 }
 
                             } else {
-                                Toast.makeText(context, "Error: No Book Details ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Error: Missing Data About The Book", Toast.LENGTH_SHORT).show();
                             }
                         }
                     } catch (JSONException e) {

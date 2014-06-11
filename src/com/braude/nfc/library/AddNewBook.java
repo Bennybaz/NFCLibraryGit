@@ -196,9 +196,9 @@ public class AddNewBook extends Activity{
                         if (field.getSelectedItemPosition() == 0) {
                             write("BK" + message.getText().toString(), mytag);
                             new UpdateTagOnDB().execute();
-                            Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
-                            message.setText("");
+                            //message.setText("");
                         }
                         if (field.getSelectedItemPosition() == 1) {
                             write("SH" + message.getText().toString(), mytag);
@@ -256,7 +256,7 @@ public class AddNewBook extends Activity{
                     try{
                         List<NameValuePair> params = new ArrayList<NameValuePair>();
                         params.add(new BasicNameValuePair("barcode", message.getText().toString()));
-
+                        Toast.makeText(ctx, message.getText().toString(), Toast.LENGTH_LONG).show();
                         // getting student details by making HTTP request
                         // Note that product details url will use GET request
                         JSONObject json = jsonParser.makeHttpRequest(
@@ -266,6 +266,7 @@ public class AddNewBook extends Activity{
                         if(json!=null) {
                             success = json.getInt(TAG_SUCCESS);
                             if (success == 1) {
+                                Toast.makeText(ctx, ctx.getString(R.string.ok_writing_book), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context,"Please Try Again", Toast.LENGTH_SHORT).show();
                                 // product with pid not found
@@ -274,8 +275,10 @@ public class AddNewBook extends Activity{
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    message.setText("");
                 }
             });
+
 
             return null;
         }
