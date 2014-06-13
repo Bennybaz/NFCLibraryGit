@@ -6,12 +6,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -75,6 +77,7 @@ public class SearchResultActivity extends Activity{
 
     private String bar;
     private int alreadyAddedFlag=0;
+    private String userType;
 
 
     // JSON Node names
@@ -93,6 +96,9 @@ public class SearchResultActivity extends Activity{
         }
 
         context = this;
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        userType = sharedPref.getString("ID", "OOPS").substring(0,2);
 
         getDirectionsBtn = (Button) findViewById(R.id.getDirectionsBtn);
         borrowBookBtn = (Button) findViewById(R.id.borrowBookBtn);
@@ -209,6 +215,8 @@ public class SearchResultActivity extends Activity{
             addToCartBtn.setClickable(false);
             addToCartBtn.setBackgroundColor(getResources().getColor(R.color.mid_blue));
         }
+
+        if(userType.equals("LB")) addToCartBtn.setVisibility(View.GONE);
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         handleIntent(getIntent());

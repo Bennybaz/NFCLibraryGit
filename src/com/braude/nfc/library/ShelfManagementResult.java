@@ -219,7 +219,7 @@ public class ShelfManagementResult extends Activity {
 
                                 Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
                                 Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);
-                                dialogButtonScan.setVisibility(View.VISIBLE);
+                                dialogButtonScan.setVisibility(View.GONE);
 
 
                                 // if button is clicked, close the custom dialog
@@ -230,14 +230,7 @@ public class ShelfManagementResult extends Activity {
                                     }
                                 });
 
-                                dialogButtonScan.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(ShelfManagementResult.this, ScanShelfActivity.class);
-                                        intent.putExtra("barcode", barcode);
-                                        startActivity(intent);
-                                    }
-                                });
+
 
                                 directDialog.show();
 
