@@ -16,54 +16,16 @@
 
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:text="Book Search"
+                      android:text="General information"
                       android:textStyle="bold"
                       android:textSize="20dp"/>
 
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginTop="5dp"
-                      android:text="1. Enter search query.\n2. Choose field to search. \n3. Press 'Search' Button. \n4. Select specific result.\n5. Select specific copy.\n6. You can get directions, scan the shelf, borrow the specific book or add it to the cart."
+                      android:text="1. For each procedure, follow the application instructions. \n2. When tag scan is required,\napproach the phone to the tag. \n3. For more information on each procedure, go to librarian or student tab."
                       android:textSize="18dp" />
 
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="Book Borrow"
-                      android:layout_marginTop="15dp"
-                      android:textStyle="bold"
-                      android:textSize="20dp"/>
-
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginTop="5dp"
-                      android:text="1. Scan the books.\n3. Click the 'Borrow' Button."
-                      android:textSize="18dp" />
-
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="Book Cart"
-                      android:layout_marginTop="15dp"
-                      android:textStyle="bold"
-                      android:textSize="20dp"/>
-
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginTop="5dp"
-                      android:text="1. Select the books you want to borrow.\n2. Scan the books' Tags. \n3. Click the 'Borrow Books' button."
-                      android:textSize="18dp" />
-
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:text="Book Information"
-                      android:layout_marginTop="15dp"
-                      android:textStyle="bold"
-                      android:textSize="20dp"/>
-
-            <TextView android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_marginTop="5dp"
-                      android:text="1. Scan a Book's NFC Tag.\n2. View the tag's information."
-                      android:textSize="18dp" />
 
         </LinearLayout>
 

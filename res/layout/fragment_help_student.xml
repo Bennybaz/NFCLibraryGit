@@ -62,7 +62,7 @@
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:layout_marginTop="5dp"
-                      android:text="1. Scan a Book's NFC Tag.\n2. View the tag's information."
+                      android:text="1. Scan a Book's NFC Tag.\n2. View the tag's information.\nNote: Book with no Location information detected cannot be displayed."
                       android:textSize="18dp" />
 
         </LinearLayout>
