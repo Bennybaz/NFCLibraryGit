@@ -414,7 +414,7 @@ public class SearchResultActivity extends Activity{
                             new UpdateBorrow().execute();
                         }
                         else Toast.makeText(context, "Scan Appropriate Book Tag", Toast.LENGTH_SHORT).show();
-                    } else Toast.makeText(context, "Please Scan a Book/Shelf/User Tag Only", Toast.LENGTH_SHORT).show();
+                    } else Toast.makeText(context, "Please Scan a Book Tag Only", Toast.LENGTH_SHORT).show();
                 }
             }
         }
