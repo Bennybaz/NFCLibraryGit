@@ -372,6 +372,7 @@ public class ShelfManagementActivity extends Activity {
                                 bk.setAuthor(product.getString("author"));
                                 bk.setYear(product.getString("year"));
 
+
                                 scannedBooks.add(bk);
                                 adapter.notifyDataSetChanged();
 
