@@ -34,6 +34,7 @@
             android:layout_marginTop="15dp"
             android:layout_below="@+id/directImage" android:layout_centerHorizontal="true"/>/>
 
+
     <Button
             android:id="@+id/directionButtonScan"
             android:layout_width="fill_parent"

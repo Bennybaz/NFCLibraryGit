@@ -218,7 +218,6 @@ public class ShelfManagementResult extends Activity {
                                     if(sector==4) image.setImageResource(R.drawable.sector_four);
                                 }*/
 
-
                                 if (sector == 1) sectorr.setText("First sector from the beginning");
                                 if (sector == 2) sectorr.setText("Second sector from the beginning");
                                 if (sector == 3) sectorr.setText("Third sector from the beginning");
