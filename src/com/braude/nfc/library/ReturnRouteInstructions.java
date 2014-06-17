@@ -265,7 +265,6 @@ public class ReturnRouteInstructions extends Activity {
                         if(pos[currentStep][1]==2) image.setImageResource(R.drawable.sector_six);
                         if(pos[currentStep][1]==3) image.setImageResource(R.drawable.sector_seven);
                         if(pos[currentStep][1]==4) image.setImageResource(R.drawable.sector_eight);
-
                     }
                     else {
                         if(pos[currentStep][1]==1) image.setImageResource(R.drawable.sector_one);

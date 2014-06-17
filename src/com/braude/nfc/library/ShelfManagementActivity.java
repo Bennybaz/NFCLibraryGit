@@ -140,6 +140,7 @@ public class ShelfManagementActivity extends Activity {
         super.onPause();
     }
 
+   
     @Override
     protected void onNewIntent(Intent intent) {
 		/*
