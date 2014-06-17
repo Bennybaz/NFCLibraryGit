@@ -142,6 +142,7 @@ public class ReturnRouteActivity extends Activity {
 
                         sortCommands.clear();
                         sorted.clear();
+
                         new GetBookBarcodeSorted().execute();
 
 

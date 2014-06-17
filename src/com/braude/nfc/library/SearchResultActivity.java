@@ -445,6 +445,7 @@ public class SearchResultActivity extends Activity{
                             if(json!=null) {
                                 success = json.getInt(TAG_SUCCESS);
                                 if (success == 1) {
+
                                     successFlag=1;
 
                                 } else {
