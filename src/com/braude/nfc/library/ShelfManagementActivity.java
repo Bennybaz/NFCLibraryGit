@@ -370,6 +370,7 @@ public class ShelfManagementActivity extends Activity {
                                 bk.setBarcode(barcode);
                                 bk.setName(product.getString("title"));
                                 bk.setAuthor(product.getString("author"));
+                                bk.setYear(product.getString("year"));
 
                                 scannedBooks.add(bk);
                                 adapter.notifyDataSetChanged();
@@ -534,6 +535,7 @@ public class ShelfManagementActivity extends Activity {
                                     bk.setBarcode(barcode);
                                     bk.setName(product.getString("title"));
                                     bk.setAuthor(product.getString("author"));
+                                    bk.setYear(product.getString("year"));
 
 
                                     for(int j=0; j<scannedBooks.size(); j++) {

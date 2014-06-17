@@ -202,7 +202,7 @@ public class ShelfManagementResult extends Activity {
                                 if(shelf==5) shelff.setText("Bottom Shelf");
 
                                 //ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
-                                TextView sectorr = (TextView) findViewById(R.id.return_sector_pos);
+                                TextView sectorr = (TextView) findViewById(R.id.return_sector_pos1);
                                 //change source according to book location
                                 /*if(stand%2==0) {
                                     if(sector==1) image.setImageResource(R.drawable.sector_five);

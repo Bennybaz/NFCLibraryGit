@@ -534,7 +534,7 @@ public class SearchResultActivity extends Activity{
                                 directDialog.setTitle("Directions");
                                 TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
                                 TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
-                                TextView sectorr = (TextView) directDialog.findViewById(R.id.return_sector_pos);
+                                TextView sectorr = (TextView) directDialog.findViewById(R.id.return_sector_pos1);
 
                                 // fill according to bookcase location
                                 /*if(stand==1 || stand==2) bookCase.setText("First BookCase on the left");

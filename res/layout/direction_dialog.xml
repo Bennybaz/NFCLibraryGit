@@ -12,14 +12,14 @@
             android:layout_centerHorizontal="true"
             />
 
-    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-              android:id="@+id/return_sector_pos"
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:id="@+id/return_sector_pos1"
               android:layout_marginTop="40dp"
               android:padding="5dp"
               android:gravity="center"
               android:layout_gravity="center"
               android:layout_below="@+id/textBC"
-              android:textSize="20dp"
+              android:textSize="22dp"
               android:layout_alignParentTop="true"
               android:layout_centerHorizontal="true"
             />
@@ -31,8 +31,9 @@
             android:textSize="@dimen/text_size"
             android:textColor="#000"
             android:textAlignment="center"
+            android:padding="5dp"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/directImage" android:layout_centerHorizontal="true"/>/>
+            android:layout_below="@+id/return_sector_pos1" android:layout_centerHorizontal="true"/>/>
 
 
     <Button
