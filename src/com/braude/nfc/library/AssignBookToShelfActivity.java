@@ -300,11 +300,15 @@ public class AssignBookToShelfActivity extends Activity {
                     }
                 }
                 else if(type.equals("SH")){
-                    super.onPostExecute(result);
-                    shelfFlag=1;
-                    shelf.setText(result.substring(2));
-                    lv.setVisibility(1);
-                    writeToShelfBtn.setVisibility(1);
+                    if(shelf.getText().equals(""))
+                    {
+                        super.onPostExecute(result);
+                        shelfFlag=1;
+                        shelf.setText(result.substring(2));
+                        lv.setVisibility(1);
+                        writeToShelfBtn.setVisibility(1);
+                    }
+                    else Toast.makeText(context,"Shelf Already Scanned", Toast.LENGTH_SHORT).show();
                 }
                 else Toast.makeText(context,"Please Scan a Book/Shelf Tag Only", Toast.LENGTH_SHORT).show();
             }

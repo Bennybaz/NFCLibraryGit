@@ -155,20 +155,9 @@ public class ShelfManagementResult extends Activity {
                                 directDialog.setTitle("Directions");
                                 TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
                                 TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                                TextView sectorr = (TextView) directDialog.findViewById(R.id.return_sector_pos1);
 
                                 // fill according to bookcase location
-                                /*if(stand==1 || stand==2) bookCase.setText("First BookCase on the left");
-                                if(stand==3 || stand==4) bookCase.setText("Second BookCase on the left");
-                                if(stand==5 || stand==6) bookCase.setText("Third BookCase on the left");
-                                if(stand==7 || stand==8) bookCase.setText("Fourth BookCase on the left");
-                                if(stand==9 || stand==10) bookCase.setText("Fifth BookCase on the left");
-                                if(stand==11 || stand==12) bookCase.setText("Sixth BookCase on the left");
-                                if(stand==13 || stand==14) bookCase.setText("First BookCase on the right");
-                                if(stand==15 || stand==16) bookCase.setText("Second BookCase on the right");
-                                if(stand==17 || stand==18) bookCase.setText("Third BookCase on the right");
-                                if(stand==19 || stand==20) bookCase.setText("Fourth BookCase on the right");
-                                if(stand==21 || stand==22) bookCase.setText("Fifth BookCase on the right");
-                                if(stand==23 || stand==24) bookCase.setText("Sixth BookCase on the right");*/
                                 if(stand==1) bookCase.setText("BookCase #2");
                                 if(stand==2) bookCase.setText("BookCase #3");
                                 if(stand==3) bookCase.setText("BookCase #4");
@@ -200,23 +189,6 @@ public class ShelfManagementResult extends Activity {
                                 if(shelf==3) shelff.setText("3rd Shelf from top");
                                 if(shelf==4) shelff.setText("4th Shelf from top");
                                 if(shelf==5) shelff.setText("Bottom Shelf");
-
-                                //ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
-                                TextView sectorr = (TextView) findViewById(R.id.return_sector_pos1);
-                                //change source according to book location
-                                /*if(stand%2==0) {
-                                    if(sector==1) image.setImageResource(R.drawable.sector_five);
-                                    if(sector==2) image.setImageResource(R.drawable.sector_six);
-                                    if(sector==3) image.setImageResource(R.drawable.sector_seven);
-                                    if(sector==4) image.setImageResource(R.drawable.sector_eight);
-
-                                }
-                                else {
-                                    if(sector==1) image.setImageResource(R.drawable.sector_one);
-                                    if(sector==2) image.setImageResource(R.drawable.sector_two);
-                                    if(sector==3) image.setImageResource(R.drawable.sector_three);
-                                    if(sector==4) image.setImageResource(R.drawable.sector_four);
-                                }*/
 
                                 if (sector == 1) sectorr.setText("First sector from the beginning");
                                 if (sector == 2) sectorr.setText("Second sector from the beginning");

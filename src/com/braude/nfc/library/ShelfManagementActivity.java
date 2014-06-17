@@ -321,11 +321,16 @@ public class ShelfManagementActivity extends Activity {
                     else Toast.makeText(context,"Please Scan a Shelf First", Toast.LENGTH_SHORT).show();
                 }
                 else if(type.equals("SH")){
-                    shelfFlag=1;
-                    super.onPostExecute(result);
-                    shelfText.setText(result.substring(2));
-                    lv.setVisibility(View.VISIBLE);
-                    shelfManage.setVisibility(View.VISIBLE);
+                    if(shelfText.getText().equals(""))
+                    {
+                        shelfFlag=1;
+                        super.onPostExecute(result);
+                        shelfText.setText(result.substring(2));
+                        lv.setVisibility(View.VISIBLE);
+                        shelfManage.setVisibility(View.VISIBLE);
+                    }
+                    else Toast.makeText(context,"Shelf Already Scanned", Toast.LENGTH_SHORT).show();
+
                 }
                 else Toast.makeText(context,"Please Scan a Book/Shelf Tag Only", Toast.LENGTH_SHORT).show();
             }
@@ -504,7 +509,7 @@ public class ShelfManagementActivity extends Activity {
                     shelfText.setText("4");
                     simBarcode.add("624-10");
                     simBarcode.add("1298-10");
-                    simBarcode.add("602-10");
+                    simBarcode.add("7249-20");
                     simBarcode.add("1568-20");
 
                     for(int i=0; i<simBarcode.size(); i++)
