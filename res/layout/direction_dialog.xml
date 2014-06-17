@@ -11,13 +11,18 @@
             android:textSize="@dimen/text_size"
             android:layout_centerHorizontal="true"
             />
-    <ImageView
-            android:id="@+id/directImage"
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="40dp"
-            android:layout_below="@+id/textBC"
-            android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:id="@+id/return_sector_pos"
+              android:layout_marginTop="40dp"
+              android:padding="5dp"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:layout_below="@+id/textBC"
+              android:textSize="20dp"
+              android:layout_alignParentTop="true"
+              android:layout_centerHorizontal="true"
+            />
 
     <TextView
             android:id="@+id/textShelf"

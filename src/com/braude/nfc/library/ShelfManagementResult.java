@@ -201,9 +201,10 @@ public class ShelfManagementResult extends Activity {
                                 if(shelf==4) shelff.setText("4th Shelf from top");
                                 if(shelf==5) shelff.setText("Bottom Shelf");
 
-                                ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                                //ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                                TextView sectorr = (TextView) findViewById(R.id.return_sector_pos);
                                 //change source according to book location
-                                if(stand%2==0) {
+                                /*if(stand%2==0) {
                                     if(sector==1) image.setImageResource(R.drawable.sector_five);
                                     if(sector==2) image.setImageResource(R.drawable.sector_six);
                                     if(sector==3) image.setImageResource(R.drawable.sector_seven);
@@ -215,7 +216,12 @@ public class ShelfManagementResult extends Activity {
                                     if(sector==2) image.setImageResource(R.drawable.sector_two);
                                     if(sector==3) image.setImageResource(R.drawable.sector_three);
                                     if(sector==4) image.setImageResource(R.drawable.sector_four);
-                                }
+                                }*/
+
+                                if (sector == 1) sectorr.setText("First sector from the beginning");
+                                if (sector == 2) sectorr.setText("Second sector from the beginning");
+                                if (sector == 3) sectorr.setText("Third sector from the beginning");
+                                if (sector == 4) sectorr.setText("Fourth sector from the beginning");
 
                                 Button dialogButtonCancel = (Button) directDialog.findViewById(R.id.directionButtonCancel);
                                 Button dialogButtonScan = (Button) directDialog.findViewById(R.id.directionButtonScan);

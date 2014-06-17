@@ -25,8 +25,10 @@ public class ReturnRouteInstructions extends Activity {
 
     // JSON parser class
     private JSONParser jsonParser = new JSONParser();
+    private JSONParser jsonParser3 = new JSONParser();
 
     private static final String url_book_barcode_for_sector = "http://nfclibrary.site40.net/barcode_to_sector.php";
+    private static final String url_return_book_by_barcode = "http://nfclibrary.site40.net/return_book_by_barcode.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -145,9 +147,11 @@ public class ReturnRouteInstructions extends Activity {
                     if (pos[position][0] == 4) shelff.setText("4th Shelf from top");
                     if (pos[position][0] == 5) shelff.setText("Bottom Shelf");
 
-                    ImageView image = (ImageView) findViewById(R.id.return_directImage);
+
+                    TextView sectorr = (TextView) findViewById(R.id.return_sector_pos);
+                    //ImageView image = (ImageView) findViewById(R.id.return_directImage);
                     //change source according to book location
-                    if (pos[position][1] % 2 == 0) {
+                    /*if (pos[position][1] % 2 == 0) {
                         if (pos[position][1] == 1) image.setImageResource(R.drawable.sector_five);
                         if (pos[position][1] == 2) image.setImageResource(R.drawable.sector_six);
                         if (pos[position][1] == 3) image.setImageResource(R.drawable.sector_seven);
@@ -158,7 +162,12 @@ public class ReturnRouteInstructions extends Activity {
                         if (pos[position][1] == 2) image.setImageResource(R.drawable.sector_two);
                         if (pos[position][1] == 3) image.setImageResource(R.drawable.sector_three);
                         if (pos[position][1] == 4) image.setImageResource(R.drawable.sector_four);
-                    }
+                    }*/
+
+                    if(pos[position][1]==1) sectorr.setText("First sector from the beginning");
+                    if(pos[position][1]==2) sectorr.setText("Second sector from the beginning");
+                    if(pos[position][1]==3) sectorr.setText("Third sector from the beginning");
+                    if(pos[position][1]==4) sectorr.setText("Fourth sector from the beginning");
 
                     if(sameFlag==1)
                         tv.setText("Place First Book Here:");
@@ -181,6 +190,9 @@ public class ReturnRouteInstructions extends Activity {
             @Override
             public void onClick(View v) {
 
+                //update the book return on DB
+                new UpdateBookStatus().execute();
+
                 Intent intent = new Intent(ReturnRouteInstructions.this, LibrarianMainActivity.class);
                 startActivity(intent);
             }
@@ -190,13 +202,11 @@ public class ReturnRouteInstructions extends Activity {
             @Override
             public void onClick(View v) {
                 currentStep++;
-                if(currentStep==(books.size()-1))
-                {
+                if (currentStep == (books.size() - 1)) {
                     nextStepBtn.setVisibility(View.GONE);
                     returnRouteBtn.setVisibility(View.VISIBLE);
                 }
-                if(currentStep<books.size())
-                {
+                if (currentStep < books.size()) {
                     lv.getChildAt(currentStep).setBackgroundColor(getResources().getColor(R.color.holo_blue_dark));
                     TextView bookCase = (TextView) findViewById(R.id.return_textBC);
                     TextView shelff = (TextView) findViewById(R.id.return_textShelf);
@@ -215,41 +225,42 @@ public class ReturnRouteInstructions extends Activity {
                     if(pos[currentStep][2]==21 || pos[currentStep][2]==22) bookCase.setText("Fifth BookCase on the right");
                     if(pos[currentStep][2]==23 || pos[currentStep][2]==24) bookCase.setText("Sixth BookCase on the right");*/
 
-                    if(pos[currentStep][2]==1) bookCase.setText("BookCase #2");
-                    if(pos[currentStep][2]==2) bookCase.setText("BookCase #3");
-                    if(pos[currentStep][2]==3) bookCase.setText("BookCase #4");
-                    if(pos[currentStep][2]==4) bookCase.setText("BookCase #5");
-                    if(pos[currentStep][2]==5) bookCase.setText("BookCase #6");
-                    if(pos[currentStep][2]==6) bookCase.setText("BookCase #7");
-                    if(pos[currentStep][2]==7) bookCase.setText("BookCase #8");
-                    if(pos[currentStep][2]==8) bookCase.setText("BookCase #9");
-                    if(pos[currentStep][2]==9) bookCase.setText("BookCase #10");
-                    if(pos[currentStep][2]==10) bookCase.setText("BookCase #11");
-                    if(pos[currentStep][2]==11) bookCase.setText("BookCase #13");
-                    if(pos[currentStep][2]==12) bookCase.setText("BookCase #14");
-                    if(pos[currentStep][2]==13) bookCase.setText("BookCase #33");
-                    if(pos[currentStep][2]==14) bookCase.setText("BookCase #34");
-                    if(pos[currentStep][2]==15) bookCase.setText("BookCase #35");
-                    if(pos[currentStep][2]==16) bookCase.setText("BookCase #36");
-                    if(pos[currentStep][2]==17) bookCase.setText("BookCase #37");
-                    if(pos[currentStep][2]==18) bookCase.setText("BookCase #38");
-                    if(pos[currentStep][2]==19) bookCase.setText("BookCase #39");
-                    if(pos[currentStep][2]==20) bookCase.setText("BookCase #40");
-                    if(pos[currentStep][2]==21) bookCase.setText("BookCase #41");
-                    if(pos[currentStep][2]==22) bookCase.setText("BookCase #42");
-                    if(pos[currentStep][2]==23) bookCase.setText("BookCase #43");
-                    if(pos[currentStep][2]==24) bookCase.setText("BookCase #44");
+                    if (pos[currentStep][2] == 1) bookCase.setText("BookCase #2");
+                    if (pos[currentStep][2] == 2) bookCase.setText("BookCase #3");
+                    if (pos[currentStep][2] == 3) bookCase.setText("BookCase #4");
+                    if (pos[currentStep][2] == 4) bookCase.setText("BookCase #5");
+                    if (pos[currentStep][2] == 5) bookCase.setText("BookCase #6");
+                    if (pos[currentStep][2] == 6) bookCase.setText("BookCase #7");
+                    if (pos[currentStep][2] == 7) bookCase.setText("BookCase #8");
+                    if (pos[currentStep][2] == 8) bookCase.setText("BookCase #9");
+                    if (pos[currentStep][2] == 9) bookCase.setText("BookCase #10");
+                    if (pos[currentStep][2] == 10) bookCase.setText("BookCase #11");
+                    if (pos[currentStep][2] == 11) bookCase.setText("BookCase #13");
+                    if (pos[currentStep][2] == 12) bookCase.setText("BookCase #14");
+                    if (pos[currentStep][2] == 13) bookCase.setText("BookCase #33");
+                    if (pos[currentStep][2] == 14) bookCase.setText("BookCase #34");
+                    if (pos[currentStep][2] == 15) bookCase.setText("BookCase #35");
+                    if (pos[currentStep][2] == 16) bookCase.setText("BookCase #36");
+                    if (pos[currentStep][2] == 17) bookCase.setText("BookCase #37");
+                    if (pos[currentStep][2] == 18) bookCase.setText("BookCase #38");
+                    if (pos[currentStep][2] == 19) bookCase.setText("BookCase #39");
+                    if (pos[currentStep][2] == 20) bookCase.setText("BookCase #40");
+                    if (pos[currentStep][2] == 21) bookCase.setText("BookCase #41");
+                    if (pos[currentStep][2] == 22) bookCase.setText("BookCase #42");
+                    if (pos[currentStep][2] == 23) bookCase.setText("BookCase #43");
+                    if (pos[currentStep][2] == 24) bookCase.setText("BookCase #44");
 
 
-                    if(pos[currentStep][0]==1) shelff.setText("Top Shelf");
-                    if(pos[currentStep][0]==2) shelff.setText("2nd Shelf from top");
-                    if(pos[currentStep][0]==3) shelff.setText("3rd Shelf from top");
-                    if(pos[currentStep][0]==4) shelff.setText("4th Shelf from top");
-                    if(pos[currentStep][0]==5) shelff.setText("Bottom Shelf");
+                    if (pos[currentStep][0] == 1) shelff.setText("Top Shelf");
+                    if (pos[currentStep][0] == 2) shelff.setText("2nd Shelf from top");
+                    if (pos[currentStep][0] == 3) shelff.setText("3rd Shelf from top");
+                    if (pos[currentStep][0] == 4) shelff.setText("4th Shelf from top");
+                    if (pos[currentStep][0] == 5) shelff.setText("Bottom Shelf");
 
-                    ImageView image = (ImageView) findViewById(R.id.return_directImage);
+                    //ImageView image = (ImageView) findViewById(R.id.return_directImage);
+                    TextView sectorr = (TextView) findViewById(R.id.return_sector_pos);
                     //change source according to book location
-                    if(pos[currentStep][1]%2==0) {
+                    /*if(pos[currentStep][1]%2==0) {
                         if(pos[currentStep][1]==1) image.setImageResource(R.drawable.sector_five);
                         if(pos[currentStep][1]==2) image.setImageResource(R.drawable.sector_six);
                         if(pos[currentStep][1]==3) image.setImageResource(R.drawable.sector_seven);
@@ -261,11 +272,17 @@ public class ReturnRouteInstructions extends Activity {
                         if(pos[currentStep][1]==2) image.setImageResource(R.drawable.sector_two);
                         if(pos[currentStep][1]==3) image.setImageResource(R.drawable.sector_three);
                         if(pos[currentStep][1]==4) image.setImageResource(R.drawable.sector_four);
-                    }
+                    }*/
 
-                    if(sameFlag==1)
+                    if (pos[currentStep][1] == 1) sectorr.setText("First sector from the beginning");
+                    if (pos[currentStep][1] == 2) sectorr.setText("Second sector from the beginning");
+                    if (pos[currentStep][1] == 3) sectorr.setText("Third sector from the beginning");
+                    if (pos[currentStep][1] == 4) sectorr.setText("Fourth sector from the beginning");
+
+
+                    if (sameFlag == 1)
                         tv.setText("Place First Book Here:");
-                    if(sameFlag==0)
+                    if (sameFlag == 0)
                         tv.setText("Place All the Book Here:");
                 }
             }
@@ -323,6 +340,59 @@ public class ReturnRouteInstructions extends Activity {
 	                        e.printStackTrace();
 	                    }
                     }//end for
+                }
+            });
+
+            return null;
+        }
+    }
+
+    class UpdateBookStatus extends AsyncTask<String, String, String> {
+
+        /* *
+          * Getting product details in background thread
+          **/
+        protected String doInBackground(String... params) {
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    // Check for success tag
+                    int success;
+                    ArrayList<Book> tempBooks = new ArrayList<Book>(books);
+                    for(int i=0; i< tempBooks.size(); i++)
+                    {
+                        try{
+                            List<NameValuePair> params = new ArrayList<NameValuePair>();
+                            params.add(new BasicNameValuePair("barcode", tempBooks.get(i).getBarcode().toString()));
+
+                            // getting student details by making HTTP request
+                            // Note that product details url will use GET request
+                            JSONObject json = jsonParser3.makeHttpRequest(
+                                    url_return_book_by_barcode, "GET", params);
+
+                            // json success tag
+                            if(json!=null) {
+                                success = json.getInt(TAG_SUCCESS);
+                                if (success == 1) {
+                                    // successfully received product details
+                                    //JSONArray productObj = json
+                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
+
+                                    // get first user object from JSON Array
+                                    //JSONObject product = productObj.getJSONObject(0);
+                                    Toast.makeText(context,"Books Status Changed",Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Toast.makeText(context,"Book doesn't Exist",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    tempBooks.clear();
                 }
             });
 

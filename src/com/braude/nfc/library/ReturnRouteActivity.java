@@ -121,7 +121,7 @@ public class ReturnRouteActivity extends Activity {
                 {
 
                     //update the book return on DB
-                    new UpdateBookStatus().execute();
+                    //new UpdateBookStatus().execute();
                     try {
                         double[][] data2 = getDoubleTwoDimArray("dump.txt");
                         firstSectorFlag=0;
