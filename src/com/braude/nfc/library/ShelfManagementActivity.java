@@ -461,6 +461,9 @@ public class ShelfManagementActivity extends Activity {
                                 Intent intent = new Intent(ShelfManagementActivity.this, ShelfManagementResult.class);
                                 intent.putParcelableArrayListExtra("bookList",scannedBooks);
                                 startActivity(intent);
+                                scannedBooks.clear();
+                                adapter.notifyDataSetChanged();
+                                shelfText.setText("");
 
                             } else {
                                 // product with pid not found

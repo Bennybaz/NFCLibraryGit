@@ -82,7 +82,8 @@ public class SearchResultsActivity extends Activity {
             TextView textView1 = (TextView) rowView.findViewById(R.id.headline2);
             TextView textView2 = (TextView) rowView.findViewById(R.id.baseline2);
             textView1.setText(values.get(position).getName());
-            textView2.setText(values.get(position).getAuthor()+", Year:"+values.get(position).getYear());
+            if(textView1.getText().toString().equals("All books are related to scanned shelf!")) textView2.setText("");
+            else textView2.setText(values.get(position).getAuthor()+", Year:"+values.get(position).getYear());
             return rowView;
         }
 

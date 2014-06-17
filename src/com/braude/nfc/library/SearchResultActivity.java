@@ -16,10 +16,7 @@ import android.os.*;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -533,8 +530,10 @@ public class SearchResultActivity extends Activity{
                                 directDialog.setContentView(R.layout.direction_dialog);
                                 directDialog.setTitle("Directions");
                                 TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
-                                TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                                TextView shelff = (TextView) directDialog.findViewById(R.id.return_shelf_pos1);
                                 TextView sectorr = (TextView) directDialog.findViewById(R.id.return_sector_pos1);
+                                ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                                image.setVisibility(View.GONE);
 
                                 // fill according to bookcase location
                                 if(stand==1) bookCase.setText("BookCase #2");

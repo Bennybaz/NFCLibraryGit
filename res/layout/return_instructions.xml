@@ -27,7 +27,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="277dp" android:layout_weight="0.29">
+                android:layout_height="100dp" android:layout_weight="0.29">
 
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                       android:id="@+id/return_textBC"
@@ -57,7 +57,7 @@
                     android:textColor="#000"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
-                    android:layout_below="@+id/directImage" android:layout_centerHorizontal="true"/><![CDATA[/>
+                    android:layout_below="@+id/return_directImage" android:layout_centerHorizontal="true"/><![CDATA[/>
 
             ]]>
         </LinearLayout>

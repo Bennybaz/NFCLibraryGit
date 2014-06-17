@@ -61,6 +61,7 @@ public class ShelfManagementResult extends Activity {
         lv = (ListView) findViewById(R.id.managementResultList);
         adapter = new SearchResultsActivity.SearchResultsAdapter(this, notRelatedBooks);
         lv.setAdapter(adapter);
+        TextView year = (TextView) findViewById(R.id.baseline2);
 
         nextShelf = (Button) findViewById(R.id.nextShelfBtn);
         finish = (Button) findViewById(R.id.finishManage);
@@ -153,8 +154,10 @@ public class ShelfManagementResult extends Activity {
                                 directDialog = new Dialog(context);
                                 directDialog.setContentView(R.layout.direction_dialog);
                                 directDialog.setTitle("Directions");
+                                ImageView image = (ImageView) directDialog.findViewById(R.id.directImage);
+                                image.setVisibility(View.GONE);
                                 TextView bookCase = (TextView) directDialog.findViewById(R.id.textBC);
-                                TextView shelff = (TextView) directDialog.findViewById(R.id.textShelf);
+                                TextView shelff = (TextView) directDialog.findViewById(R.id.return_shelf_pos1);
                                 TextView sectorr = (TextView) directDialog.findViewById(R.id.return_sector_pos1);
 
                                 // fill according to bookcase location

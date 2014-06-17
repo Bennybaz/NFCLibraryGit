@@ -211,20 +211,6 @@ public class ReturnRouteInstructions extends Activity {
                     TextView bookCase = (TextView) findViewById(R.id.return_textBC);
                     TextView shelff = (TextView) findViewById(R.id.return_textShelf);
 
-                    // fill according to bookcase location
-                    /*if(pos[currentStep][2]==1 || pos[currentStep][2]==2) bookCase.setText("First BookCase on the left");
-                    if(pos[currentStep][2]==3 || pos[currentStep][2]==4) bookCase.setText("Second BookCase on the left");
-                    if(pos[currentStep][2]==5 || pos[currentStep][2]==6) bookCase.setText("Third BookCase on the left");
-                    if(pos[currentStep][2]==7 || pos[currentStep][2]==8) bookCase.setText("Fourth BookCase on the left");
-                    if(pos[currentStep][2]==9 || pos[currentStep][2]==10) bookCase.setText("Fifth BookCase on the left");
-                    if(pos[currentStep][2]==11 || pos[currentStep][2]==12) bookCase.setText("Sixth BookCase on the left");
-                    if(pos[currentStep][2]==13 || pos[currentStep][2]==14) bookCase.setText("First BookCase on the right");
-                    if(pos[currentStep][2]==15 || pos[currentStep][2]==16) bookCase.setText("Second BookCase on the right");
-                    if(pos[currentStep][2]==17 || pos[currentStep][2]==18) bookCase.setText("Third BookCase on the right");
-                    if(pos[currentStep][2]==19 || pos[currentStep][2]==20) bookCase.setText("Fourth BookCase on the right");
-                    if(pos[currentStep][2]==21 || pos[currentStep][2]==22) bookCase.setText("Fifth BookCase on the right");
-                    if(pos[currentStep][2]==23 || pos[currentStep][2]==24) bookCase.setText("Sixth BookCase on the right");*/
-
                     if (pos[currentStep][2] == 1) bookCase.setText("BookCase #2");
                     if (pos[currentStep][2] == 2) bookCase.setText("BookCase #3");
                     if (pos[currentStep][2] == 3) bookCase.setText("BookCase #4");
@@ -257,21 +243,8 @@ public class ReturnRouteInstructions extends Activity {
                     if (pos[currentStep][0] == 4) shelff.setText("4th Shelf from top");
                     if (pos[currentStep][0] == 5) shelff.setText("Bottom Shelf");
 
-                    //ImageView image = (ImageView) findViewById(R.id.return_directImage);
                     TextView sectorr = (TextView) findViewById(R.id.return_sector_pos);
                     //change source according to book location
-                    /*if(pos[currentStep][1]%2==0) {
-                        if(pos[currentStep][1]==1) image.setImageResource(R.drawable.sector_five);
-                        if(pos[currentStep][1]==2) image.setImageResource(R.drawable.sector_six);
-                        if(pos[currentStep][1]==3) image.setImageResource(R.drawable.sector_seven);
-                        if(pos[currentStep][1]==4) image.setImageResource(R.drawable.sector_eight);
-                    }
-                    else {
-                        if(pos[currentStep][1]==1) image.setImageResource(R.drawable.sector_one);
-                        if(pos[currentStep][1]==2) image.setImageResource(R.drawable.sector_two);
-                        if(pos[currentStep][1]==3) image.setImageResource(R.drawable.sector_three);
-                        if(pos[currentStep][1]==4) image.setImageResource(R.drawable.sector_four);
-                    }*/
 
                     if (pos[currentStep][1] == 1) sectorr.setText("First sector from the beginning");
                     if (pos[currentStep][1] == 2) sectorr.setText("Second sector from the beginning");

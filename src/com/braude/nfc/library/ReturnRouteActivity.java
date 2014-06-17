@@ -119,9 +119,6 @@ public class ReturnRouteActivity extends Activity {
 
                 if(b.size()>0)
                 {
-
-                    //update the book return on DB
-                    //new UpdateBookStatus().execute();
                     try {
                         double[][] data2 = getDoubleTwoDimArray("dump.txt");
                         firstSectorFlag=0;
@@ -523,58 +520,6 @@ public class ReturnRouteActivity extends Activity {
         }
     }
 
-    class UpdateBookStatus extends AsyncTask<String, String, String> {
-
-        /* *
-          * Getting product details in background thread
-          **/
-        protected String doInBackground(String... params) {
-
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    // Check for success tag
-                    int success;
-                    ArrayList<Book> tempBooks = new ArrayList<Book>(b);
-                    for(int i=0; i< tempBooks.size(); i++)
-                    {
-                        try{
-                            List<NameValuePair> params = new ArrayList<NameValuePair>();
-                            params.add(new BasicNameValuePair("barcode", tempBooks.get(i).getBarcode().toString()));
-
-                            // getting student details by making HTTP request
-                            // Note that product details url will use GET request
-                            JSONObject json = jsonParser3.makeHttpRequest(
-                                    url_return_book_by_barcode, "GET", params);
-
-                            // json success tag
-                            if(json!=null) {
-                                success = json.getInt(TAG_SUCCESS);
-                                if (success == 1) {
-                                    // successfully received product details
-                                    //JSONArray productObj = json
-                                    //       .getJSONArray(TAG_PRODUCT); // JSON Array
-
-                                    // get first user object from JSON Array
-                                    //JSONObject product = productObj.getJSONObject(0);
-                                    Toast.makeText(context,"Books Status Changed",Toast.LENGTH_SHORT).show();
-
-                                } else {
-                                    Toast.makeText(context,"Book doesn't Exist",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    tempBooks.clear();
-                }
-            });
-
-            return null;
-        }
-    }
 
     class GetBookBarcodeSorted extends AsyncTask<String, String, String> {
 
@@ -702,136 +647,6 @@ public class ReturnRouteActivity extends Activity {
                 }
 
             });
-            return null;
-        }
-
-
-    }
-
-
-    class GetBookSectorForSimulation extends AsyncTask<String, String, String> {
-
-        /**
-         * Getting product details in background thread
-         * */
-        protected String doInBackground(String... params) {
-
-            // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    // Check for success tag
-                    int success;
-                    ArrayList<String> simBarcode = new ArrayList<String>();
-
-                    simBarcode.add("1568-20");
-                    simBarcode.add("624-10");
-                    simBarcode.add("1298-10");
-                    simBarcode.add("602-10");
-                    simBarcode.add("1568-10");
-
-
-                    for(int i=0; i<simBarcode.size(); i++)
-                    {
-                        barcode = simBarcode.get(i);
-                        try {
-                            // Building Parameters
-                            List<NameValuePair> params = new ArrayList<NameValuePair>();
-                            params.add(new BasicNameValuePair("barcode", barcode));
-
-                            // getting student details by making HTTP request
-                            // Note that product details url will use GET request
-
-                            JSONObject json2 = jsonParser2.makeHttpRequest(
-                                    url_book_barcode_for_sector, "GET", params);
-
-                            // json success tag
-                            if(json2!=null) {
-                                success = json2.getInt(TAG_SUCCESS);
-                                if (success == 1) {
-
-                                    // successfully received product details
-                                    JSONArray productObj = json2.getJSONArray("reader"); // JSON Array
-
-                                    // get first user object from JSON Array
-                                    JSONObject product = productObj.getJSONObject(0);
-
-                                    shelf = product.getInt("shelf");
-                                    sector = product.getInt("sector");
-                                    stand = product.getInt("stand");
-
-                                    Integer sectorForAlg = (stand-1)*4+sector;
-                                    fixedPos = sectorForAlg+shelf*0.1;
-
-
-                                    if(!sectors.contains(sectorForAlg)) {
-                                        sectors.add(sectorForAlg);
-                                    }
-
-                                    ArrayList<String> tempBar;
-                                    tempBar = barcodeSector.get(fixedPos);
-                                    if(tempBar == null)
-                                        tempBar = new ArrayList<String>();
-                                    tempBar.add(barcode);
-                                    barcodeSector.put(fixedPos,tempBar);
-
-                                    try {
-                                        // Building Parameters
-                                        List<NameValuePair> params1 = new ArrayList<NameValuePair>();
-                                        params1.add(new BasicNameValuePair("barcode", barcode));
-
-                                        // getting student details by making HTTP request
-                                        // Note that product details url will use GET request
-
-                                        JSONObject json3 = jsonParser.makeHttpRequest(
-                                                url_book_barcode_for_details, "GET", params);
-
-                                        // json success tag
-                                        if(json3!=null) {
-                                            success = json3.getInt(TAG_SUCCESS);
-                                            if (success == 1) {
-                                                // successfully received product details
-                                                JSONArray productObj1 = json3.getJSONArray(TAG_PRODUCT); // JSON Array
-
-                                                // get first user object from JSON Array
-                                                JSONObject product1 = productObj1.getJSONObject(0);
-
-                                                Book bk = new Book();
-                                                bk.setBarcode(barcode);
-                                                bk.setName(product1.getString("title"));
-                                                bk.setAuthor(product1.getString("author"));
-                                                bk.setFixedPosition(fixedPos);
-
-                                                for(int j=0; j<b.size(); j++) {
-                                                    if(b.get(j).getBarcode().equals(barcode))
-                                                        flag=1;
-                                                    break;
-                                                }
-
-                                                if(flag==0) {
-                                                    b.add(bk);
-                                                    adapter.notifyDataSetChanged();
-                                                }
-
-                                            } else {
-                                                Toast.makeText(context,"Error: cannot find the book details",Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                } else {
-                                    Toast.makeText(context,"Error: cannot find the book details(location)",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }//end for
-                }
-            });
-
             return null;
         }
 
